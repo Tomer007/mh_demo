@@ -7,6 +7,7 @@ from typing import Dict, List
 from app.service.chat_service import get_doctor_visit_assistance, generate_summary
 import os
 from dotenv import load_dotenv
+import random
 
 load_dotenv()
 
@@ -27,7 +28,6 @@ def landing(request: Request):
 @app.get("/chat", response_class=HTMLResponse)
 def chat_get(request: Request, patient_id: str = "demo-patient"):
     conv = conversations.get(patient_id, [])
-
     return templates.TemplateResponse(
         "chat.html",
         {
@@ -54,15 +54,14 @@ class SummaryResponse(BaseModel):
 def chat_endpoint(req: ChatRequest):
     conv = conversations.setdefault(req.patient_id, [])
     reply, updated_conv = get_doctor_visit_assistance(req.message, conv)
-    conversations[req.patient_id] = updated_conv  # עדכון היסטוריה
-    return {"response": reply}
-    conv.append(reply)
+    conversations[req.patient_id] = updated_conv 
+
     return {"response": reply}
 
 @app.get("/api/summary/{patient_id}", response_model=SummaryResponse)
 def summary_endpoint(patient_id: str):
-    print(f"Generating summary for {patient_id}")
     conv = conversations.get(patient_id, [])
+    
     summary = generate_summary(conv)
     return {"patient_id": patient_id, "summary": summary}
 
@@ -70,5 +69,6 @@ def summary_endpoint(patient_id: str):
 def clear_session(patient_id: str):
     if patient_id in conversations:
         del conversations[patient_id]
+
         return {"success": True, "message": f"Session for {patient_id} cleared."}
     return {"success": False, "message": f"No session found for {patient_id}."}, 404 
