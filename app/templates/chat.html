@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>עוזר רפואי</title>
+  <title>עוזר רפואי - הכנה לביקור</title>
   <style>
     body {
       font-family: 'Alef', sans-serif;
@@ -386,6 +386,17 @@
       padding-bottom: 2px;
       word-break: break-word;
     }
+    .main-logo {
+      float: right;
+      margin-left: 12px;
+      margin-top: -4px;
+      height: 38px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      background: white;
+      padding: 2px 4px;
+      object-fit: contain;
+    }
   </style>
   <script src="/static/marked.min.js"></script>
   <script>
@@ -463,7 +474,8 @@
         botBubble.className = "chat-bubble bot animated";
         botBubble.innerHTML = `
           <div class="bot-message">
-            <span class="bot-label">עוזר רפואי</span>
+            <span class="bot-label">עוזר רפואי</span></br>
+            <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
             <div class="message-content"></div>
             <div class="message-meta">
               <span class="message-time">${getCurrentTime()}</span>
@@ -509,7 +521,8 @@
         botBubble.className = "chat-bubble bot animated";
         botBubble.innerHTML = `
           <div class="bot-message">
-            <span class="bot-label">עוזר רפואי</span>
+            <span class="bot-label">עוזר רפואי</span></br>
+            <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
             <div class="message-content">שגיאה בשליחת ההודעה לשרת</div>
             <div class="message-meta">
               <span class="message-time">${getCurrentTime()}</span>
@@ -607,6 +620,7 @@
       initialBot.innerHTML = `
         <div class="bot-message">
           <span class="bot-label">עוזר רפואי</span></br>
+          <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
           <div class="message-content">שלום לך ${PATIENT_NAME}, תודה שפנית אלינו! איך ניתן לעזור לך?</div>
           <div class="message-meta">
             <span class="message-time">${getCurrentTime()}</span>
@@ -626,7 +640,9 @@
   </script>
 </head>
 <body>
-  <header>הכנה לביקור</header>
+  <header>
+    הכנה לביקור 
+  </header>
 
 <div class="container">
   <div class="title"><span id="patientName"></span> ,</span> לפני המפגש עם הרופא:</div>
