@@ -75,8 +75,17 @@
     <a href="/chat" class="corner-link" title="ביקור רופא - התחל שיחה"></a>
   </div>
   <script>
-    // On page load or reset
-    const patient_id = "demo-patient";
+    function getOrCreatePatientId() {
+      return patient_id = crypto.randomUUID();;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const patient_id = getOrCreatePatientId();
+      const chatLink = document.querySelector('.corner-link');
+      if (chatLink) {
+        chatLink.href = `/chat?patient_id=${encodeURIComponent(patient_id)}`;
+      }
+    });
   </script>
 </body>
 </html>
