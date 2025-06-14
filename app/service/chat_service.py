@@ -55,14 +55,13 @@ MAX_MESSAGES = int(os.getenv("MAX_MESSAGES", 5))
 
 def get_doctor_visit_assistance(user_input: str, session_history: list) -> (str, list):
 
-    print(f"OPENAI_API_KEY: " + os.getenv("OPENAI_API_KEY"))
     # User message limit (counting only user messages)
     user_messages = [m for m in session_history if m["role"] == "user"]
     logger.debug(f"User input: {user_input}")
     logger.debug(f"Session history (before): {session_history}")
     if len(user_messages) >= MAX_MESSAGES:
         logger.info("Session message limit reached.")
-        return ("מגבלת שיחות הושגה. אנא התחל שיחה חדשה.", session_history)
+        return ("מגבלת שיחות הושגה. תודה על שיתוף הפעולה.", session_history)
 
     # Build message list for API call
     messages = [{"role": "system", "content": SYSTEM_PROMPT}] + session_history
@@ -77,7 +76,7 @@ def get_doctor_visit_assistance(user_input: str, session_history: list) -> (str,
             max_tokens=500,
         )
         assistant_reply = response.choices[0].message.content.strip()
-        logger.debug(f"OpenAI response: {assistant_reply}")
+        #logger.debug(f"OpenAI response: {assistant_reply}")
 
         # Update session history
         session_history.append({"role": "user", "content": user_input})
@@ -98,10 +97,12 @@ def generate_summary(conversation):
     """
     # Prepare the prompt for OpenAI
     system_prompt = (
-        "You are a medical assistant. Summarize the following patient-doctor pre-visit conversation "
-        "for the doctor. The summary should help the doctor quickly understand the patient's main complaints, "
-        "symptoms, duration, and any other relevant information, so the visit can be as effective as possible. "
-        "Write the summary in Hebrew. the name of the patient is: תומר"
+        "אנא נקה כל זיכרון או היסטוריית שיחה קודמת. התחל סשן חדש ונקי.\n\n"
+        "אתה עוזר רפואי. סכם את שיחת ההכנה בין המטופל לרופא שלפני הביקור. "
+        "המטרה היא להציג לרופא סיכום תמציתי וברור שיעזור להבין את עיקרי התלונות של המטופל, "
+        "כולל תיאור סימפטומים, חומרה, משך, טריגרים או גורמים מקלים, וכל פרט רפואי רלוונטי נוסף. "
+        "הסיכום יאפשר לרופא להתחיל את הפגישה בצורה ממוקדת ויעילה. "
+        "כתוב את הסיכום בעברית."
     )
 
     # Build the messages for the API
