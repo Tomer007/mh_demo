@@ -446,6 +446,9 @@
       userBubble.querySelector('.message-content').innerHTML = marked.parse(message);
       chatContainer.insertBefore(userBubble, inputArea);
 
+      // Scroll to bottom after user message
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
       input.value = "";
 
       const typing = document.createElement("div");
@@ -459,6 +462,9 @@
         </div>
       `;
       chatContainer.insertBefore(typing, inputArea);
+
+      // Scroll to bottom after typing indicator
+      chatContainer.scrollTop = chatContainer.scrollHeight;
 
       // Call backend API for bot response
       try {
@@ -486,6 +492,9 @@
         botBubble.querySelector('.message-content').innerHTML = marked.parse(data.response.replace("###conversation_Ended###", ""));
         chatContainer.insertBefore(botBubble, inputArea);
         messageSound.play();
+
+        // Scroll to bottom after bot message
+        chatContainer.scrollTop = chatContainer.scrollHeight;
 
         // Update message status to delivered
         setTimeout(() => {
@@ -530,6 +539,8 @@
           </div>
         `;
         chatContainer.insertBefore(botBubble, inputArea);
+        // Scroll to bottom after error message
+        chatContainer.scrollTop = chatContainer.scrollHeight;
       }
 
       // Re-enable input and mic after bot response
