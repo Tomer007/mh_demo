@@ -594,30 +594,6 @@
       }
     }
 
-    function toggleEmojiPicker() {
-      const picker = document.getElementById('emojiPicker');
-      picker.classList.toggle('active');
-    }
-
-    function insertEmoji(emoji) {
-      const input = document.getElementById('userInput');
-      const start = input.selectionStart;
-      const end = input.selectionEnd;
-      const text = input.value;
-      input.value = text.substring(0, start) + emoji + text.substring(end);
-      input.focus();
-      input.selectionStart = input.selectionEnd = start + emoji.length;
-    }
-
-    // Close emoji picker when clicking outside
-    document.addEventListener('click', function(event) {
-      const picker = document.getElementById('emojiPicker');
-      const emojiBtn = document.getElementById('emojiBtn');
-      if (!picker.contains(event.target) && !emojiBtn.contains(event.target)) {
-        picker.classList.remove('active');
-      }
-    });
-
     document.addEventListener("DOMContentLoaded", function() {
       // Set patient name in the title
       document.getElementById("patientName").innerText = PATIENT_NAME;
@@ -642,7 +618,7 @@
     });
 
     function showSummaryModal(summary) {
-      document.getElementById("summaryText").innerText = summary;
+      document.getElementById("summaryText").innerHTML = marked.parse(summary);
       document.getElementById("summaryModal").style.display = "flex";
     }
     function closeSummaryModal() {
