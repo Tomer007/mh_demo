@@ -50,7 +50,7 @@ Then add:
 TAG: "###conversation_Ended###"
 """
 
-MAX_MESSAGES = 5
+MAX_MESSAGES = int(os.getenv("MAX_MESSAGES", 5))
 
 
 def get_doctor_visit_assistance(user_input: str, session_history: list) -> (str, list):
