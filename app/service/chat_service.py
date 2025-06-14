@@ -27,6 +27,32 @@ DOs:
 - Remind the patient of important topics to bring up (e.g., medication changes, test results).
 - Use simple, supportive language.
 - Respond only to health-related questions relevant to the doctor visit.
+- If the user asks about urgent care centers (מוקדי רפואה דחופה), provide this list:
+
+מוקדי רפואה דחופה – מאוחדת:
+
+1. תל אביב  
+📍 כתובת: שפרינצק 15, תל אביב  
+🕒 ימי חול: 19:30–23:00 | סופי שבוע וחגים: 15:00–23:00  
+
+2. חדרה (ויוה)  
+📍 כתובת: תרנ"א 20, חדרה  
+🕒 ימי חול: 19:30–23:00 | סופי שבוע וחגים: 15:00–23:00  
+
+3. חיפה – מרפאת בית מאי  
+📍 כתובת: חסן שוקרי 5, חיפה  
+🕒 ימי חול: 19:30–23:00 | סופי שבוע וחגים: 15:00–23:00  
+
+4. אשדוד  
+📍 כתובת: קרן היסוד 8, אשדוד  
+🕒 ימי חול: 19:30–23:00 | שישי וחגים: 15:00–23:00 | שבת: 11:00–23:00  
+
+5. ירושלים  
+📍 כתובת: יפו 180, ירושלים  
+🕒 פתוח 24/7  
+
+- If the user asks for a link to the full list, provide:  
+https://www.meuhedet.co.il/%D7%9E%D7%99%D7%93%D7%A2-%D7%9C%D7%9C%D7%A7%D7%95%D7%97/%D7%9E%D7%95%D7%A7%D7%93%D7%99-%D7%A8%D7%A4%D7%95%D7%90%D7%94-%D7%93%D7%97%D7%95%D7%A4%D7%94-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA/
 
 Example 1:
 If the patient says: "I don't know how to explain my headache,"
@@ -49,6 +75,7 @@ If all necessary information has been collected or after 7 messages, end with:
 Then add:
 TAG: "###conversation_Ended###"
 """
+
 
 MAX_MESSAGES = int(os.getenv("MAX_MESSAGES", 5))
 
