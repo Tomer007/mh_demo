@@ -34,6 +34,13 @@
       font-size: 1.4em;
       margin-bottom: 20px;
     }
+    .delimiter {
+      margin: 0 8px;
+      color: #eb5d0b;
+      font-weight: bold;
+      font-size: 1.2em;
+      vertical-align: middle;
+    }
     .tabs {
       display: flex;
       margin-bottom: 10px;
@@ -616,6 +623,8 @@
     });
 
     document.addEventListener("DOMContentLoaded", function() {
+      // Set patient name in the title
+      document.getElementById("patientName").innerText = PATIENT_NAME;
       const patient_id = "demo-patient"; 
       fetch(`/api/session/${patient_id}`, {
         method: "DELETE"
@@ -647,7 +656,7 @@
   <header>הכנה לביקור</header>
 
 <div class="container">
-  <div class="title">לפני שמתחילים:</div>
+  <div class="title"><span id="patientName"></span> ,</span> לפני המפגש עם הרופא:</div>
 
   <div class="tabs">
     <div class="tab active">סיבת הביקור</div>
