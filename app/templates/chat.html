@@ -239,27 +239,33 @@
       font-weight: 500;
       opacity: 0.9;
     }
-    .message-time {
+    .message-meta {
       position: absolute;
       bottom: 4px;
       left: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
       font-size: 0.7em;
       color: #666;
       opacity: 0.8;
     }
-    .message-content {
-      margin-top: 20px;
+    .message-time {
+      position: static;
+      font-size: 0.7em;
+      color: #666;
+      opacity: 0.8;
+      margin: 0;
+      padding: 0;
     }
     .message-status {
-      position: absolute;
-      bottom: 4px;
-      right: 12px;
-      font-size: 0.7em;
-      color: #666;
-      opacity: 0.8;
+      position: static;
       display: flex;
       align-items: center;
       gap: 2px;
+      font-size: 0.7em;
+      margin: 0;
+      padding: 0;
     }
     .message-status svg {
       width: 14px;
@@ -414,12 +420,14 @@
       userBubble.innerHTML = `
         <div class="user-message">
           <span class="user-label">${PATIENT_NAME}</span>
-          <span class="message-time">${getCurrentTime()}</span>
           <div class="message-content"></div>
-          <div class="message-status sent">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-            </svg>
+          <div class="message-meta">
+            <span class="message-status sent">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+              </svg>
+            </span>
+            <span class="message-time">${getCurrentTime()}</span>
           </div>
         </div>
       `;
@@ -456,8 +464,10 @@
         botBubble.innerHTML = `
           <div class="bot-message">
             <span class="bot-label">עוזר רפואי</span>
-            <span class="message-time">${getCurrentTime()}</span>
             <div class="message-content"></div>
+            <div class="message-meta">
+              <span class="message-time">${getCurrentTime()}</span>
+            </div>
           </div>
         `;
         // Render markdown for bot message
@@ -500,8 +510,10 @@
         botBubble.innerHTML = `
           <div class="bot-message">
             <span class="bot-label">עוזר רפואי</span>
-            <span class="message-time">${getCurrentTime()}</span>
             <div class="message-content">שגיאה בשליחת ההודעה לשרת</div>
+            <div class="message-meta">
+              <span class="message-time">${getCurrentTime()}</span>
+            </div>
           </div>
         `;
         chatContainer.insertBefore(botBubble, inputArea);
@@ -595,8 +607,10 @@
       initialBot.innerHTML = `
         <div class="bot-message">
           <span class="bot-label">עוזר רפואי</span>
-          <span class="message-time">${getCurrentTime()}</span>
           <div class="message-content">שלום לך ${PATIENT_NAME}, תודה שפנית אלינו! איך ניתן לעזור לך?</div>
+          <div class="message-meta">
+            <span class="message-time">${getCurrentTime()}</span>
+          </div>
         </div>
       `;
       chatContainer.insertBefore(initialBot, document.querySelector(".input-area"));
