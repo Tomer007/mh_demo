@@ -127,56 +127,6 @@
     .input-area button:active {
       transform: translateY(0);
     }
-    .emoji-btn {
-      background: #fff3e0;
-      border: 1.5px solid #ff9800;
-      border-radius: 50%;
-      width: 42px;
-      height: 42px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s, border 0.2s;
-      margin-left: 2px;
-      margin-right: 2px;
-      position: relative;
-      font-size: 20px;
-    }
-    .emoji-btn:hover {
-      background: #ffe0b2;
-    }
-    .emoji-picker {
-      position: absolute;
-      bottom: 100%;
-      right: 0;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      padding: 10px;
-      margin-bottom: 10px;
-      display: none;
-      z-index: 1000;
-      width: 300px;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-    .emoji-picker.active {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 8px;
-    }
-    .emoji-item {
-      font-size: 24px;
-      cursor: pointer;
-      padding: 5px;
-      text-align: center;
-      border-radius: 8px;
-      transition: background 0.2s;
-    }
-    .emoji-item:hover {
-      background: #f5f5f5;
-    }
     .mic-btn {
       background: #fff3e0;
       border: 1.5px solid #ff9800;
@@ -637,7 +587,7 @@
         <div class="bot-message">
           <span class="bot-label">עוזר רפואי</span>
           <span class="message-time">${getCurrentTime()}</span>
-          <div class="message-content">איך את/ה מרגיש?</div>
+          <div class="message-content">שלום לך ${PATIENT_NAME}, תודה שפנית אלינו! איך ניתן לעזור לך?</div>
         </div>
       `;
       chatContainer.insertBefore(initialBot, document.querySelector(".input-area"));
@@ -668,25 +618,6 @@
     <!-- Chat messages will be inserted here -->
     <div class="input-area">
       <input id="userInput" type="text" placeholder="הקלד הודעה..." lang="he-IL" onkeydown="if(event.key==='Enter'){sendMessage()}" />
-      <button class="emoji-btn" id="emojiBtn" type="button" onclick="toggleEmojiPicker()" title="הוסף אימוג'י">😊</button>
-      <div class="emoji-picker" id="emojiPicker">
-        <div class="emoji-item" onclick="insertEmoji('😊')">😊</div>
-        <div class="emoji-item" onclick="insertEmoji('😂')">😂</div>
-        <div class="emoji-item" onclick="insertEmoji('❤️')">❤️</div>
-        <div class="emoji-item" onclick="insertEmoji('👍')">👍</div>
-        <div class="emoji-item" onclick="insertEmoji('🙏')">🙏</div>
-        <div class="emoji-item" onclick="insertEmoji('😷')">😷</div>
-        <div class="emoji-item" onclick="insertEmoji('🤒')">🤒</div>
-        <div class="emoji-item" onclick="insertEmoji('💊')">💊</div>
-        <div class="emoji-item" onclick="insertEmoji('🏥')">🏥</div>
-        <div class="emoji-item" onclick="insertEmoji('👨‍⚕️')">👨‍⚕️</div>
-        <div class="emoji-item" onclick="insertEmoji('👩‍⚕️')">👩‍⚕️</div>
-        <div class="emoji-item" onclick="insertEmoji('💉')">💉</div>
-        <div class="emoji-item" onclick="insertEmoji('📋')">📋</div>
-        <div class="emoji-item" onclick="insertEmoji('⏰')">⏰</div>
-        <div class="emoji-item" onclick="insertEmoji('📅')">📅</div>
-        <div class="emoji-item" onclick="insertEmoji('❓')">❓</div>
-      </div>
       <button class="mic-btn" id="micBtn" type="button" onclick="toggleMic()" title="הקלט קול">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="44" height="44" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
           <path d="M12 18v3m0 0h4m-4 0H8m6-7a4 4 0 01-8 0V7a4 4 0 018 0v4z" />
