@@ -28,4 +28,4 @@ Thumbs.db
 .ipynb_checkpoints/
 
 # Local config
-*.local 
+*.local .env
