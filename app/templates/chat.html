@@ -321,17 +321,26 @@
       to { opacity: 1; }
     }
     .modal-content {
-      background: #e9d8ae;
+      background: #f3efe5;
       border-radius: 18px;
       box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 6px rgba(255,152,0,0.10);
       padding: 32px 28px 24px 28px;
-      min-width: 320px;
+      min-width: 200px;
       max-width: 90vw;
       max-height: 80vh;
       overflow-y: auto;
       position: relative;
       text-align: right;
       animation: popupIn 0.4s cubic-bezier(.23,1.01,.32,1);
+    }
+    @media (max-width: 600px) {
+      .modal-content {
+        width: 98vw;
+        min-width: 0;
+        max-width: 98vw;
+        padding: 16px 6px 12px 6px;
+        border-radius: 12px;
+      }
     }
     @keyframes popupIn {
       from { transform: scale(0.92) translateY(40px); opacity: 0; }
@@ -375,6 +384,7 @@
   <script src="/static/marked.min.js"></script>
   <script>
     const PATIENT_NAME = "{{ patient_name }}";
+    const PATIENT_ID = "{{ patient_id }}";
     const messageSound = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_722d560b83.mp3');
 
     function getCurrentTime() {
@@ -436,7 +446,7 @@
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ patient_id: "demo-patient", message })
+          body: JSON.stringify({ patient_id: PATIENT_ID, message })
         });
         const data = await res.json();
 
@@ -477,7 +487,7 @@
 
         if (data.response.includes("מגבלת שיחות הושגה") || data.response.includes("###conversation_Ended###")) {
           // Fetch summary and show modal
-          fetch("/api/summary/demo-patient")
+          fetch(`/api/summary/${PATIENT_ID}`)
             .then(r => r.json())
             .then(summaryData => {
               showSummaryModal(summaryData.summary);
@@ -575,8 +585,7 @@
     document.addEventListener("DOMContentLoaded", function() {
       // Set patient name in the title
       document.getElementById("patientName").innerText = PATIENT_NAME;
-      const patient_id = "demo-patient"; 
-      fetch(`/api/session/${patient_id}`, {
+      fetch(`/api/session/${PATIENT_ID}`, {
         method: "DELETE"
       });
 
