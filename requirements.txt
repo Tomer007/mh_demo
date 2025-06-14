@@ -3,4 +3,6 @@ jinja2
 uvicorn
 python-multipart
 aiofiles
-python-dotenv 
+openai
+
+python-dotenv openai
