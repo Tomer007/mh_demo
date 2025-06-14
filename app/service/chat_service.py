@@ -29,7 +29,7 @@ if you have all the information you need, you can end the conversation with a a 
 
 """
 
-MAX_MESSAGES = 3
+MAX_MESSAGES = 5
 
 
 def get_doctor_visit_assistance(user_input: str, session_history: list) -> (str, list):
