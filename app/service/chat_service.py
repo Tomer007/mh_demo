@@ -157,10 +157,8 @@ def generate_summary_prompt(
         "*6. היסטוריה רפואית רלוונטית:* [מצבים רפואיים דומים בעבר, מחלות רקע]\n"
         "*7. תרופות נוכחיות:* [או 'ללא']\n"
         "*8. המלצות/בירור ראשוני (אם נאמרו):* [הצעות לבדיקות או מעקב]\n\n"
-        "**Example 1 – With Clinical Information (Hebrew):**\n"
+        "**Example – With Clinical Information (Hebrew):**\n"
         f"{example_with_info}\n\n"
-        "**Example 2 – No Clinical Information Provided (Hebrew):**\n"
-        f"{default_no_info_message}"
     )
 
     
@@ -194,7 +192,7 @@ def generate_summary(conversation):
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
-            temperature=0.4,
+            temperature=0.1,
             max_tokens=300,
         )
         summary = response.choices[0].message.content.strip()
