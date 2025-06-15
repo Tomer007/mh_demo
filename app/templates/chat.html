@@ -604,29 +604,43 @@
           //inputArea.style.display = 'none';
           //chatContainer.classList.add('chat-disabled');
 
-          // Then show thank you message
-          const thankYouBubble = document.createElement("div");
-          thankYouBubble.className = "chat-bubble bot animated";
-          thankYouBubble.innerHTML = `
-            <div class="bot-message">
-              <span class="bot-label">עוזר רפואי מאוחדת</span></br>
-              <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
-              <div class="message-content">${PATIENT_NAME} תודה על שיתוף הפעולה.</div>
-              <div class="message-meta">
-                <span class="message-time">${getCurrentTime()}</span>
-              </div>
-            </div>
-          `;
-          chatContainer.insertBefore(thankYouBubble, inputArea);
+          
+          const summaryButton = document.createElement("button");
+          summaryButton.textContent = "דו״ח סיכום הכנה לרופא";
+          summaryButton.style.cssText = `
+    background-color: #f7941d;
+  color: white !important;
+  border: none;
+  border-radius: 28px;
+  padding: 14px 28px;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 24px auto 0;
+  cursor: pointer;
+  display: block;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  `;
+          summaryButton.onclick = async () => {
+            try {
+              const res = await fetch(`/api/summary/${PATIENT_ID}`);
+              const data = await res.json();
+              showSummaryModal(data.summary);
+            } catch (err) {
+              alert("שגיאה בטעינת הסיכום. נא לנסות שוב מאוחר יותר.");
+            }
+          };
+          chatContainer.insertBefore(summaryButton, inputArea);
 
-          // Fetch and show summary
-          fetch(`/api/summary/${PATIENT_ID}`)
-            .then(r => r.json())
-            .then(summaryData => {
-              showSummaryModal(summaryData.summary);
+          // Add smooth scroll to bottom
+          setTimeout(() => {
+            chatContainer.scrollTo({
+              top: chatContainer.scrollHeight,
+              behavior: 'smooth'
             });
+          }, 100);
 
-          return; // Exit the function here to prevent re-enabling
+          return;
         }
 
         // Only re-enable if conversation hasn't ended
