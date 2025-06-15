@@ -735,6 +735,28 @@
         </div>
       `;
       chatContainer.insertBefore(initialBot, document.querySelector(".input-area"));
+
+      // Prevent scrolling of the body when scrolling the chat
+      chatContainer.addEventListener('touchstart', function(e) {
+        if (e.target === chatContainer) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      // Add pull-to-refresh prevention
+      let touchStartY = 0;
+      chatContainer.addEventListener('touchstart', function(e) {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      chatContainer.addEventListener('touchmove', function(e) {
+        const touchY = e.touches[0].clientY;
+        const scrollTop = chatContainer.scrollTop;
+        
+        if (scrollTop === 0 && touchY > touchStartY) {
+          e.preventDefault();
+        }
+      }, { passive: false });
     });
 
     function showSummaryModal(summary) {
