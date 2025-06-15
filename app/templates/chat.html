@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,6 +13,7 @@
       padding: 0;
       box-sizing: border-box;
     }
+
     header {
       background: #92278f;
       color: white;
@@ -20,20 +22,23 @@
       font-size: 1.2em;
       border-radius: 0 0 10px 10px;
     }
+
     .container {
       background: white;
       margin: 30px auto;
       padding: 20px;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       max-width: 600px;
     }
+
     .title {
       color: #f7941d;
       font-weight: bold;
       font-size: 1.4em;
       margin-bottom: 20px;
     }
+
     .delimiter {
       margin: 0 8px;
       color: #eb5d0b;
@@ -41,10 +46,12 @@
       font-size: 1.2em;
       vertical-align: middle;
     }
+
     .tabs {
       display: flex;
       margin-bottom: 10px;
     }
+
     .tab {
       flex: 1;
       padding: 10px;
@@ -54,6 +61,7 @@
       cursor: pointer;
       font-weight: normal;
     }
+
     .tab.active {
       font-weight: normal;
       background: #f7f7f7;
@@ -61,6 +69,7 @@
       color: #f7941d;
       border-bottom: 2px solid #f7941d;
     }
+
     .chat-container {
       background: white;
       border-radius: 16px;
@@ -78,6 +87,7 @@
       overflow-y: auto;
       position: relative;
     }
+
     .input-area {
       display: flex;
       margin-top: auto;
@@ -89,8 +99,9 @@
       background: white;
       padding: 10px 0;
       z-index: 1;
-      border-top: 1px solid rgba(0,0,0,0.1);
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
+
     .input-area input {
       flex-grow: 1;
       padding: 12px 16px;
@@ -101,14 +112,17 @@
       color: #e65100;
       transition: all 0.3s ease;
     }
+
     .input-area input:focus {
       outline: none;
       box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.3);
       background-color: white;
     }
+
     .input-area input::placeholder {
       color: #ffa726;
     }
+
     .input-area button {
       background-color: #ff9800;
       color: white;
@@ -120,13 +134,16 @@
       transition: all 0.3s ease;
       font-weight: 500;
     }
+
     .input-area button:hover {
       background-color: #fb8c00;
       transform: translateY(-1px);
     }
+
     .input-area button:active {
       transform: translateY(0);
     }
+
     .mic-btn {
       background: #fff3e0;
       border: 1.5px solid #ff9800;
@@ -142,20 +159,24 @@
       margin-right: 2px;
       position: relative;
     }
+
     .mic-btn.active {
       background: #ffe0b2;
       border: 2.5px solid #fb8c00;
       box-shadow: 0 0 0 2px #ff9800;
     }
+
     .mic-btn svg {
       width: 32px;
       height: 32px;
       color: white;
     }
+
     .mic-btn.active svg {
       color: white;
       animation: pulse 1s infinite;
     }
+
     .footer {
       background: #f7941d;
       padding: 20px;
@@ -168,6 +189,7 @@
       margin-left: auto;
       margin-right: auto;
     }
+
     .footer a {
       display: inline-block;
       margin-top: 15px;
@@ -180,10 +202,12 @@
       text-decoration: none;
       transition: background 0.3s, color 0.3s;
     }
+
     .footer a:hover {
       background: white;
       color: #f7941d;
     }
+
     .chat-bubble {
       background: #f5f5f5;
       border-radius: 12px;
@@ -200,9 +224,11 @@
       position: relative;
       transition: transform 0.2s ease;
     }
+
     .chat-bubble:hover {
       transform: translateY(-1px);
     }
+
     .chat-bubble.bot {
       background-color: #ffe0b2;
       color: #e65100;
@@ -210,6 +236,7 @@
       margin-right: auto;
       margin-left: 0;
     }
+
     .chat-bubble.user {
       background-color: #e3f2fd;
       color: #0d47a1;
@@ -217,10 +244,13 @@
       margin-left: auto;
       margin-right: 0;
     }
-    .bot-message, .user-message {
+
+    .bot-message,
+    .user-message {
       width: 100%;
       padding-bottom: 16px;
     }
+
     .bot-label {
       position: absolute;
       top: 4px;
@@ -230,6 +260,7 @@
       font-weight: 500;
       opacity: 0.9;
     }
+
     .user-label {
       position: absolute;
       top: 4px;
@@ -239,6 +270,7 @@
       font-weight: 500;
       opacity: 0.9;
     }
+
     .message-meta {
       position: absolute;
       bottom: 4px;
@@ -250,6 +282,7 @@
       color: #666;
       opacity: 0.8;
     }
+
     .message-time {
       position: static;
       font-size: 1.0em;
@@ -259,6 +292,7 @@
       padding: 0;
       font-weight: bold;
     }
+
     .message-status {
       position: static;
       display: flex;
@@ -268,19 +302,24 @@
       margin: 0;
       padding: 0;
     }
+
     .message-status svg {
       width: 14px;
       height: 14px;
     }
+
     .message-status.sent svg {
       color: #666;
     }
+
     .message-status.delivered svg {
       color: #4CAF50;
     }
+
     .message-status.read svg {
       color: #2196F3;
     }
+
     .typing-indicator {
       display: flex;
       align-items: center;
@@ -293,10 +332,12 @@
       margin-bottom: 10px;
       width: fit-content;
     }
+
     .typing-dots {
       display: flex;
       gap: 2px;
     }
+
     .typing-dot {
       width: 6px;
       height: 6px;
@@ -304,33 +345,56 @@
       border-radius: 50%;
       animation: typingDot 1.4s infinite;
     }
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes typingDot {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-4px); }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
     }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typingDot {
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+      }
+
+      30% {
+        transform: translateY(-4px);
+      }
+    }
+
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0,0,0,0.35);
+      background: rgba(0, 0, 0, 0.35);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 2000;
       animation: fadeInModal 0.3s;
     }
+
     @keyframes fadeInModal {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
+
     .modal-content {
       background: #f3efe5;
       border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 6px rgba(255,152,0,0.10);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 1.5px 6px rgba(255, 152, 0, 0.10);
       padding: 32px 28px 24px 28px;
       min-width: 200px;
       max-width: 90vw;
@@ -338,8 +402,9 @@
       overflow-y: auto;
       position: relative;
       text-align: right;
-      animation: popupIn 0.4s cubic-bezier(.23,1.01,.32,1);
+      animation: popupIn 0.4s cubic-bezier(.23, 1.01, .32, 1);
     }
+
     @media (max-width: 600px) {
       .modal-content {
         width: 98vw;
@@ -349,22 +414,33 @@
         border-radius: 12px;
       }
     }
+
     @keyframes popupIn {
-      from { transform: scale(0.92) translateY(40px); opacity: 0; }
-      to { transform: scale(1) translateY(0); opacity: 1; }
+      from {
+        transform: scale(0.92) translateY(40px);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
     }
+
     .modal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 18px;
     }
+
     .modal-title {
       font-size: 1.25em;
       font-weight: bold;
       color: #eb5d0b;
       letter-spacing: 0.5px;
     }
+
     .modal-close {
       background: none;
       border: black;
@@ -376,9 +452,11 @@
       transition: color 0.2s;
       line-height: 1;
     }
+
     .modal-close:hover {
       color: #361603;
     }
+
     .modal-body {
       font-size: 1.08em;
       color: #361603;
@@ -387,13 +465,14 @@
       padding-bottom: 2px;
       word-break: break-word;
     }
+
     .main-logo {
       float: right;
       margin-left: 12px;
       margin-top: -4px;
       height: 38px;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
       background: white;
       padding: 2px 4px;
       object-fit: contain;
@@ -517,13 +596,45 @@
           `;
         }, 2000);
 
-        if (data.response.includes("מגבלת שיחות הושגה") || data.response.includes("###conversation_Ended###")) {
-          // Fetch summary and show modal
+        if (data.response.includes("הגעת למספר השיחות המרבי") || data.response.includes("###conversation_Ended###")) {
+          // Disable chat interface first
+          input.disabled = true;
+          micBtn.disabled = true;
+          if (sendBtn) sendBtn.disabled = true;
+          //inputArea.style.display = 'none';
+          //chatContainer.classList.add('chat-disabled');
+
+          // Then show thank you message
+          const thankYouBubble = document.createElement("div");
+          thankYouBubble.className = "chat-bubble bot animated";
+          thankYouBubble.innerHTML = `
+            <div class="bot-message">
+              <span class="bot-label">עוזר רפואי מאוחדת</span></br>
+              <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
+              <div class="message-content">${PATIENT_NAME} תודה על שיתוף הפעולה.</div>
+              <div class="message-meta">
+                <span class="message-time">${getCurrentTime()}</span>
+              </div>
+            </div>
+          `;
+          chatContainer.insertBefore(thankYouBubble, inputArea);
+
+          // Fetch and show summary
           fetch(`/api/summary/${PATIENT_ID}`)
             .then(r => r.json())
             .then(summaryData => {
               showSummaryModal(summaryData.summary);
             });
+
+          return; // Exit the function here to prevent re-enabling
+        }
+
+        // Only re-enable if conversation hasn't ended
+        if (!data.response.includes("הגעת למספר השיחות המרבי") && !data.response.includes("###conversation_Ended###")) {
+          input.disabled = false;
+          micBtn.disabled = false;
+          if (sendBtn) sendBtn.disabled = false;
+          input.focus();
         }
       } catch (err) {
         typing.remove();
@@ -543,12 +654,6 @@
         // Scroll to bottom after error message
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
-
-      // Re-enable input and mic after bot response
-      input.disabled = false;
-      micBtn.disabled = false;
-      if (sendBtn) sendBtn.disabled = false;
-      input.focus();
     }
 
     // Voice recognition support
@@ -567,15 +672,15 @@
         recognition.lang = 'he-IL'; // Default to Hebrew
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
-        recognition.onresult = function(event) {
+        recognition.onresult = function (event) {
           const transcript = event.results[0][0].transcript;
           document.getElementById("userInput").value = transcript;
         };
-        recognition.onend = function() {
+        recognition.onend = function () {
           recognizing = false;
           document.getElementById('micBtn').classList.remove('active');
         };
-        recognition.onerror = function() {
+        recognition.onerror = function () {
           recognizing = false;
           document.getElementById('micBtn').classList.remove('active');
         };
@@ -595,7 +700,7 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
       // Set patient name in the title
       document.getElementById("patientName").innerText = PATIENT_NAME;
       fetch(`/api/session/${PATIENT_ID}`, {
@@ -627,53 +732,59 @@
     }
   </script>
 </head>
+
 <body>
   <header>
-    הכנה לביקור 
+    הכנה לביקור
   </header>
 
-<div class="container">
-  <div class="title"><span id="patientName"></span> ,</span> לפני המפגש עם הרופא:</div>
+  <div class="container">
+    <div class="title"><span id="patientName"></span> ,</span> לפני המפגש עם הרופא:</div>
 
-  <div class="tabs">
-    <div class="tab active">סיבת הביקור</div>
-    <div class="tab">יצירת קשר</div>
-    <div class="tab">צירוף מסמכים</div>
-  </div>
-
-  <div class="chat-container">
-    <!-- Chat messages will be inserted here -->
-    <div class="input-area">
-      <input id="userInput" type="text" placeholder="הקלד הודעה..." lang="he-IL" onkeydown="if(event.key==='Enter'){sendMessage()}" />
-      <button class="mic-btn" id="micBtn" type="button" onclick="toggleMic()" title="הקלט קול">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="44" height="44" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
-          <path d="M12 18v3m0 0h4m-4 0H8m6-7a4 4 0 01-8 0V7a4 4 0 018 0v4z" />
-        </svg>          
-      </button>
-      <button onclick="sendMessage()">שלח</button>
+    <div class="tabs">
+      <div class="tab active">סיבת הביקור</div>
+      <div class="tab">יצירת קשר</div>
+      <div class="tab">צירוף מסמכים</div>
     </div>
-  </div>
-</div>
 
-<div class="footer">
-  <div>מעוניין לעדכן את התור או להיערך טוב יותר לפגישה עם הרופא?</div>
-  <a href="#">שינוי תור</a>
-</div>
-
-<div id="summaryModal" class="modal-overlay" style="display:none;">
-  <div class="modal-content">
-    <div class="modal-header">
-      <div class="header">
-        <img class="logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="50">
+    <div class="chat-container">
+      <!-- Chat messages will be inserted here -->
+      <div class="input-area">
+        <input id="userInput" type="text" placeholder="הקלד הודעה..." lang="he-IL"
+          onkeydown="if(event.key==='Enter'){sendMessage()}" />
+        <button class="mic-btn" id="micBtn" type="button" onclick="toggleMic()" title="הקלט קול">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="44" height="44"
+            stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
+            <path d="M12 18v3m0 0h4m-4 0H8m6-7a4 4 0 01-8 0V7a4 4 0 018 0v4z" />
+          </svg>
+        </button>
+        <button onclick="sendMessage()">שלח</button>
       </div>
-      <button class="modal-close" onclick="closeSummaryModal()">&times;</button>
-    </div>
-    
-    <div class="modal-body">
-      <span class="modal-title">סיכום סיבת הביקור כפי שדיווח/ה המטופל/ת</span>
-      <p id="summaryText"></p>
     </div>
   </div>
-</div>
+
+  <div class="footer">
+    <div>מעוניין לעדכן את התור או להיערך טוב יותר לפגישה עם הרופא?</div>
+    <a href="#">שינוי תור</a>
+  </div>
+
+  <div id="summaryModal" class="modal-overlay" style="display:none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="header">
+          <img class="logo"
+            src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg"
+            alt="מאוחדת" height="50">
+        </div>
+        <button class="modal-close" onclick="closeSummaryModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <span class="modal-title">סיכום סיבת הביקור כפי שדיווח/ה המטופל/ת</span>
+        <p id="summaryText"></p>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>

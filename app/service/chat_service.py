@@ -88,7 +88,7 @@ def get_doctor_visit_assistance(user_input: str, session_history: list) -> (str,
     logger.debug(f"Session history (before): {session_history}")
     if len(user_messages) >= MAX_MESSAGES:
         logger.info("Session message limit reached.")
-        return ("מגבלת שיחות הושגה. תודה על שיתוף הפעולה.", session_history)
+        return ("הגעת למספר השיחות המרבי. נשמח לעזור שוב בהמשך.", session_history)
 
     # Build message list for API call
     messages = [{"role": "system", "content": SYSTEM_PROMPT}] + session_history
