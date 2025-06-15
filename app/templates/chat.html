@@ -554,7 +554,6 @@
           body: JSON.stringify({ patient_id: PATIENT_ID, message })
         });
         const data = await res.json();
-
         typing.remove();
         const botBubble = document.createElement("div");
         botBubble.className = "chat-bubble bot animated";
@@ -596,15 +595,12 @@
           `;
         }, 2000);
 
-        if (data.response.includes("הגעת למספר השיחות המרבי") || data.response.includes("###conversation_Ended###")) {
+        if (data.response.includes("###conversation_Ended###")) {
           // Disable chat interface first
           input.disabled = true;
           micBtn.disabled = true;
           if (sendBtn) sendBtn.disabled = true;
-          //inputArea.style.display = 'none';
-          //chatContainer.classList.add('chat-disabled');
 
-          
           const summaryButton = document.createElement("button");
           summaryButton.textContent = "דו״ח סיכום הכנה לרופא";
           summaryButton.style.cssText = `
@@ -621,12 +617,34 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: background-color 0.3s ease, transform 0.2s ease;
   `;
+
+          // Add disabled state styles
+          const disabledStyles = `
+    background-color: #f7941d !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+    box-shadow: none;
+  `;
+
           summaryButton.onclick = async () => {
+            // Disable button immediately
+            summaryButton.disabled = true;
+            summaryButton.style.cssText += disabledStyles;
+            summaryButton.textContent = "טוען...";
+
             try {
               const res = await fetch(`/api/summary/${PATIENT_ID}`);
               const data = await res.json();
               showSummaryModal(data.summary);
+              
+              // Keep button disabled after successful response
+              summaryButton.textContent = "דו״ח נטען";
             } catch (err) {
+              // Re-enable button only on error
+              summaryButton.disabled = false;
+              summaryButton.style.cssText = summaryButton.style.cssText.replace(disabledStyles, '');
+              summaryButton.textContent = "דו״ח סיכום הכנה לרופא";
               alert("שגיאה בטעינת הסיכום. נא לנסות שוב מאוחר יותר.");
             }
           };
@@ -644,7 +662,7 @@
         }
 
         // Only re-enable if conversation hasn't ended
-        if (!data.response.includes("הגעת למספר השיחות המרבי") && !data.response.includes("###conversation_Ended###")) {
+        if (!data.response.includes("הגעת למספר השיחות המרבי")) {
           input.disabled = false;
           micBtn.disabled = false;
           if (sendBtn) sendBtn.disabled = false;
