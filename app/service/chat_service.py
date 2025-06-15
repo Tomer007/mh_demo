@@ -73,7 +73,7 @@ End of Conversation:
 If all necessary information has been collected or after 7 messages, end with:
 "תודה ששיתפת אותי במה שאתה מרגיש. אני מאחל לך בריאות שלמה והחלמה מהירה!"
 Then add:
-TAG: "###conversation_Ended###"
+"###conversation_Ended###"
 """
 
 
@@ -117,35 +117,68 @@ def get_doctor_visit_assistance(user_input: str, session_history: list) -> (str,
         return f"שגיאה בתקשורת עם ה-AI: {e}", session_history
     
 
-def generate_summary(conversation):
-    """
-    Sends the conversation to OpenAI and asks for a visit summary report for the doctor.
-    The summary should help the doctor be effective for the upcoming patient visit.
-    """
-    # Prepare the prompt for OpenAI
-    system_prompt = (
+def generate_summary_prompt(
+    max_questions: int = 4,
+    default_no_info_message: str = "לא נמסר מידע קליני המספיק לכתיבת סיכום.",
+    example_with_info: str = 
+    "1. תלונה עיקרית: המטופל מדווח על כאבי גב תחתון.\n"
+    "2. משך הסימפטום: כשלושה שבועות.\n"
+    "3. חומרה: דרגת כאב בינונית-גבוהה (6–7 מתוך 10).\n"
+    "4. טריגרים/גורמים מקלים: מוחמר בישיבה ממושכת, משתפר בשכיבה.\n"
+    "5. תסמינים נלווים: אין חום או הקרנה לרגליים.\n"
+    "6. היסטוריה רפואית רלוונטית: ללא היסטוריה קודמת של בעיות גב.\n"
+    "7. תרופות נוכחיות: אינו נוטל תרופות כרגע.\n"
+    "8. המלצות/בירור ראשוני (אם נאמרו): לא צוינו."
+) -> str:
+    return (
         "Reset all memory and chat history. Begin a new, clean session.\n\n"
         "**Role:**\n"
         "You are a medical assistant. Your responsibility is to summarize the patient's pre-visit conversation for the physician, based solely on information provided by the patient.\n\n"
-        "**Efficiency Requirement:**\n\n"
-        "* Be highly efficient. Strive to complete the full summary after **no more than four questions** to the patient.\n"
+        "**Efficiency Requirement:**\n"
+        f"* Be highly efficient. Strive to complete the full summary after **no more than {max_questions} questions** to the patient.\n"
         "* Use each question strategically to gather only the most essential clinical details.\n"
         "* Avoid unnecessary follow-ups or elaboration beyond the core goal of visit preparation.\n\n"
-        "**Summary Guidelines:**\n\n"
-        "* Write in Hebrew, using a professional, neutral, and concise tone.\n"
+        "**Summary Guidelines:**\n"
+        f"* Write in user input language, using a professional, neutral, and concise tone.\n"
         "* The summary is intended for the **physician only** and supports clinical efficiency. Do not include content directed at the patient.\n"
         "* Include only essential clinical details: presenting symptoms, severity, duration, aggravating or relieving factors, relevant medical history, medications, and treatment background.\n"
-        "* If no sufficient information is available, write: *\"לא נמסר מידע קליני המספיק לכתיבת סיכום.\"*\n\n"
-        "**Limitations:**\n\n"
+        f"* If no sufficient information is available, write: *\"{default_no_info_message}\"*\n\n"
+        "**Limitations:**\n"
         "* Never add assumptions, personal interpretations, or clinical advice.\n"
         "* Do not address or reference the patient directly.\n"
         "* Never conclude with a question or suggest further actions.\n\n"
         "---\n\n"
+        "**Template – Standard Summary Format (Hebrew):**\n"
+        "*1. תלונה עיקרית:* [תיאור קצר של הסימפטום או הסיבה לפנייה]\n"
+        "*2. משך הסימפטום:* [כמה זמן התסמין קיים]\n"
+        "*3. חומרה:* [רמת הכאב או חומרת התסמין (לדוג' 1–10) אם נמסרה]\n"
+        "*4. טריגרים/גורמים מקלים:* [מה מחמיר ומה מקל על התסמין]\n"
+        "*5. תסמינים נלווים:* [חום, בחילה, הקרנה, קוצר נשימה וכו']\n"
+        "*6. היסטוריה רפואית רלוונטית:* [מצבים רפואיים דומים בעבר, מחלות רקע]\n"
+        "*7. תרופות נוכחיות:* [או 'ללא']\n"
+        "*8. המלצות/בירור ראשוני (אם נאמרו):* [הצעות לבדיקות או מעקב]\n\n"
         "**Example 1 – With Clinical Information (Hebrew):**\n"
-        "*המטופל מדווח על כאבי גב תחתון מזה כשלושה שבועות, בדרגת חומרה בינונית-גבוהה (6–7 מתוך 10). הכאב מוחמר בישיבה ממושכת ומשתפר בשכיבה. אין תסמינים נלווים של חום או הקרנה לרגליים. ללא היסטוריה קודמת של בעיות גב. אינו נוטל תרופות כרגע.*\n\n"
+        f"{example_with_info}\n\n"
         "**Example 2 – No Clinical Information Provided (Hebrew):**\n"
-        "*לא נמסר מידע קליני המספיק לכתיבת סיכום.*"
+        f"{default_no_info_message}"
     )
+
+    
+
+def generate_summary(conversation):
+    """
+    Sends the conversation to OpenAI and asks for a visit summary report for the doctor.
+    The summary should help the doctor be effective for the upcoming patient visit.
+    
+    Args:
+        conversation: List of conversation messages
+        max_questions (int): Maximum number of questions allowed in the conversation
+    """
+    # Generate the prompt with configurable parameters
+    system_prompt = generate_summary_prompt(MAX_MESSAGES)
+
+    print(f"System prompt: {system_prompt}")
+    print(f"Conversation: {conversation}")
 
     # Build the messages for the API
     messages = [{"role": "system", "content": system_prompt}]
