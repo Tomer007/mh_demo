@@ -1,174 +1,219 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
-
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>מאוחדת עוזר רפואי - הכנה לביקור</title>
+  <title>Amwell Medical Assistant - Visit Preparation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-blue: #0066FF;
+      --secondary-teal: #00D4AA;
+      --text-dark: #1E293B;
+      --text-medium: #475569;
+      --background: #F8FAFC;
+      --white: #FFFFFF;
+      --shadow-soft: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Alef', sans-serif;
-      background: #f7f7f7;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #abb7f5 0%, #c5c3c7 100%);
+      min-height: 100vh;
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-
     header {
-      background: #92278f;
-      color: white;
-      padding: 15px;
+      width: 100%;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(20px);
+      padding: 15px 0;
       text-align: center;
-      font-size: 1.2em;
-      border-radius: 0 0 10px 10px;
+      font-size: 1.4rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-soft);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-
     .container {
-      background: white;
-      margin: 30px auto;
-      padding: 20px;
+      background: var(--white);
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-soft);
+      margin: 30px;
+      padding: 20px;
       max-width: 600px;
+      width: 100%;
     }
-
     .title {
-      color: #f7941d;
-      font-weight: bold;
-      font-size: 1.4em;
+      font-size: 1.0rem;
+      font-weight: 500;
+      color: var(--primary-blue);
       margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
     }
-
-    .delimiter {
-      margin: 0 8px;
-      color: #eb5d0b;
-      font-weight: bold;
-      font-size: 1.2em;
-      vertical-align: middle;
+    .title.popup {
+      opacity: 1;
+      transform: translateY(0);
     }
-
     .tabs {
       display: flex;
-      margin-bottom: 10px;
+      gap: 10px;
+      margin-bottom: 20px;
     }
-
     .tab {
       flex: 1;
       padding: 10px;
       text-align: center;
-      background: #f7f7f7;
-      border: none;
+      background: var(--background);
+      border-radius: 8px;
       cursor: pointer;
-      font-weight: normal;
+      font-weight: 500;
+      transition: background 0.3s;
     }
-
     .tab.active {
-      font-weight: normal;
-      background: #f7f7f7;
-      border: none;
-      color: #f7941d;
-      border-bottom: 2px solid #f7941d;
+      background: var(--primary-blue);
+      color: var(--white);
     }
-
     .chat-container {
-      background: white;
+      background: var(--white);
       border-radius: 16px;
       padding: 10px;
-      max-width: 570px;
-      width: 100%;
-      box-shadow: 0 4px 12px rgba(235, 199, 145, 0.15);
-      margin-top: 40px;
+      box-shadow: var(--shadow-soft);
       display: flex;
       flex-direction: column;
-      animation: fadeIn 0.8s ease-in-out;
-      transition: all 0.4s ease;
-      min-height: 450px;
-      max-height: 600px;
+      gap: 10px;
+      max-height: 500px;
       overflow-y: auto;
-      position: relative;
     }
-
+    .chat-bubble {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      position: relative;
+      animation: fadeIn 0.5s;
+      line-height: 1.5;
+    }
+    .chat-bubble.bot {
+      background: #aac3e8;
+      color: var(--primary-blue);
+      align-self: flex-start;
+    }
+    .chat-bubble.user {
+      background: #b1dfb1;
+      color: var(--text-dark);
+      align-self: flex-end;
+    }
+    .bot-label, .user-label {
+      font-size: 0.80rem;
+      font-weight: 500;
+      position: absolute;
+      top: 4px;
+      left: 8px;
+      opacity: 0.8;
+      font-weight: bold;
+    }
+    .message-meta {
+      font-size: 0.7rem;
+      position: absolute;
+      bottom: 4px;
+      right: 8px;
+      opacity: 0.8;
+      display: flex;
+      gap: 4px;
+    }
     .input-area {
       display: flex;
-      margin-top: auto;
       gap: 10px;
-      animation: fadeIn 1.2s ease;
-      align-items: center;
-      position: sticky;
-      bottom: 0;
-      background: white;
-      padding: 10px 0;
-      z-index: 1;
-      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
     }
-
     .input-area input {
-      flex-grow: 1;
+      flex: 1;
       padding: 12px 16px;
       border-radius: 24px;
-      border: 1px solid #ff9800;
-      font-size: 16px;
-      background-color: #fff3e0;
-      color: #e65100;
-      transition: all 0.3s ease;
+      border: 1px solid var(--primary-blue);
+      background: var(--background);
     }
-
-    .input-area input:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.3);
-      background-color: white;
-    }
-
-    .input-area input::placeholder {
-      color: #ffa726;
-    }
-
     .input-area button {
-      background-color: #ff9800;
-      color: white;
+      background: var(--primary-blue);
+      color: var(--white);
       border: none;
       border-radius: 24px;
       padding: 12px 20px;
-      font-size: 16px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
+      transition: background 0.3s;
     }
-
     .input-area button:hover {
-      background-color: #fb8c00;
-      transform: translateY(-1px);
+      background: var(--secondary-teal);
     }
-
-    .input-area button:active {
-      transform: translateY(0);
-    }
-
-    .mic-btn {
-      background: #fff3e0;
-      border: 1.5px solid #ff9800;
-      border-radius: 50%;
-      width: 55px;
-      height: 42px;
+    @keyframes fadeIn { from { opacity:0; transform: translateY(10px);} to { opacity:1; transform: translateY(0);} }
+    .messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s, border 0.2s;
-      margin-left: 2px;
-      margin-right: 2px;
-      position: relative;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 400px;
+      max-height: 600px;
+    }
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .input-area {
+      margin-top: auto;
+      padding: 20px;
+      background: var(--white);
+      border-top: 1px solid var(--border-light);
+    }
+    .main-logo {
+      float: right;
+      margin-left: 12px;
+      margin-top: -4px;
+      height: 50px;
+      border-radius: 18px;
+      padding: 2px 4px;
+      object-fit: cover;
+    }
+    .message-time {
+      position: static;
+      font-size: 1.0em;
+      color: #010415;
+      opacity: 0.8;
+      margin: 0;
+      padding: 0;
+      font-weight: bold;
+    }
+    .message-content {
+        font-size: 0.9em;
+        line-height: 1.5;
+        margin: 8px 0;
+        font-weight: 500;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+        color: var(--text-dark);
     }
 
-    .mic-btn.active {
-      background: #ffe0b2;
-      border: 2.5px solid #fb8c00;
-      box-shadow: 0 0 0 2px #ff9800;
+    /* For user messages */
+    .chat-bubble.user .message-content {
+      color: var(--text-dark);
+    }
+
+    /* For bot messages */
+    .chat-bubble.bot .message-content {
+        color: var(--text-dark);
     }
 
     .mic-btn svg {
-      width: 32px;
-      height: 32px;
+      width: 25px;
+      height: 20px;
       color: white;
     }
 
@@ -177,147 +222,98 @@
       animation: pulse 1s infinite;
     }
 
-    .footer {
-      background: #f7941d;
-      padding: 20px;
-      text-align: center;
-      color: white;
-      margin-top: 20px;
-      font-size: 1.1em;
-      border-radius: 10px;
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .footer a {
-      display: inline-block;
-      margin-top: 15px;
-      padding: 10px 25px;
-      background: #f7941d;
-      color: white;
-      border: 2px solid white;
-      border-radius: 24px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: background 0.3s, color 0.3s;
-    }
-
-    .footer a:hover {
-      background: white;
-      color: #f7941d;
-    }
-
-    .chat-bubble {
-      background: #f5f5f5;
-      border-radius: 12px;
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      font-size: 16px;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      animation: slideIn 0.5s ease;
-      direction: rtl;
-      text-align: right;
-      max-width: 85%;
-      position: relative;
-      transition: transform 0.2s ease;
-    }
-
-    .chat-bubble:hover {
-      transform: translateY(-1px);
-    }
-
-    .chat-bubble.bot {
-      background-color: #ffe0b2;
-      color: #e65100;
-      align-self: flex-start;
-      margin-right: auto;
-      margin-left: 0;
-    }
-
-    .chat-bubble.user {
-      background-color: #e3f2fd;
-      color: #0d47a1;
-      align-self: flex-end;
-      margin-left: auto;
-      margin-right: 0;
-    }
-
-    .bot-message,
-    .user-message {
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      padding-bottom: 16px;
-    }
-
-    .bot-label {
-      position: absolute;
-      top: 4px;
-      right: 12px;
-      font-size: 0.75em;
-      color: #e65100;
-      font-weight: 500;
-      opacity: 0.9;
-    }
-
-    .user-label {
-      position: absolute;
-      top: 4px;
-      right: 12px;
-      font-size: 0.75em;
-      color: #0d47a1;
-      font-weight: 500;
-      opacity: 0.9;
-    }
-
-    .message-meta {
-      position: absolute;
-      bottom: 4px;
-      left: 12px;
-      display: flex;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
       align-items: center;
-      gap: 4px;
-      font-size: 0.7em;
-      color: #666;
-      opacity: 0.8;
+      z-index: 9999;
+      animation: fadeIn 0.3s ease-in-out;
     }
 
-    .message-time {
-      position: static;
-      font-size: 1.0em;
-      color: #201d1d;
-      opacity: 0.8;
-      margin: 0;
-      padding: 0;
+    .modal-content {
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 600px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      position: relative;
+      animation: slideUp 0.4s ease-out;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-title {
+      font-size: 1.4rem;
       font-weight: bold;
-    }
-
-    .message-status {
-      position: static;
+      color: #1E293B;
       display: flex;
       align-items: center;
-      gap: 2px;
-      font-size: 0.7em;
-      margin: 0;
-      padding: 0;
+      gap: 10px;
     }
 
-    .message-status svg {
-      width: 14px;
-      height: 14px;
+    .modal-title img {
+      height: 30px;
     }
 
-    .message-status.sent svg {
-      color: #666;
+    .modal-close {
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
     }
 
-    .message-status.delivered svg {
-      color: #4CAF50;
+    .modal-close:hover {
+      color: #333;
     }
 
-    .message-status.read svg {
-      color: #2196F3;
+    .modal-body {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #334155;
+    }
+
+    .modal-footer {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .modal-footer button {
+      background-color: #0066FF;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .modal-footer button:hover {
+      background-color: #004fcc;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .typing-indicator {
@@ -325,498 +321,398 @@
       align-items: center;
       gap: 4px;
       padding: 8px 12px;
-      background: #ffe0b2;
+      background: #aac3e8;
       border-radius: 12px;
-      color: #e65100;
       font-size: 0.9em;
       margin-bottom: 10px;
       width: fit-content;
     }
-
-    .typing-dots {
-      display: flex;
-      gap: 2px;
-    }
-
-    .typing-dot {
-      width: 6px;
-      height: 6px;
-      background: #e65100;
-      border-radius: 50%;
-      animation: typingDot 1.4s infinite;
-    }
-
-    .typing-dot:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .typing-dot:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    @keyframes typingDot {
-
-      0%,
-      60%,
-      100% {
-        transform: translateY(0);
-      }
-
-      30% {
-        transform: translateY(-4px);
-      }
-    }
-
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2000;
-      animation: fadeInModal 0.3s;
-    }
-
-    @keyframes fadeInModal {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    .modal-content {
-      background: #f3efe5;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 1.5px 6px rgba(255, 152, 0, 0.10);
-      padding: 32px 28px 24px 28px;
-      min-width: 200px;
-      max-width: 90vw;
-      max-height: 80vh;
-      overflow-y: auto;
-      position: relative;
-      text-align: right;
-      animation: popupIn 0.4s cubic-bezier(.23, 1.01, .32, 1);
-    }
-
-    @media (max-width: 600px) {
-      .modal-content {
-        width: 98vw;
-        min-width: 0;
-        max-width: 98vw;
-        padding: 16px 6px 12px 6px;
-        border-radius: 12px;
-      }
-    }
-
-    @keyframes popupIn {
-      from {
-        transform: scale(0.92) translateY(40px);
-        opacity: 0;
-      }
-
-      to {
-        transform: scale(1) translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-
-    .modal-title {
-      font-size: 1.25em;
-      font-weight: bold;
-      color: #eb5d0b;
-      letter-spacing: 0.5px;
-    }
-
-    .modal-close {
-      background: none;
-      border: black;
-      font-size: 1.7em;
-      color: #ea6e09;
-      cursor: pointer;
-      font-weight: bold;
-      margin-left: 8px;
-      transition: color 0.2s;
-      line-height: 1;
-    }
-
-    .modal-close:hover {
-      color: #361603;
-    }
-
-    .modal-body {
-      font-size: 1.08em;
-      color: #361603;
-      line-height: 1.7;
-      padding-top: 6px;
-      padding-bottom: 2px;
-      word-break: break-word;
-    }
-
-    .main-logo {
-      float: right;
-      margin-left: 12px;
-      margin-top: -4px;
-      height: 38px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-      background: white;
-      padding: 2px 4px;
-      object-fit: contain;
-    }
+   
   </style>
-  <script src="/static/marked.min.js"></script>
-  <script>
-    const PATIENT_NAME = "{{ patient_name }}";
-    const PATIENT_ID = "{{ patient_id }}";
-    const messageSound = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_722d560b83.mp3');
-
-    function getCurrentTime() {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, '0');
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${minutes}`;
-    }
-
-    async function sendMessage() {
-      const input = document.getElementById("userInput");
-      const micBtn = document.getElementById("micBtn");
-      const sendBtn = document.querySelector(".input-area button[onclick='sendMessage()']");
-      const chatContainer = document.querySelector(".chat-container");
-      const inputArea = document.querySelector(".input-area");
-
-      const message = input.value.trim();
-      if (message === "") return;
-
-      // Disable input and mic while waiting for bot
-      input.disabled = true;
-      micBtn.disabled = true;
-      if (sendBtn) sendBtn.disabled = true;
-
-      const userBubble = document.createElement("div");
-      userBubble.className = "chat-bubble user animated";
-      userBubble.innerHTML = `
-        <div class="user-message">
-          <span class="user-label">${PATIENT_NAME}</span>
-          <div class="message-content"></div>
-          <div class="message-meta">
-            <span class="message-status sent">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
-              </svg>
-            </span>
-            <span class="message-time">${getCurrentTime()}</span>
-          </div>
-        </div>
-      `;
-      // Render markdown for user message
-      userBubble.querySelector('.message-content').innerHTML = marked.parse(message);
-      chatContainer.insertBefore(userBubble, inputArea);
-
-      // Scroll to bottom after user message
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-
-      input.value = "";
-
-      const typing = document.createElement("div");
-      typing.className = "typing-indicator";
-      typing.innerHTML = `
-        <span>עוזר רפואי מאוחדת  מקליד</span>
-        <div class="typing-dots">
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-          <div class="typing-dot"></div>
-        </div>
-      `;
-      chatContainer.insertBefore(typing, inputArea);
-
-      // Scroll to bottom after typing indicator
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-
-      // Call backend API for bot response
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ patient_id: PATIENT_ID, message })
-        });
-        const data = await res.json();
-        typing.remove();
-        const botBubble = document.createElement("div");
-        botBubble.className = "chat-bubble bot animated";
-        botBubble.innerHTML = `
-          <div class="bot-message">
-            <span class="bot-label">עוזר רפואי מאוחדת</span></br>
-            <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
-            <div class="message-content"></div>
-            <div class="message-meta">
-              <span class="message-time">${getCurrentTime()}</span>
-            </div>
-          </div>
-        `;
-        // Render markdown for bot message
-        botBubble.querySelector('.message-content').innerHTML = marked.parse(data.response.replace("###conversation_Ended###", ""));
-        chatContainer.insertBefore(botBubble, inputArea);
-        messageSound.play();
-
-        // Scroll to bottom after bot message
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-
-        // Update message status to delivered
-        setTimeout(() => {
-          userBubble.querySelector('.message-status').className = 'message-status delivered';
-          userBubble.querySelector('.message-status').innerHTML = `
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
-            </svg>
-          `;
-        }, 1000);
-
-        // Update message status to read
-        setTimeout(() => {
-          userBubble.querySelector('.message-status').className = 'message-status read';
-          userBubble.querySelector('.message-status').innerHTML = `
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
-            </svg>
-          `;
-        }, 2000);
-
-        if (data.response.includes("###conversation_Ended###")) {
-          // Disable chat interface first
-          input.disabled = true;
-          micBtn.disabled = true;
-          if (sendBtn) sendBtn.disabled = true;
-
-          const summaryButton = document.createElement("button");
-          summaryButton.textContent = "דו״ח סיכום הכנה לרופא";
-          summaryButton.style.cssText = `
-    background-color: #f7941d;
-  color: white !important;
-  border: none;
-  border-radius: 28px;
-  padding: 14px 28px;
-  font-size: 17px;
-  font-weight: 600;
-  margin: 24px auto 0;
-  cursor: pointer;
-  display: block;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  `;
-
-          // Add disabled state styles
-          const disabledStyles = `
-    background-color: #f7941d !important;
-    cursor: not-allowed;
-    opacity: 0.7;
-    transform: none;
-    box-shadow: none;
-  `;
-
-          summaryButton.onclick = async () => {
-            // Disable button immediately
-            summaryButton.disabled = true;
-            summaryButton.style.cssText += disabledStyles;
-            summaryButton.textContent = "טוען...";
-
-            try {
-              const res = await fetch(`/api/summary/${PATIENT_ID}`);
-              const data = await res.json();
-              showSummaryModal(data.summary);
-              
-              // Keep button disabled after successful response
-              summaryButton.textContent = "דו״ח נטען";
-            } catch (err) {
-              // Re-enable button only on error
-              summaryButton.disabled = false;
-              summaryButton.style.cssText = summaryButton.style.cssText.replace(disabledStyles, '');
-              summaryButton.textContent = "דו״ח סיכום הכנה לרופא";
-              alert("שגיאה בטעינת הסיכום. נא לנסות שוב מאוחר יותר.");
-            }
-          };
-          chatContainer.insertBefore(summaryButton, inputArea);
-
-          // Add smooth scroll to bottom
-          setTimeout(() => {
-            chatContainer.scrollTo({
-              top: chatContainer.scrollHeight,
-              behavior: 'smooth'
-            });
-          }, 100);
-
-          return;
-        }
-
-        // Only re-enable if conversation hasn't ended
-        if (!data.response.includes("הגעת למספר השיחות המרבי")) {
-          input.disabled = false;
-          micBtn.disabled = false;
-          if (sendBtn) sendBtn.disabled = false;
-          input.focus();
-        }
-      } catch (err) {
-        typing.remove();
-        const botBubble = document.createElement("div");
-        botBubble.className = "chat-bubble bot animated";
-        botBubble.innerHTML = `
-          <div class="bot-message">
-            <span class="bot-label">מאוחדת עוזר רפואי</span></br>
-            <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
-            <div class="message-content">שגיאה בשליחת ההודעה לשרת</div>
-            <div class="message-meta">
-              <span class="message-time">${getCurrentTime()}</span>
-            </div>
-          </div>
-        `;
-        chatContainer.insertBefore(botBubble, inputArea);
-        // Scroll to bottom after error message
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-      }
-    }
-
-    // Voice recognition support
-    let recognition;
-    let recognizing = false;
-    function toggleMic() {
-      const micBtn = document.getElementById("micBtn");
-      if (micBtn.disabled) return;
-      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        alert('Voice recognition is not supported in this browser.');
-        return;
-      }
-      if (!recognition) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.lang = 'he-IL'; // Default to Hebrew
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
-        recognition.onresult = function (event) {
-          const transcript = event.results[0][0].transcript;
-          document.getElementById("userInput").value = transcript;
-        };
-        recognition.onend = function () {
-          recognizing = false;
-          document.getElementById('micBtn').classList.remove('active');
-        };
-        recognition.onerror = function () {
-          recognizing = false;
-          document.getElementById('micBtn').classList.remove('active');
-        };
-      }
-      if (!recognizing) {
-        // Try to detect language from input placeholder or browser
-        const input = document.getElementById("userInput");
-        const lang = input.lang || navigator.language || 'he-IL';
-        recognition.lang = lang.match(/^he/) ? 'he-IL' : 'en-US';
-        recognition.start();
-        recognizing = true;
-        document.getElementById('micBtn').classList.add('active');
-      } else {
-        recognition.stop();
-        recognizing = false;
-        document.getElementById('micBtn').classList.remove('active');
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-      // Set patient name in the title
-      document.getElementById("patientName").innerText = PATIENT_NAME;
-      fetch(`/api/session/${PATIENT_ID}`, {
-        method: "DELETE"
-      });
-
-      const chatContainer = document.querySelector(".chat-container");
-      const initialBot = document.createElement("div");
-      initialBot.className = "chat-bubble bot animated";
-      initialBot.innerHTML = `
-        <div class="bot-message">
-          <span class="bot-label">מאוחדת עוזר רפואי</span></br>
-          <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
-          <div class="message-content">שלום ${PATIENT_NAME} 👋 , תודה שפנית אלינו. כדי להתכונן לביקור נשמח לדעת למה פנית לרופא, מה את מרגישה, אילו סימפטומים יש לך, ואילו תרופות את נוטלת – נתחיל?</div>
-          <div class="message-meta">
-            <span class="message-time">${getCurrentTime()}</span>
-          </div>
-        </div>
-      `;
-      chatContainer.insertBefore(initialBot, document.querySelector(".input-area"));
-    });
-
-    function showSummaryModal(summary) {
-      document.getElementById("summaryText").innerHTML = marked.parse(summary);
-      document.getElementById("summaryModal").style.display = "flex";
-    }
-    function closeSummaryModal() {
-      document.getElementById("summaryModal").style.display = "none";
-    }
-  </script>
 </head>
-
 <body>
   <header>
-    הכנה לביקור
+    <div class="visit-prep-title" style="
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1E293B;
+    background: linear-gradient(90deg, #0066FF 0%, #00D4AA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-align: center;
+    margin-top: 24px;
+    margin-bottom: 12px;
+">
+  Let's get you ready to make the most out of your visit!
+</div>
   </header>
-
   <div class="container">
-    <div class="title"><span id="patientName"></span> ,</span> לפני המפגש עם הרופא:</div>
+    <div class="title"><span id="patientName"></span>, let's get you ready to make the most out of your visit.</div>
 
     <div class="tabs">
-      <div class="tab active">סיבת הביקור</div>
-      <div class="tab">יצירת קשר</div>
-      <div class="tab">צירוף מסמכים</div>
+      <div class="tab active">Reason for visit</div>
+      <div class="tab">Contact</div>
+      <div class="tab">Upload documents</div>
     </div>
 
     <div class="chat-container">
-      <!-- Chat messages will be inserted here -->
+            <!-- Chat messages will be inserted here -->
       <div class="input-area">
-        <input id="userInput" type="text" placeholder="הקלד הודעה..." lang="he-IL"
+        <input id="userInput" type="text" placeholder="Type your message..." 
           onkeydown="if(event.key==='Enter'){sendMessage()}" />
-        <button class="mic-btn" id="micBtn" type="button" onclick="toggleMic()" title="הקלט קול">
+        <button class="mic-btn" id="micBtn" type="button" onclick="toggleMic()" title="Voice Input">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="44" height="44"
             stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
             <path d="M12 18v3m0 0h4m-4 0H8m6-7a4 4 0 01-8 0V7a4 4 0 018 0v4z" />
           </svg>
         </button>
-        <button onclick="sendMessage()">שלח</button>
+        <button type="button" onclick="sendMessage()">Send</button>
       </div>
     </div>
   </div>
 
-  <div class="footer">
-    <div>מעוניין לעדכן את התור או להיערך טוב יותר לפגישה עם הרופא?</div>
-    <a href="#">שינוי תור</a>
-  </div>
 
-  <div id="summaryModal" class="modal-overlay" style="display:none;">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="header">
-          <img class="logo"
-            src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg"
-            alt="מאוחדת" height="50">
+    <div class="footer">
+        <a href="https://business.amwell.com/">Let's talk about how we can digitally empower your healthcare ambitions.</a>
+    </div>
+
+    <div id="summaryModal" class="modal-overlay" onclick="closeSummaryModal(event)">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <div class="modal-title">
+            <img src="https://logowik.com/content/uploads/images/amwell4190.jpg" alt="Amwell Logo">
+            Visit Prep Summary Report
+          </div>
+          <button class="modal-close" onclick="closeSummaryModal()">&times;</button>
         </div>
-        <button class="modal-close" onclick="closeSummaryModal()">&times;</button>
-      </div>
-
-      <div class="modal-body">
-        <span class="modal-title">סיכום סיבת הביקור כפי שדיווח/ה המטופל/ת</span>
-        <p id="summaryText"></p>
+        <div class="modal-body">
+          <p id="summaryText"></p>
+          <div class="modal-footer">
+            <button onclick="window.print()">Print</button>
+            <button onclick="downloadPDF()">Download PDF</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</body>
 
+    <audio id="modalSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_722d560b83.mp3"></audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+      function showSummaryModal(summary) {
+        document.getElementById("summaryText").innerHTML = marked.parse(summary);
+        document.getElementById("summaryModal").style.display = "flex";
+        document.getElementById("modalSound").play();
+      }
+  
+      function closeSummaryModal(event) {
+        if (!event || event.target === document.getElementById("summaryModal")) {
+          document.getElementById("summaryModal").style.display = "none";
+        }
+      }
+  
+      function downloadPDF() {
+        const element = document.getElementById("summaryText");
+        const opt = {
+          margin:       1,
+          filename:     'visit-summary.pdf',
+          image:        { type: 'jpeg', quality: 0.98 },
+          html2canvas:  { scale: 2 },
+          jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+      }
+    </script>
+  <script src="/static/marked.min.js"></script>
+
+<!-- tomer todo: add the script below -->
+<script>
+  const PATIENT_NAME = "{{ patient_name }}";
+  const PATIENT_ID = "{{ patient_id }}";
+  const messageSound = new Audio('https://cdn.pixabay.com/audio/2022/03/15/audio_722d560b83.mp3');
+
+  function getCurrentTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById("userInput");
+    const micBtn = document.getElementById("micBtn");
+    const sendBtn = document.querySelector(".input-area button[onclick='sendMessage()']");
+    const chatContainer = document.querySelector(".chat-container");
+    const inputArea = document.querySelector(".input-area");
+
+    const message = input.value.trim();
+    if (message === "") return;
+
+    // Disable input and mic while waiting for bot
+    input.disabled = true;
+    micBtn.disabled = true;
+    if (sendBtn) sendBtn.disabled = true;
+
+    const userBubble = document.createElement("div");
+    userBubble.className = "chat-bubble user animated";
+    userBubble.innerHTML = `
+      <div class="user-message">
+        <span class="user-label">${PATIENT_NAME}</span>
+        <div class="message-content"></div>
+        <div class="message-meta">
+          <span class="message-status sent">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+            </svg>
+          </span>
+            <span class="message-time">${getCurrentTime()}</span>
+        </div>
+      </div>
+    `;
+    // Render markdown for user message
+    userBubble.querySelector('.message-content').innerHTML = marked.parse(message);
+    chatContainer.insertBefore(userBubble, inputArea);
+
+    // Scroll to bottom after user message
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    input.value = "";
+
+    const typing = document.createElement("div");
+    typing.className = "typing-indicator";
+    typing.innerHTML = `
+      <span>Amwell Assistant is typing...</span>
+      <div class="typing-dots">
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+        <div class="typing-dot"></div>
+      </div>
+    `;
+    chatContainer.insertBefore(typing, inputArea);
+
+    // Scroll to bottom after typing indicator
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+
+    // Call backend API for bot response
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ patient_id: PATIENT_ID, message })
+      });
+      const data = await res.json();
+      typing.remove();
+      const botBubble = document.createElement("div");
+      botBubble.className = "chat-bubble bot animated";
+      botBubble.innerHTML = `
+        <div class="chat-bubble.bot">
+          <span class="bot-label">Amwell Assistant</span></br>
+          <img class="main-logo" src="https://logowik.com/content/uploads/images/amwell4190.jpg" alt="Amwell" height="38">
+          <div class="message-content"></div>
+          <div class="message-meta">
+            <span class="message-time">${getCurrentTime()}</span>
+          </div>
+        </div>
+      `;
+      // Render markdown for bot message
+      botBubble.querySelector('.message-content').innerHTML = marked.parse(data.response.replace("###conversation_Ended###", ""));
+      chatContainer.insertBefore(botBubble, inputArea);
+      messageSound.play();
+
+      // Scroll to bottom after bot message
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      // Update message status to delivered
+      setTimeout(() => {
+        userBubble.querySelector('.message-status').className = 'message-status delivered';
+        userBubble.querySelector('.message-status').innerHTML = `
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
+          </svg>
+        `;
+      }, 1000);
+
+      // Update message status to read
+      setTimeout(() => {
+        userBubble.querySelector('.message-status').className = 'message-status read';
+        userBubble.querySelector('.message-status').innerHTML = `
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
+          </svg>
+        `;
+      }, 2000);
+
+      if (data.response.includes("###conversation_Ended###")) {
+        // Disable chat interface first
+        input.disabled = true;
+        micBtn.disabled = true;
+        if (sendBtn) sendBtn.disabled = true;
+
+        const summaryButton = document.createElement("button");
+        summaryButton.textContent = "Visit Prep Summary Report";
+        summaryButton.style.cssText = `
+  background-color:  #aac3e8 
+color: var(--primary-blue) 
+border: none;
+border-radius: 28px;
+padding: 14px 28px;
+font-size: 17px;
+font-weight: 600;
+margin: 24px auto 0;
+cursor: pointer;
+display: block;
+transition: background-color 0.3s ease, transform 0.2s ease;
+`;
+
+        // Add disabled state styles
+        const disabledStyles = `
+  background-color: #aac3e8 !important;
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+  box-shadow: none;
+`;
+
+        summaryButton.onclick = async () => {
+          // Disable button immediately
+          summaryButton.disabled = true;
+          summaryButton.style.cssText += disabledStyles;
+          summaryButton.textContent = "Loading...";
+
+          // Add popup animation to title
+          const title = document.querySelector('.title');
+          title.classList.add('popup');
+
+          try {
+            const res = await fetch(`/api/summary/${PATIENT_ID}`);
+            const data = await res.json();
+            showSummaryModal(data.summary);
+            
+            // Keep button disabled after successful response
+            summaryButton.textContent = "report summary loaded";
+          } catch (err) {
+            // Re-enable button only on error
+            summaryButton.disabled = false;
+            summaryButton.style.cssText = summaryButton.style.cssText.replace(disabledStyles, '');
+            summaryButton.textContent = "report provider summary";
+            alert("Error loading summary. Please try again later.");
+          }
+        };
+        chatContainer.insertBefore(summaryButton, inputArea);
+
+        // Add smooth scroll to bottom
+        setTimeout(() => {
+          chatContainer.scrollTo({
+            top: chatContainer.scrollHeight,
+            behavior: 'smooth'
+          });
+        }, 100);
+
+        return;
+      }
+
+      // Only re-enable if conversation hasn't ended
+      if (!data.response.includes("You have reached the maximum number of messages")) {
+        input.disabled = false;
+        micBtn.disabled = false;
+        if (sendBtn) sendBtn.disabled = false;
+        input.focus();
+      }
+    } catch (err) {
+      typing.remove();
+      const botBubble = document.createElement("div");
+      botBubble.className = "chat-bubble bot animated";
+      botBubble.innerHTML = `
+        <div class="bot-message">
+          <img class="main-logo" src="https://logowik.com/content/uploads/images/amwell4190.jpg" alt="Amwell" height="38">
+          <div class="message-content">Hello! I'm your Amwell medical assistant. How can I help you prepare for your visit today?</div>
+          <div class="message-content">Error sending message to server</div>
+          <div class="message-meta">
+            <span class="message-time">${getCurrentTime()}</span>
+          </div>
+        </div>
+      `;
+      chatContainer.insertBefore(botBubble, inputArea);
+      // Scroll to bottom after error message
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+  }
+
+  // Voice recognition support
+  let recognition;
+  let recognizing = false;
+  function toggleMic() {
+    const micBtn = document.getElementById("micBtn");
+    if (micBtn.disabled) return;
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Voice recognition is not supported in this browser.');
+      return;
+    }
+    if (!recognition) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US'; 
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById("userInput").value = transcript;
+      };
+      recognition.onend = function () {
+        recognizing = false;
+        document.getElementById('micBtn').classList.remove('active');
+      };
+      recognition.onerror = function () {
+        recognizing = false;
+        document.getElementById('micBtn').classList.remove('active');
+      };
+    }
+    if (!recognizing) {
+      // Try to detect language from input placeholder or browser
+      const input = document.getElementById("userInput");
+      const lang = input.lang || navigator.language || 'he-IL';
+      recognition.lang = lang.match(/^he/) ? 'he-IL' : 'en-US';
+      recognition.start();
+      recognizing = true;
+      document.getElementById('micBtn').classList.add('active');
+    } else {
+      recognition.stop();
+      recognizing = false;
+      document.getElementById('micBtn').classList.remove('active');
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Set patient name in the title
+    document.getElementById("patientName").innerText = PATIENT_NAME;
+    fetch(`/api/session/${PATIENT_ID}`, {
+      method: "DELETE"
+    });
+
+    const chatContainer = document.querySelector(".chat-container");
+    const initialBot = document.createElement("div");
+    initialBot.className = "chat-bubble bot animated";
+    initialBot.innerHTML = `
+      <div class="bot-message">
+        <span class="bot-label">Amwell Assistant</span>
+          <img class="main-logo" src="https://logowik.com/content/uploads/images/amwell4190.jpg" alt="Amwell" height="38">
+          <div class="message-content">Hello! I'm your Amwell medical assistant. How can I help you prepare for your visit today?</div>
+        <div class="message-meta">
+          <span class="message-time">${getCurrentTime()}</span>
+        </div>
+      </div>
+    `;
+    chatContainer.insertBefore(initialBot, document.querySelector(".input-area"));
+  });
+
+  function showSummaryModal(summary) {
+    document.getElementById("summaryText").innerHTML = marked.parse(summary);
+    document.getElementById("summaryModal").style.display = "flex";
+  }
+  function closeSummaryModal() {
+    document.getElementById("summaryModal").style.display = "none";
+  }
+</script>
+</body>
 </html>

@@ -1,103 +1,512 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>עוזר רפואי</title>
+  <title>Your Healthcare Journey Starts Here - Amwell</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      background: #f5f5f5;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    :root {
+      --primary-blue: #0066FF;
+      --secondary-teal: #00D4AA;
+      --accent-purple: #6366F1;
+      --text-dark: #1E293B;
+      --text-medium: #475569;
+      --text-light: #64748B;
+      --background-light: #F8FAFC;
+      --white: #FFFFFF;
+      --border-light: #E2E8F0;
+      --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-medium: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-large: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #abb7f5 0%, #c5c3c7 100%);
       min-height: 100vh;
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    .bg-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+    .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+    .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+    .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+    .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+    .particle:nth-child(7) { left: 70%; animation-delay: 0.5s; }
+    .particle:nth-child(8) { left: 80%; animation-delay: 1.5s; }
+    .particle:nth-child(9) { left: 90%; animation-delay: 2.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.1; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 0.3; }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .logo-container {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(212, 228, 241, 0.95);
+      padding: 15px 30px;
+      border-radius: 50px;
+      backdrop-filter: blur(20px);
+      box-shadow: var(--shadow-medium);
+      transition: all 0.3s ease;
+    }
+
+    .logo-container:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-large);
+    }
+
+    .amwell-logo {
+      width: 50px;
+      height: auto;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 60px 0;
+      position: relative;
+    }
+
+    .hero-content {
+      background: rgba(232, 230, 230, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      padding: 60px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-shadow: var(--shadow-large);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-blue), var(--secondary-teal), var(--accent-purple));
+      border-radius: 32px 32px 0 0;
+    }
+
+    .ai-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 12px 24px;
+      border-radius: 50px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow-soft);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .ai-badge svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-medium);
+      margin-bottom: 40px;
+      font-weight: 400;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 18px 36px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-medium);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .cta-button:hover::before {
+      left: 100%;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    .cta-button svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    /* How it works section */
+    .how-it-works {
+      padding: 60px 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      margin-top: 40px;
+    }
+
+    .steps-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .steps-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .steps-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+    }
+
+    .steps-subtitle {
+      font-size: 1rem;
+      color: var(--text-medium);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .step-card {
+      text-align: center;
+      position: relative;
+      padding: 20px;
+    }
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary-blue), var(--secondary-teal));
+      color: white;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 auto 20px;
+      box-shadow: var(--shadow-soft);
     }
-    .image-wrapper {
-      position: relative;
-      display: inline-block;
-      max-width: 300px;
-      padding: 20px;
+
+    .step-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 10px;
     }
-    .image-wrapper img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
+
+    .step-description {
+      font-size: 0.9rem;
+      color: var(--text-medium);
+      line-height: 1.5;
     }
-    .image-wrapper img:hover {
-      transform: scale(1.05);
-    }
-    .corner-link {
-      position: absolute;
-      bottom: 100px; 
-      right: 100px;
-      width: 160px;
-      height: 160px;
-      z-index: 2;
-      background: transparent;
-      cursor: pointer;
-      border-radius: 50%;
-    }
-    .corner-link:hover::after {
-      content: attr(title);
-      position: absolute;
-      bottom: 180px;
-      left: 0;
-      background-color: orange;
-      color: white;
-      padding: 6px 10px;
-      border-radius: 6px;
-      white-space: nowrap;
-      font-size: 0.85em;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      animation: fadeInTooltip 0.3s ease-out forwards;
-      opacity: 0;
-    }
-    @keyframes fadeInTooltip {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+      
+      .hero-content {
+        padding: 40px 20px;
+        margin: 0 20px;
+      }
+      
+      .steps-title {
+        font-size: 1.8rem;
+      }
+      
+      .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+      
+      .step-card {
+        padding: 15px;
+      }
+
+      .step-number {
+        width: 45px;
+        height: 45px;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+      }
+
+      .step-title {
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+
+      .step-description {
+        font-size: 0.85rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .cta-button {
+        padding: 15px 30px;
+        font-size: 1rem;
+      }
+
+      .steps-title {
+        font-size: 1.6rem;
+      }
+
+      .steps-subtitle {
+        font-size: 0.9rem;
+      }
+
+      .how-it-works {
+        padding: 40px 0;
+        margin: 20px 15px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="image-wrapper">
-    <img src="/static/img/mh_landing.png" alt="mh_landing_p" />
-    <a href="/chat" class="corner-link" title="ביקור רופא - התחל שיחה"></a>
+  <!-- Animated background particles -->
+  <div class="bg-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
   </div>
-  <script>
-    function getOrCreatePatientId() {
-      let patient_id = localStorage.getItem('patient_id');
-      if (!patient_id) {
-        // Generate a UUID v4
-        patient_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-          var r = Math.random() * 16 | 0,
-              v = c == 'x' ? r : (r & 0x3 | 0x8);
-          return v.toString(16);
-        });
-        localStorage.setItem('patient_id', patient_id);
-      }
-      return patient_id;
-    }
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const patient_id = getOrCreatePatientId();
-      console.log("Generated/Retrieved patient ID:", patient_id);
-      const chatLink = document.querySelector('.corner-link');
-      if (chatLink) {
-        chatLink.href = `/chat?patient_id=${encodeURIComponent(patient_id)}`;
-        console.log("Updated chat link with patient ID:", chatLink.href);
-      }
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" style="max-width: 900px; margin: 0 auto; padding: 2rem 1rem;">
+      <div class="hero-content" style="text-align: center;">
+        <div class="ai-badge" style="font-size: 0.7rem; padding: 0.4rem 0.8rem; display: inline-block; margin: 0 auto;">
+          <img class="amwell-logo" src="https://business.amwell.com/globalassets/images/logos/amwell-logo_white_2023_v02.svg" alt="Amwell - Your Healthcare Partner" style="height: 1rem;" />
+          Enabling hybrid care at scale
+        </div>
+        
+        <h1 style="font-size: 1.8rem; margin: 1rem 0;">Your Health Journey<br>Starts Here</h1>
+        
+        <p class="hero-subtitle" style="font-size: 0.90rem; max-width: 600px; margin: 0.5rem auto;">
+          Experience personalized healthcare with Amwell's AI-driven platform. Get instant answers, 
+          connect with healthcare professionals, and take control of your health journey today.
+        </p>
+        <br><br>
+        <a href="#" class="cta-button" id="start-journey" data-chat-link="true" style="padding: 0.4rem 0.8rem; font-size: 1.0rem; display: inline-block;">
+          <svg viewBox="0 0 24 24" style="width: 0.9rem; height: 0.9rem;">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+          Begin Your Health Assessment
+        </a>
+
+        <script>
+          function getOrCreatePatientId() {
+            let patient_id = localStorage.getItem('patient_id');
+            if (!patient_id) {
+              // Generate a UUID v4
+              patient_id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+              });
+              localStorage.setItem('patient_id', patient_id);
+            }
+            return patient_id;
+          }
+
+          // Wait for the DOM to be fully loaded
+          window.addEventListener('load', function() {
+            try {
+              const patient_id = getOrCreatePatientId();
+              console.log("Generated/Retrieved patient ID:", patient_id);
+              
+              // Find all elements with data-chat-link attribute
+              const chatLinks = document.querySelectorAll('[data-chat-link]');
+              chatLinks.forEach(function(link) {
+                link.onclick = function(e) {
+                  e.preventDefault();
+                  window.location.href = `/chat?patient_id=${encodeURIComponent(patient_id)}`;
+                };
+              });
+              console.log("Chat link click handlers set up with patient ID:", patient_id);
+            } catch (error) {
+              console.error("Error setting up chat link:", error);
+            }
+          });
+        </script>
+
+        <div class="steps-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2rem;">
+          <div class="step-card" style="padding: 1.5rem; text-align: center;">
+            <div class="step-number" style="font-size: 1.2rem; margin-bottom: 0.5rem;">1</div>
+            <h3 class="step-title" style="font-size: 1rem; margin-bottom: 0.5rem;">Share Your Story</h3>
+            <p class="step-description" style="font-size: 0.8rem;">
+              Tell Amwell about your symptoms and health concerns through our smart intake system
+            </p>
+          </div>
+          
+          <div class="step-card" style="padding: 1.5rem; text-align: center;">
+            <div class="step-number" style="font-size: 1.2rem; margin-bottom: 0.5rem;">2</div>
+            <h3 class="step-title" style="font-size: 1rem; margin-bottom: 0.5rem;">Get AI Insights</h3>
+            <p class="step-description" style="font-size: 0.8rem;">
+              Amwell's advanced AI provides instant, personalized health recommendations
+            </p>
+          </div>
+          
+          <div class="step-card" style="padding: 1.5rem; text-align: center;">
+            <div class="step-number" style="font-size: 1.2rem; margin-bottom: 0.5rem;">3</div>
+            <h3 class="step-title" style="font-size: 1rem; margin-bottom: 0.5rem;">Connect & Care</h3>
+            <p class="step-description" style="font-size: 0.8rem;">
+              Access Amwell's network of healthcare professionals or follow guided self-care
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works section -->
+    
+  </div>
+
+  <script>
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
     });
+
+    // Add keyframe for spinning animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
 </body>
 </html>
