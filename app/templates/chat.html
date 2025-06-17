@@ -292,10 +292,6 @@
       padding: 0;
       font-weight: bold;
     }
-    .amwell-logo {
-      width: 50px;
-      height: auto;
-    }
 
     .message-status {
       position: static;
@@ -641,7 +637,7 @@
               const res = await fetch(`/api/summary/${PATIENT_ID}`);
               const data = await res.json();
               showSummaryModal(data.summary);
-              
+
               // Keep button disabled after successful response
               summaryButton.textContent = "דו״ח נטען";
             } catch (err) {
@@ -750,7 +746,7 @@
         <div class="bot-message">
           <span class="bot-label">מאוחדת עוזר רפואי</span></br>
           <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
-          <div class="message-content">שלום ${PATIENT_NAME}  , תודה שפנית אלינו. כדי להתכונן לביקור נשמח לדעת למה פנית לרופא – נתחיל?</div>
+          <div class="message-content">שלום ${PATIENT_NAME} 👋 , תודה שפנית אלינו. כדי להתכונן לביקור נשמח לדעת למה פנית לרופא, מה את מרגישה, אילו סימפטומים יש לך, ואילו תרופות את נוטלת – נתחיל?</div>
           <div class="message-meta">
             <span class="message-time">${getCurrentTime()}</span>
           </div>
