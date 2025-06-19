@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="patient-name" content="{{ patient_name }}">
+  <title>Provider Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
+      margin: 0;
+    }
+    .header {
+      background-color: #1f2937;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header-title {
+      font-size: 16px;
+    }
+    .connect-button {
+      background-color: #22c55e;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .sidebar {
+      background-color: #1f2937;
+      width: 100px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      padding-top: 60px;
+      align-items: center;
+    }
+    .sidebar-item {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #fff;
+      transition: all 0.3s ease;
+    }
+    .sidebar-item.selected .icon-container {
+      box-shadow: 0 0 8px 2px rgba(59, 130, 246, 0.7);
+      transform: scale(1.1);
+    }
+    .sidebar-item.selected .item-label {
+      font-weight: bold;
+      color: #3B82F6;
+    }
+    .item-label {
+      display: block;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+    .icon-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      color: #fff;
+    }
+    .bg-blue { background-color: #3B82F6; }
+    .bg-purple { background-color: #8B5CF6; }
+    .bg-pink { background-color: #EC4899; }
+    .bg-orange { background-color: #F97316; }
+    .bg-green { background-color: #22C55E; }
+    .bg-red { background-color: #EF4444; }
+    .bg-yellow { background-color: #F59E0B; }
+    .bg-teal { background-color: #14B8A6; }
+    .bg-indigo { background-color: #6366F1; }
+    .bg-rose { background-color: #F43F5E; }
+    .bg-cyan { background-color: #06B6D4; }
+    .bg-emerald { background-color: #10B981; }
+    .bg-violet { background-color: #8B5CF6; }
+    .bg-slate { background-color: #64748B; }
+
+    .main-content {
+      margin-left: 120px;
+      padding: 40px;
+    }
+    .tabs {
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+    .tab {
+      background-color: #1f2937;
+      color: #ccc;
+      border: 1px solid #374151;
+      padding: 10px 15px;
+      margin-right: 10px;
+      border-radius: 20px;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .tab:hover {
+      background-color: #374151;
+    }
+    .tab.ai-screening {
+      background-color: #3B82F6;
+      color: white;
+    }
+    .summary-box {
+      background-color: #1f2937;
+      border: 1px solid #374151;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    .summary-item {
+      margin-bottom: 10px;
+    }
+    .summary-item strong {
+      color: #fff;
+    }
+    .loading {
+      text-align: center;
+      color: #ccc;
+      font-style: italic;
+    }
+    .error {
+      color: #ef4444;
+      text-align: center;
+      padding: 20px;
+    }
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header" style="
+  background-color: #1f2937;
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #f1f5f9;
+  border-bottom: 2px solid #3b82f6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+">
+  <div class="header-title" style="
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.6;
+    font-weight: 300;
+    color: #cbd5e1;
+  ">
+<strong id="patient-name" style="color: #3b82f6; font-size: 20px;"></strong><br />
+<span>Date of Birth: <strong>7/24/1997</strong></span> |
+    <span>Gender: <strong>M</strong></span> |
+    <span>Country: <strong>Israel</strong></span> |
+    <span>Patient ID: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code></span>
+      <!--button class="connect-button" style="
+        background-color: #22c55e;
+        color: white;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      " onmouseover="this.style.backgroundColor='#16a34a'" onmouseout="this.style.backgroundColor='#22c55e'">
+        Connect Now
+      </button-->
+    
+  </div>
+  
+  
+</div>
+
+
+<div class="sidebar">
+  <div class="sidebar-item selected">
+    <div class="icon-container bg-blue">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
+    </div>
+    <span class="item-label">Today's Visit</span>
+  </div>
+  <div class="sidebar-item">
+    <div class="icon-container bg-purple">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" /></svg>
+    </div>
+    <span class="item-label">Patient Record</span>
+  </div>
+  <div class="sidebar-item">
+    <div class="icon-container bg-pink">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.96 6.053" /><path d="M16 19h6" /><path d="M19 16v6" /></svg>
+    </div>
+    <span class="item-label">Care Programs</span>
+  </div>
+  <div class="sidebar-item">
+    <div class="icon-container bg-orange">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
+    </div>
+    <span class="item-label">Calendar</span>
+  </div>
+  <div class="sidebar-item">
+    <div class="icon-container bg-green">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12v.01" /><path d="M19.071 4.929c-1.562 -1.562 -6 .337 -9.9 4.243c-3.905 3.905 -5.804 8.337 -4.242 9.9c1.562 1.561 6 -.338 9.9 -4.244c3.905 -3.905 5.804 -8.337 4.242 -9.9" /><path d="M4.929 4.929c-1.562 1.562 .337 6 4.243 9.9c3.905 3.905 8.337 5.804 9.9 4.242c1.561 -1.562 -.338 -6 -4.244 -9.9c-3.905 -3.905 -8.337 -5.804 -9.9 -4.242" /></svg>
+    </div>
+    <span class="item-label">Automated Care</span>
+  </div>
+  <div class="sidebar-item">
+    <div class="icon-container bg-red">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4" /><path d="M21 12c-1 0-2-1-2-2s1-2 2-2 2 1 2 2-1 2-2 2z" /><path d="M3 12c1 0 2-1 2-2s-1-2-2-2-2 1-2 2 1 2 2 2z" /><path d="M12 3c0 1-1 2-2 2s-2-1-2-2 1-2 2-2 2 1 2 2z" /><path d="M12 21c0-1 1-2 2-2s2 1 2 2-1 2-2 2-2-1-2-2z" /></svg>
+    </div>
+    <span class="item-label">Rx Insight</span>
+  </div>
+  
+  <div class="sidebar-item">
+    <div class="icon-container bg-yellow">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+    </div>
+    <span class="item-label">Urgent Care</span>
+  </div>
+  
+  <div class="sidebar-item">
+    <div class="icon-container bg-teal">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
+    </div>
+    <span class="item-label">Primary Care</span>
+  </div>
+  
+  <div class="sidebar-item">
+    <div class="icon-container bg-indigo">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+    </div>
+    <span class="item-label">Therapy</span>
+  </div>
+  
+  <div class="sidebar-item">
+    <div class="icon-container bg-rose">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.22l10.65 10.65a2 2 0 0 1-.47 3.11L8.47 21.76a2 2 0 0 1-2.83 0l-4.24-4.24a2 2 0 0 1 0-2.83L15.22 2.22a2 2 0 0 1 3.11-.47L21.78 8.47a2 2 0 0 1 0 2.83L12 2.22z" /></svg>
+    </div>
+    <span class="item-label">Nutrition</span>
+  </div>
+  
+  <div class="sidebar-item">
+    <div class="icon-container bg-cyan">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /><path d="M12 6v6l4 2" /></svg>
+    </div>
+    <span class="item-label">Lactation</span>
+  </div>
+  
+  <div class="sidebar-item">
+    <div class="icon-container bg-emerald">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>
+    </div>
+    <span class="item-label">MSK</span>
+  </div>
+  
+  <div class="sidebar-item">
+    <div class="icon-container bg-violet">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /><path d="M12 6v6l4 2" /></svg>
+    </div>
+    <span class="item-label">Diabetes</span>
+  </div>
+  
+  <div class="sidebar-item">
+    <div class="icon-container bg-slate">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+    </div>
+    <span class="item-label">Blood Pressure</span>
+  </div>
+</div>
+</div>
+
+<div class="main-content">
+  <h2>Today's Visit</h2>
+  <div class="tabs">
+    <div class="tab">Summary</div>
+    <div class="tab">Provider Insight</div>
+    <div class="tab ai-screening">AI Screening</div>
+    <div class="tab">Intake Questions</div>
+    <div class="tab">Additional Information</div>
+    <div class="tab">Preferred Pharmacy</div>
+  </div>
+
+  <div class="summary-box" id="summary-container">
+    <div class="loading">Loading visit summary...</div>
+  </div>
+</div>
+
+<script>
+async function loadSummary1() {
+  const summaryContainer = document.getElementById('summary-container');
+  
+  try {
+    const response = await fetch('/api/summary');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    const formattedSummary = (data.summary || '')
+  .split('*')
+  .filter(line => line.trim())
+  .map(item => {
+    const parts = item.split(':');
+    const label = parts[0]?.trim() || '';
+    const value = parts.slice(1).join(':').trim();
+    return `<li><strong>${label}:</strong> ${value}</li>`;
+  })
+  .join('');
+    
+    // Display the summary from the API response
+    summaryContainer.innerHTML = `
+  <div class="summary-item">
+    <strong>Visit Summary:</strong>
+    <ul  style="margin-top: 10px; line-height: 1.8; color: #ccc; padding-left: 1rem;">
+      ${formattedSummary || '<li>No summary available for this visit.</li>'}
+    </ul>
+  </div>
+      <div class="summary-item">
+        <strong>Patient ID:</strong> ${data.patient_id}
+      </div>
+    `;
+    
+  } catch (error) {
+    console.error('Error loading summary:', error);
+    summaryContainer.innerHTML = `
+      <div class="error">
+        Error loading visit summary. Please try again later.
+        <br><small>Error: ${error.message}</small>
+      </div>
+    `;
+  }
+}
+
+async function loadSummary() {
+    const summaryContainer = document.getElementById('summary-container');
+    try {
+      const response = await fetch('/api/summary');
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      const formattedSummary = (data.summary || '')
+  .split(/\n|\*/)
+  .filter(line => line.trim())
+  .map(item => {
+    // remove dot after number like "1." → "1"
+    const cleaned = item.replace(/^(\d+)\.\s*/, '$1 ');
+    
+    // extract label and value
+    const parts = cleaned.split(':');
+    const label = parts[0]?.trim() || '';
+    const value = parts.slice(1).join(':').replace(/[:]+$/, '').trim();
+
+    // merge into one RTL-friendly line
+    return `<li dir="rtl" style="margin-bottom: 10px;">🔹 <strong>${label}:</strong> ${value}</li>`;
+  })
+  .join('');
+      summaryContainer.innerHTML = `
+        <div class="summary-item">
+          <strong>Visit Summary:</strong>
+          <ul style="margin-top: 10px; line-height: 1.8; color: #ccc; padding-left: 1rem; direction: rtl; text-align: right;">
+            ${formattedSummary || '<li>No summary available for this visit.</li>'}
+          </ul>
+        </div>
+        <div class="summary-item">
+          <strong>Patient ID:</strong> ${data.patient_id}
+        </div>
+      `;
+    } catch (error) {
+      console.error('Error loading summary:', error);
+      summaryContainer.innerHTML = `<div class="error">שגיאה בטעינת הסיכום. נסה שוב מאוחר יותר.<br><small>Error: ${error.message}</small></div>`;
+    }
+  }
+// Load summary when page loads
+document.addEventListener('DOMContentLoaded', loadSummary);
+</script>
+
+
+<script>
+  const patientName = document.querySelector('meta[name="patient-name"]').getAttribute('content');
+  document.getElementById('patient-name').innerText = patientName;
+</script>
+
+</body>
+</html>

@@ -26,6 +26,26 @@ conversations: Dict[str, List[str]] = {}
 
 patient_name = os.getenv("PATIENT_NAME", "תומר")  
 
+# Global variable for current patient ID
+_current_patient_id = "demo-patient"
+
+def get_current_patient_id() -> str:
+    """Getter function for current patient ID"""
+    return _current_patient_id
+
+def set_current_patient_id(patient_id: str) -> None:
+    """Setter function for current patient ID"""
+    global _current_patient_id
+    _current_patient_id = patient_id
+    logger.info("Current patient ID set to: %s", patient_id)
+
+def get_patient_id():
+    return _current_patient_id
+
+def set_current_patient_id(patient_id: str):
+    global _current_patient_id
+    _current_patient_id = patient_id
+
 @app.get("/", response_class=HTMLResponse)
 def landing(request: Request):
     logger.info("Landing page accessed - Request URL: %s", request.url)
@@ -34,6 +54,7 @@ def landing(request: Request):
 @app.get("/chat", response_class=HTMLResponse)
 def chat_get(request: Request, patient_id: str = "demo-patient"):
     logger.info("Chat page accessed - Patient ID: %s, Request URL: %s", patient_id, request.url)
+    # Set the current patient ID when chat page is accessed
     conv = conversations.get(patient_id, [])
     return templates.TemplateResponse(
         "chat.html",
@@ -72,7 +93,17 @@ def summary_endpoint(patient_id: str):
     conv = conversations.get(patient_id, [])
     summary = generate_summary(conv)
     logger.info("Summary generated for Patient ID: %s", patient_id)
+    set_current_patient_id(patient_id)
     return {"patient_id": patient_id, "summary": summary}
+
+@app.get("/api/summary", response_model=SummaryResponse)
+def summary_endpoint():
+    current_patient_id = get_current_patient_id()
+    logger.info("Summary API called - Patient ID: %s", current_patient_id)
+    conv = conversations.get(current_patient_id, [])
+    summary = generate_summary(conv)
+    logger.info("Summary generated for Patient ID: %s", current_patient_id)
+    return {"patient_id": current_patient_id, "summary": summary}
 
 @app.delete("/api/session/{patient_id}")
 def clear_session(patient_id: str):
@@ -83,3 +114,19 @@ def clear_session(patient_id: str):
         return {"success": True, "message": f"Session for {patient_id} cleared."}
     logger.warning("No session found for Patient ID: %s", patient_id)
     return {"success": False, "message": f"No session found for {patient_id}."}, 404 
+
+@app.get("/provider", response_class=HTMLResponse)
+def provider(request: Request):
+    logger.info("Provider page accessed - Request URL: %s", request.url)
+    return templates.TemplateResponse("provider.html", {"request": request})
+
+@app.get("/provider_deashboard", response_class=HTMLResponse)
+def provider_dashboard(request: Request):
+    logger.info("Provider dashboard page accessed - Request URL: %s", request.url)
+    return templates.TemplateResponse("provider_deashboard.html", {"request": request})
+
+@app.get("/provider_deashboard.html", response_class=HTMLResponse)
+def provider_dashboard_html(request: Request):
+    logger.info("Provider dashboard HTML page accessed - Request URL: %s", request.url)
+    return templates.TemplateResponse("provider_deashboard.html", {"request": request})
+
