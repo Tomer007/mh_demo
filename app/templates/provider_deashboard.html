@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="patient-name" content="{{ patient_name }}">
+  <meta name="patient-name" content="Ami">
   <title>לוח בקרה של ספק</title>
   <style>
     body {
@@ -14,13 +14,39 @@
     }
     .header {
       background-color: #1f2937;
-      padding: 20px;
+      padding: 20px 30px;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      color: #f1f5f9;
+      border-bottom: 2px solid #3b82f6;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
     .header-title {
-      font-size: 16px;
+      text-align: right;
+      font-size: 12px;
+      line-height: 1.6;
+      font-weight: 300;
+      color: #cbd5e1;
+    }
+    .language-selector {
+      position: absolute;
+      top: 20px;
+      right: 100px;
+    }
+    .language-selector select {
+      background-color: #374151;
+      color: #fff;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .language-selector select:focus {
+      outline: none;
+      box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
     }
     .connect-button {
       background-color: #22c55e;
@@ -85,7 +111,6 @@
     .bg-emerald { background-color: #10B981; }
     .bg-violet { background-color: #8B5CF6; }
     .bg-slate { background-color: #64748B; }
-
     .main-content {
       margin-right: 120px;
       padding: 40px;
@@ -140,206 +165,313 @@
   </style>
 </head>
 <body>
-
-  <div class="header" style="
-  background-color: #1f2937;
-  padding: 20px 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #f1f5f9;
-  border-bottom: 2px solid #3b82f6;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-">
-  <div class="header-title" style="
-    text-align: right;
-    font-size: 12px;
-    line-height: 1.6;
-    font-weight: 300;
-    color: #cbd5e1;
-  ">
-<span>שם המטופל:<strong>{{ patient_name }}</strong></span> |
-
-<span>תאריך לידה: <strong>24/7/1997</strong></span> |
-    <span>מין: <strong>זכר</strong></span> |
-    <span>מדינה: <strong>ישראל</strong></span> |
-    <span>מזהה מטופל: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code></span>
-  </div>
-  
-  
-</div>
-
-
-<div class="sidebar">
-  <div class="sidebar-item selected">
-    <div class="icon-container bg-blue">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
+  <div class="header">
+    <div class="language-selector">
+      <select id="language-select" onchange="changeLanguage()">
+        <option value="he" selected>עברית</option>
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="ru">Русский</option>
+      </select>
     </div>
-    <span class="item-label">ביקור היום</span>
-  </div>
-  <div class="sidebar-item">
-    <div class="icon-container bg-purple">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" /></svg>
+    <div class="header-title">
+      <strong id="patient-name" style="color: #3b82f6; font-size: 20px;"></strong><br />
+      <span data-lang-key="patient_name_label">שם המטופל: <strong>Ami</strong></span> |
+      <span data-lang-key="dob_label">תאריך לידה: <strong>24/7/1997</strong></span> |
+      <span data-lang-key="gender_label">מין: <strong>זכר</strong></span> |
+      <span data-lang-key="country_label">מדינה: <strong>ישראל</strong></span> |
+      <span data-lang-key="patient_id_label">מזהה מטופל: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code></span>
     </div>
-    <span class="item-label">תיק מטופל</span>
-  </div>
-  <div class="sidebar-item">
-    <div class="icon-container bg-pink">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.96 6.053" /><path d="M16 19h6" /><path d="M19 16v6" /></svg>
-    </div>
-    <span class="item-label">תוכניות טיפול</span>
-  </div>
-  <div class="sidebar-item">
-    <div class="icon-container bg-orange">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
-    </div>
-    <span class="item-label">יומן</span>
-  </div>
-  <div class="sidebar-item">
-    <div class="icon-container bg-green">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12v.01" /><path d="M19.071 4.929c-1.562 -1.562 -6 .337 -9.9 4.243c-3.905 3.905 -5.804 8.337 -4.242 9.9c1.562 1.561 6 -.338 9.9 -4.244c3.905 -3.905 5.804 -8.337 4.242 -9.9" /><path d="M4.929 4.929c-1.562 1.562 .337 6 4.243 9.9c3.905 3.905 8.337 5.804 9.9 4.242c1.561 -1.562 -.338 -6 -4.244 -9.9c-3.905 -3.905 -8.337 -5.804 -9.9 -4.242" /></svg>
-    </div>
-    <span class="item-label">טיפול אוטומטי</span>
-  </div>
-  <div class="sidebar-item">
-    <div class="icon-container bg-red">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4" /><path d="M21 12c-1 0-2-1-2-2s1-2 2-2 2 1 2 2-1 2-2 2z" /><path d="M3 12c1 0 2-1 2-2s-1-2-2-2-2 1-2 2 1 2 2 2z" /><path d="M12 3c0 1-1 2-2 2s-2-1-2-2 1-2 2-2 2 1 2 2z" /><path d="M12 21c0-1 1-2 2-2s2 1 2 2-1 2-2 2-2-1-2-2z" /></svg>
-    </div>
-    <span class="item-label">תובנות תרופות</span>
-  </div>
-  
-  <div class="sidebar-item">
-    <div class="icon-container bg-yellow">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-    </div>
-    <span class="item-label">טיפול דחוף</span>
-  </div>
-  
-  <div class="sidebar-item">
-    <div class="icon-container bg-teal">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
-    </div>
-    <span class="item-label">רפואה ראשונית</span>
-  </div>
-  
-  <div class="sidebar-item">
-    <div class="icon-container bg-indigo">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-    </div>
-    <span class="item-label">טיפול נפשי</span>
-  </div>
-  
-  <div class="sidebar-item">
-    <div class="icon-container bg-rose">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.22l10.65 10.65a2 2 0 0 1-.47 3.11L8.47 21.76a2 2 0 0 1-2.83 0l-4.24-4.24a2 2 0 0 1 0-2.83L15.22 2.22a2 2 0 0 1 3.11-.47L21.78 8.47a2 2 0 0 1 0 2.83L12 2.22z" /></svg>
-    </div>
-    <span class="item-label">תזונה</span>
-  </div>
-  
-  <div class="sidebar-item">
-    <div class="icon-container bg-cyan">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /><path d="M12 6v6l4 2" /></svg>
-    </div>
-    <span class="item-label">הנקה</span>
-  </div>
-  
-  <div class="sidebar-item">
-    <div class="icon-container bg-emerald">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>
-    </div>
-    <span class="item-label">שרירים ושלד</span>
-  </div>
-  
-  <div class="sidebar-item">
-    <div class="icon-container bg-violet">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /><path d="M12 6v6l4 2" /></svg>
-    </div>
-    <span class="item-label">סוכרת</span>
-  </div>
-  
-  <div class="sidebar-item">
-    <div class="icon-container bg-slate">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
-    </div>
-    <span class="item-label">לחץ דם</span>
-  </div>
-</div>
-</div>
-
-<div class="main-content">
-  <h2>ביקור היום</h2>
-  <div class="tabs">
-    <div class="tab ai-screening">מידע טרום ביקור</div>
   </div>
 
-  <div class="summary-box" id="summary-container">
-    <div class="loading">טוען סיכום ביקור...</div>
+  <div class="sidebar">
+    <div class="sidebar-item selected">
+      <div class="icon-container bg-blue">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="today_visit">ביקור היום</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-purple">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l3 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="patient_record">תיק מטופל</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-pink">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.96 6.053" /><path d="M16 19h6" /><path d="M19 16v6" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="care_programs">תוכניות טיפול</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-orange">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="calendar">יומן</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-green">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12v.01" /><path d="M19.071 4.929c-1.562 -1.562 -6 .337 -9.9 4.243c-3.905 3.905 -5.804 8.337 -4.242 9.9c1.562 1.561 6 -.338 9.9 -4.244c3.905 -3.905 5.804 -8.337 4.242 -9.9" /><path d="M4.929 4.929c-1.562 1.562 .337 6 4.243 9.9c3.905 3.905 8.337 5.804 9.9 4.242c1.561 -1.562 -.338 -6 -4.244 -9.9c-3.905 -3.905 -8.337 -5.804 -9.9 -4.242" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="automated_care">טיפול אוטומטי</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-red">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4" /><path d="M21 12c-1 0-2-1-2-2s1-2 2-2 2 1 2 2-1 2-2 2z" /><path d="M3 12c1 0 2-1 2-2s-1-2-2-2-2 1-2 2 1 2 2 2z" /><path d="M12 3c0 1-1 2-2 2s-2-1-2-2 1-2 2-2 2 1 2 2z" /><path d="M12 21c0-1 1-2 2-2s2 1 2 2-1 2-2 2-2-1-2-2z" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="prescription_insights">תובנות תרופות</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-yellow">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="urgent_care">טיפול דחוף</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-teal">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1z" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="primary_care">רפואה ראשונית</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-indigo">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="mental_health">טיפול נפשי</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-rose">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.22l10.65 10.65a2 2 0 0 1-.47 3.11L8.47 21.76a2 2 0 0 1-2.83 0l-4.24-4.24a2 2 0 0 1 0-2.83L15.22 2.22a2 2 0 0 1 3.11-.47L21.78 8.47a2 2 0 0 1 0 2.83L12 2.22z" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="nutrition">תזונה</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-cyan">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /><path d="M12 6v6l4 2" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="breastfeeding">הנקה</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-emerald">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="musculoskeletal">שרירים ושלד</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-violet">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /><path d="M12 6v6l4 2" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="diabetes">סוכרת</span>
+    </div>
+    <div class="sidebar-item">
+      <div class="icon-container bg-slate">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg>
+      </div>
+      <span class="item-label" data-lang-key="blood_pressure">לחץ דם</span>
+    </div>
   </div>
-</div>
 
-<script>
-async function loadSummary() {
-    const summaryContainer = document.getElementById('summary-container');
-    try {
-      // Add timestamp to prevent caching
-      const timestamp = new Date().getTime();
-      const response = await fetch(`/api/summary_for_provider?t=${timestamp}`, {
-        method: 'GET',
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
+  <div class="main-content">
+    <h2 data-lang-key="today_visit">ביקור היום</h2>
+    <div class="tabs">
+      <div class="tab ai-screening" data-lang-key="pre_visit_info">מידע טרום ביקור</div>
+    </div>
+    <div class="summary-box" id="summary-container">
+      <div class="loading" data-lang-key="loading_summary">טוען סיכום ביקור...</div>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      he: {
+        title: "לוח בקרה של ספק",
+        patient_name_label: "שם המטופל",
+        dob_label: "תאריך לידה",
+        gender_label: "מין",
+        country_label: "מדינה",
+        patient_id_label: "מזהה מטופל",
+        today_visit: "ביקור היום",
+        patient_record: "תיק מטופל",
+        care_programs: "תוכניות טיפול",
+        calendar: "יומן",
+        automated_care: "טיפול אוטומטי",
+        prescription_insights: "תובנות תרופות",
+        urgent_care: "טיפול דחוף",
+        primary_care: "רפואה ראשונית",
+        mental_health: "טיפול נפשי",
+        nutrition: "תזונה",
+        breastfeeding: "הנקה",
+        musculoskeletal: "שרירים ושלד",
+        diabetes: "סוכרת",
+        blood_pressure: "לחץ דם",
+        pre_visit_info: "מידע טרום ביקור",
+        loading_summary: "טוען סיכום ביקור...",
+        summary_label: "סיכום ביקור",
+        no_summary: "אין סיכום זמין עבור ביקור זה.",
+        error_message: "שגיאה בטעינת הסיכום. נסה שוב מאוחר יותר."
+      },
+      en: {
+        title: "Provider Dashboard",
+        patient_name_label: "Patient Name",
+        dob_label: "Date of Birth",
+        gender_label: "Gender",
+        country_label: "Country",
+        patient_id_label: "Patient ID",
+        today_visit: "Today's Visit",
+        patient_record: "Patient Record",
+        care_programs: "Care Programs",
+        calendar: "Calendar",
+        automated_care: "Automated Care",
+        prescription_insights: "Prescription Insights",
+        urgent_care: "Urgent Care",
+        primary_care: "Primary Care",
+        mental_health: "Mental Health",
+        nutrition: "Nutrition",
+        breastfeeding: "Breastfeeding",
+        musculoskeletal: "Musculoskeletal",
+        diabetes: "Diabetes",
+        blood_pressure: "Blood Pressure",
+        pre_visit_info: "Pre-Visit Information",
+        loading_summary: "Loading visit summary...",
+        summary_label: "Visit Summary",
+        no_summary: "No summary available for this visit.",
+        error_message: "Error loading summary. Please try again later."
+      },
+      ar: {
+        title: "لوحة تحكم مقدم الخدمة",
+        patient_name_label: "اسم المريض",
+        dob_label: "تاريخ الميلاد",
+        gender_label: "الجنس",
+        country_label: "البلد",
+        patient_id_label: "رقم المريض",
+        today_visit: "زيارة اليوم",
+        patient_record: "سجل المريض",
+        care_programs: "برامج الرعاية",
+        calendar: "التقويم",
+        automated_care: "الرعاية الآلية",
+        prescription_insights: "رؤى الوصفات",
+        urgent_care: "الرعاية العاجلة",
+        primary_care: "الرعاية الأولية",
+        mental_health: "العلاج النفسي",
+        nutrition: "التغذية",
+        breastfeeding: "الرضاعة",
+        musculoskeletal: "العضلات والهيكل",
+        diabetes: "السكري",
+        blood_pressure: "ضغط الدم",
+        pre_visit_info: "معلومات ما قبل الزيارة",
+        loading_summary: "جاري تحميل ملخص الزيارة...",
+        summary_label: "ملخص الزيارة",
+        no_summary: "لا يوجد ملخص متاح لهذه الزيارة.",
+        error_message: "خطأ في تحميل الملخص. حاول مرة أخرى لاحقاً."
+      },
+      ru: {
+        title: "Панель управления провайдера",
+        patient_name_label: "Имя пациента",
+        dob_label: "Дата рождения",
+        gender_label: "Пол",
+        country_label: "Страна",
+        patient_id_label: "Идентификатор пациента",
+        today_visit: "Сегодняшний визит",
+        patient_record: "Медицинская карта",
+        care_programs: "Программы ухода",
+        calendar: "Календарь",
+        automated_care: "Автоматизированный уход",
+        prescription_insights: "Анализ рецептов",
+        urgent_care: "Срочная помощь",
+        primary_care: "Первичная помощь",
+        mental_health: "Психическое здоровье",
+        nutrition: "Питание",
+        breastfeeding: "Грудное вскармливание",
+        musculoskeletal: "Опорно-двигательный аппарат",
+        diabetes: "Диабет",
+        blood_pressure: "Артериальное давление",
+        pre_visit_info: "Информация перед визитом",
+        loading_summary: "Загрузка сводки визита...",
+        summary_label: "Сводка визита",
+        no_summary: "Нет доступной сводки для этого визита.",
+        error_message: "Ошибка загрузки сводки. Пожалуйста, попробуйте снова позже."
+      }
+    };
+
+    function changeLanguage() {
+      const lang = document.getElementById('language-select').value;
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === 'en' || lang === 'ru' ? 'ltr' : 'rtl';
+      document.title = translations[lang].title;
+
+      document.querySelectorAll('[data-lang-key]').forEach(element => {
+        const key = element.getAttribute('data-lang-key');
+        if (element.tagName === 'SPAN' && element.parentElement.classList.contains('header-title')) {
+          if (key === 'patient_name_label') {
+            element.innerHTML = `${translations[lang][key]}: <strong>Ami</strong>`;
+          } else if (key === 'dob_label') {
+            element.innerHTML = `${translations[lang][key]}: <strong>24/7/1997</strong>`;
+          } else if (key === 'gender_label') {
+            element.innerHTML = `${translations[lang][key]}: <strong>${translations[lang].gender_label === 'Gender' ? 'Male' : translations[lang].gender_label === 'الجنس' ? 'ذكر' : translations[lang].gender_label === 'Пол' ? 'Мужской' : 'זכר'}</strong>`;
+          } else if (key === 'country_label') {
+            element.innerHTML = `${translations[lang][key]}: <strong>${translations[lang].country_label === 'Country' ? 'Israel' : translations[lang].country_label === 'البلد' ? 'إسرائيل' : translations[lang].country_label === 'Страна' ? 'Израиль' : 'ישראל'}</strong>`;
+          } else if (key === 'patient_id_label') {
+            element.innerHTML = `${translations[lang][key]}: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code>`;
+          }
+        } else {
+          element.textContent = translations[lang][key];
         }
       });
-      
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      const data = await response.json();
-      
-      const formattedSummary = (data.summary || '')
-        .split(/\n|\*/)
-        .filter(line => line.trim())
-        .map(item => {
-          // remove dot after number like "1." → "1"
-          const cleaned = item.replace(/^(\d+)\.\s*/, '$1 ');
-          
-          // extract label and value
-          const parts = cleaned.split(':');
-          const label = parts[0]?.trim() || '';
-          const value = parts.slice(1).join(':').replace(/[:]+$/, '').trim();
 
-          // merge into one RTL-friendly line
-          return `<li dir="rtl" style="margin-bottom: 10px;">🔹 <strong>${label}:</strong> ${value}</li>`;
-        })
-        .join('');
-        
-      summaryContainer.innerHTML = `
-        <div class="summary-item">
-          <strong>סיכום ביקור:</strong>
-          <ul style="margin-top: 10px; line-height: 1.8; color: #ccc; padding-right: 1rem; direction: rtl; text-align: right;">
-            ${formattedSummary || '<li>אין סיכום זמין עבור ביקור זה.</li>'}
-          </ul>
-        </div>
-      `;
-      
-     
-      
-    } catch (error) {
-      console.error('Error loading summary:', error);
-      summaryContainer.innerHTML = `<div class="error">שגיאה בטעינת הסיכום. נסה שוב מאוחר יותר.<br><small>שגיאה: ${error.message}</small></div>`;
+      // Update summary container if it has been loaded
+      const summaryContainer = document.getElementById('summary-container');
+      if (!summaryContainer.querySelector('.loading')) {
+        loadSummary(lang);
+      }
     }
-}
 
-// Load summary when page loads
-document.addEventListener('DOMContentLoaded', loadSummary);
+    async function loadSummary(lang = 'he') {
+      const summaryContainer = document.getElementById('summary-container');
+      summaryContainer.innerHTML = `<div class="loading">${translations[lang].loading_summary}</div>`;
+      try {
+        const timestamp = new Date().getTime();
+        const response = await fetch(`/api/summary_for_provider?t=${timestamp}`, {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        });
+        
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        
+        const formattedSummary = (data.summary || '')
+          .split(/\n|\*/)
+          .filter(line => line.trim())
+          .map(item => {
+            const cleaned = item.replace(/^(\d+)\.\s*/, '$1 ');
+            const parts = cleaned.split(':');
+            const label = parts[0]?.trim() || '';
+            const value = parts.slice(1).join(':').replace(/[:]+$/, '').trim();
+            return `<li dir="${lang === 'en' || lang === 'ru' ? 'ltr' : 'rtl'}" style="margin-bottom: 10px;">🔹 <strong>${label}:</strong> ${value}</li>`;
+          })
+          .join('');
+        
+        summaryContainer.innerHTML = `
+          <div class="summary-item">
+            <strong>${translations[lang].summary_label}:</strong>
+            <ul style="margin-top: 10px; line-height: 1.8; color: #ccc; padding-${lang === 'en' || lang === 'ru' ? 'left' : 'right'}: 1rem; direction: ${lang === 'en' || lang === 'ru' ? 'ltr' : 'rtl'}; text-align: ${lang === 'en' || lang === 'ru' ? 'left' : 'right'};">
+              ${formattedSummary || `<li>${translations[lang].no_summary}</li>`}
+            </ul>
+          </div>
+        `;
+      } catch (error) {
+        console.error('Error loading summary:', error);
+        summaryContainer.innerHTML = `<div class="error">${translations[lang].error_message}<br><small>${error.message}</small></div>`;
+      }
+    }
 
-
-</script>
-
-
-<script>
-  const patientName = document.querySelector('meta[name="patient-name"]').getAttribute('content');
-  document.getElementById('patient-name').innerText = patientName;
-</script>
-
+    document.addEventListener('DOMContentLoaded', () => {
+      const patientName = document.querySelector('meta[name="patient-name"]').getAttribute('content');
+      document.getElementById('patient-name').innerText = patientName;
+      loadSummary();
+    });
+  </script>
 </body>
 </html>
