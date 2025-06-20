@@ -117,15 +117,15 @@ def clear_session(patient_id: str):
 @app.get("/provider", response_class=HTMLResponse)
 def provider(request: Request):
     logger.info("Provider page accessed - Request URL: %s", request.url)
-    return templates.TemplateResponse("provider.html", {"request": request})
+    return templates.TemplateResponse("provider.html", {"request": request, "patient_name": patient_name})
 
 @app.get("/provider_deashboard", response_class=HTMLResponse)
 def provider_dashboard(request: Request):
     logger.info("Provider dashboard page accessed - Request URL: %s", request.url)
-    return templates.TemplateResponse("provider_deashboard.html", {"request": request})
+    return templates.TemplateResponse("provider_deashboard.html", {"request": request, "patient_name": patient_name})
 
 @app.get("/provider_deashboard.html", response_class=HTMLResponse)
 def provider_dashboard_html(request: Request):
     logger.info("Provider dashboard HTML page accessed - Request URL: %s", request.url)
-    return templates.TemplateResponse("provider_deashboard.html", {"request": request})
+    return templates.TemplateResponse("provider_deashboard.html", {"request": request, "patient_name": patient_name})
 

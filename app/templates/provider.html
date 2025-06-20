@@ -411,7 +411,7 @@
 <script>
   // נתונים עם מידע רפואי
   const patientData = [
-    { name: "יוחאי נבון", hasAlert: true, alertType: "warning", alertMessage: "אלרגיה לפניצילין - זהירות במתן אנטיביוטיקה" },
+    { name: "{{ patient_name }}", hasAlert: true, alertType: "warning", alertMessage: "אלרגיה לפניצילין - זהירות במתן אנטיביוטיקה", symptomDuration: "התחיללפני שלושה ימים" },
     { name: "מאיה גבאי", hasAlert: false },
     { name: "גדי עמר", hasAlert: true, alertType: "warning", alertMessage: "לחץ דם גבוה - נדרש מעקב צמוד" },
     { name: "אפרת בר", hasAlert: false },
@@ -453,11 +453,11 @@
         date: now.toLocaleDateString('he-IL'),
         time: now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' }),
         timeStamp: now.getTime(),
-        isWaiting: index < 4,
+        isWaiting: index < 1,
         hasAlert: patient.hasAlert,
         alertType: patient.alertType,
         alertMessage: patient.alertMessage,
-        unread: index < 4
+        unread: index < 1
       };
       
       allPatients.push(patientRecord);
