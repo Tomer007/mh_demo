@@ -296,74 +296,39 @@
 </div>
 
 <script>
-async function loadSummary1() {
-  const summaryContainer = document.getElementById('summary-container');
-  
-  try {
-    const response = await fetch('/api/summary');
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    const formattedSummary = (data.summary || '')
-  .split('*')
-  .filter(line => line.trim())
-  .map(item => {
-    const parts = item.split(':');
-    const label = parts[0]?.trim() || '';
-    const value = parts.slice(1).join(':').trim();
-    return `<li><strong>${label}:</strong> ${value}</li>`;
-  })
-  .join('');
-    
-    // Display the summary from the API response
-    summaryContainer.innerHTML = `
-  <div class="summary-item">
-    <strong>Visit Summary:</strong>
-    <ul  style="margin-top: 10px; line-height: 1.8; color: #ccc; padding-left: 1rem;">
-      ${formattedSummary || '<li>No summary available for this visit.</li>'}
-    </ul>
-  </div>
-      <div class="summary-item">
-        <strong>Patient ID:</strong> ${data.patient_id}
-      </div>
-    `;
-    
-  } catch (error) {
-    console.error('Error loading summary:', error);
-    summaryContainer.innerHTML = `
-      <div class="error">
-        Error loading visit summary. Please try again later.
-        <br><small>Error: ${error.message}</small>
-      </div>
-    `;
-  }
-}
-
 async function loadSummary() {
     const summaryContainer = document.getElementById('summary-container');
     try {
-      const response = await fetch('/api/summary');
+      // Add timestamp to prevent caching
+      const timestamp = new Date().getTime();
+      const response = await fetch(`/api/summary_for_provider?t=${timestamp}`, {
+        method: 'GET',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      });
+      
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
+      
       const formattedSummary = (data.summary || '')
-  .split(/\n|\*/)
-  .filter(line => line.trim())
-  .map(item => {
-    // remove dot after number like "1." → "1"
-    const cleaned = item.replace(/^(\d+)\.\s*/, '$1 ');
-    
-    // extract label and value
-    const parts = cleaned.split(':');
-    const label = parts[0]?.trim() || '';
-    const value = parts.slice(1).join(':').replace(/[:]+$/, '').trim();
+        .split(/\n|\*/)
+        .filter(line => line.trim())
+        .map(item => {
+          // remove dot after number like "1." → "1"
+          const cleaned = item.replace(/^(\d+)\.\s*/, '$1 ');
+          
+          // extract label and value
+          const parts = cleaned.split(':');
+          const label = parts[0]?.trim() || '';
+          const value = parts.slice(1).join(':').replace(/[:]+$/, '').trim();
 
-    // merge into one RTL-friendly line
-    return `<li dir="rtl" style="margin-bottom: 10px;">🔹 <strong>${label}:</strong> ${value}</li>`;
-  })
-  .join('');
+          // merge into one RTL-friendly line
+          return `<li dir="rtl" style="margin-bottom: 10px;">🔹 <strong>${label}:</strong> ${value}</li>`;
+        })
+        .join('');
+        
       summaryContainer.innerHTML = `
         <div class="summary-item">
           <strong>Visit Summary:</strong>
@@ -375,13 +340,19 @@ async function loadSummary() {
           <strong>Patient ID:</strong> ${data.patient_id}
         </div>
       `;
+      
+     
+      
     } catch (error) {
       console.error('Error loading summary:', error);
       summaryContainer.innerHTML = `<div class="error">שגיאה בטעינת הסיכום. נסה שוב מאוחר יותר.<br><small>Error: ${error.message}</small></div>`;
     }
-  }
+}
+
 // Load summary when page loads
 document.addEventListener('DOMContentLoaded', loadSummary);
+
+
 </script>
 
 

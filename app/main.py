@@ -27,24 +27,26 @@ conversations: Dict[str, List[str]] = {}
 patient_name = os.getenv("PATIENT_NAME", "תומר")  
 
 # Global variable for current patient ID
-_current_patient_id = "demo-patient"
+_current_patient_id = "65387911-0da8-40d0-a7c1-2da29b4acb33"
+_summary_current_patient_id = ""
 
 def get_current_patient_id() -> str:
     """Getter function for current patient ID"""
     return _current_patient_id
 
-def set_current_patient_id(patient_id: str) -> None:
-    """Setter function for current patient ID"""
-    global _current_patient_id
-    _current_patient_id = patient_id
-    logger.info("Current patient ID set to: %s", patient_id)
-
-def get_patient_id():
-    return _current_patient_id
-
 def set_current_patient_id(patient_id: str):
     global _current_patient_id
     _current_patient_id = patient_id
+
+def get_summary_current_patient_id() -> str:
+    """Getter function for summary current patient ID"""
+    return _summary_current_patient_id
+
+def set_summary_current_patient_id(summary_patient_id: str) -> None:
+    """Setter function for summary current patient ID"""
+    global _summary_current_patient_id
+    _summary_current_patient_id = summary_patient_id
+    logger.info("Summary current patient ID set to: %s", summary_patient_id)
 
 @app.get("/", response_class=HTMLResponse)
 def landing(request: Request):
@@ -93,17 +95,14 @@ def summary_endpoint(patient_id: str):
     conv = conversations.get(patient_id, [])
     summary = generate_summary(conv)
     logger.info("Summary generated for Patient ID: %s", patient_id)
-    set_current_patient_id(patient_id)
+    set_summary_current_patient_id(summary)
     return {"patient_id": patient_id, "summary": summary}
 
-@app.get("/api/summary", response_model=SummaryResponse)
+@app.get("/api/summary_for_provider", response_model=SummaryResponse)
 def summary_endpoint():
-    current_patient_id = get_current_patient_id()
-    logger.info("Summary API called - Patient ID: %s", current_patient_id)
-    conv = conversations.get(current_patient_id, [])
-    summary = generate_summary(conv)
-    logger.info("Summary generated for Patient ID: %s", current_patient_id)
-    return {"patient_id": current_patient_id, "summary": summary}
+    summary = get_summary_current_patient_id()
+    logger.info("Summary generated for patient ID: %s summary %s ", summary ,get_current_patient_id)
+    return {"patient_id": get_current_patient_id(), "summary": summary}
 
 @app.delete("/api/session/{patient_id}")
 def clear_session(patient_id: str):

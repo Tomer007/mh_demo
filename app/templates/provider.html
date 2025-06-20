@@ -1,144 +1,600 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>תיק רפואי מטופל</title>
+<head dir="rtl">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Dashboard</title>
   <style>
-    html, body {
+    body {
       margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: Arial, sans-serif;
+      background: #f3f8fc;
+      direction: rtl;
     }
-
-    .image-wrapper {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+    .container {
+      display: flex;
+      height: 100vh;
+      flex-direction: row;
     }
-
-    .image-wrapper img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .corner-link {
-      position: absolute;
-      top: 300px;
-      left: 100px;
-      width: 140px;
-      height: 140px;
-      z-index: 2;
-      background: transparent;
-      cursor: pointer;
-      border-radius: 50%;
-    }
-
-    /* Tooltip */
-    .corner-link:hover::after {
-      content: attr(title);
-      position: absolute;
-      bottom: 160px;
-      left: 0;
-      background-color: orange;
-      color: white;
-      padding: 6px 6px;
-      border-radius: 6px;
-      white-space: nowrap;
-      font-size: 0.85em;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      animation: fadeInTooltip 0.3s ease-out forwards;
-      opacity: 0;
-    }
-
-    @keyframes fadeInTooltip {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @media (max-width: 600px) {
-      .corner-link {
-        width: 100px;
-        height: 100px;
-        top: 10px;
-        left: 10px;
-      }
-    }
-
-    /* Modal styles */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-      justify-content: center;
+    .sidebar {
+      width: 270px;
+      background: #f6f6f6;
+      border-left: 1px solid #d1dbe5;
+      display: flex;
+      flex-direction: column;
       align-items: center;
+      padding: 0;
     }
-
-    .modal-content {
+    .logo {
+      margin: 20px 0 10px 0;
       width: 80%;
-      height: 80%;
-      background: white;
-      border-radius: 12px;
-      overflow: auto;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      position: relative;
+      text-align: right;
+      font-weight: bold;
+      color: #1e90c1;
+      font-size: 1.2em;
     }
-
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: #e74c3c;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
+    .sidebar .timebox {
+      background: #ff9800;
+      color: #fff;
+      width: 100%;
+      text-align: center;
+      padding: 10px 0 5px 0;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .sidebar .date {
+      background: #ff9800;
+      color: #fff;
+      width: 100%;
+      text-align: center;
+      font-size: 1em;
+      padding-bottom: 10px;
+    }
+    .sidebar .menu {
+      margin: 20px 0 0 0;
+      width: 100%;
+      padding: 0 20px;
+    }
+    .sidebar .menu-item {
+      background: #e9f0f7;
+      margin-bottom: 8px;
+      padding: 10px 15px;
+      border-radius: 5px;
+      color: #1e90c1;
+      font-weight: bold;
+      font-size: 1em;
       cursor: pointer;
     }
-
+    .sidebar .menu-item.active {
+      background: #fff;
+      color: #ff9800;
+      border-left: 4px solid #ff9800;
+    }
+    .sidebar .footer {
+      margin-top: auto;
+      width: 100%;
+      text-align: right;
+      font-size: 0.9em;
+      color: #888;
+      padding: 10px 20px;
+      border-top: 1px solid #d1dbe5;
+    }
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background: #fff;
+      border-bottom: 2px solid #1e90c1;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      padding: 5px 20px;
+      font-size: 1em;
+      color: #1e90c1;
+      background: #f6f6f6;
+    }
+    .user-info img {
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      margin-left: 10px;
+    }
+    .nav {
+      display: flex;
+      background: #1e90c1;
+      color: #fff;
+      padding: 0 10px;
+      align-items: center;
+      height: 48px;
+    }
+    .nav-item {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      cursor: pointer;
+      font-size: 1em;
+      border-left: 1px solid #fff3;
+    }
+    .nav-item:last-child {
+      border-left: none;
+    }
+    .nav-item span {
+      display: block;
+      font-size: 1.5em;
+      margin-bottom: 2px;
+    }
+    .unread {
+      background-color: #fff7e6;
+    }
+    
+    /* עיצוב סטטוס משופר */
+    .status-waiting {
+      background-color: #fff3e0 !important;
+      color: #e65100;
+      font-weight: bold;
+      text-align: center;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: help;
+    }
+    
+    .status-completed {
+      background-color: #e3f2fd !important;
+      color: #0d47a1;
+      font-weight: bold;
+      text-align: center;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: help;
+    }
+    
+    /* Tooltip styling */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 8px;
+      position: absolute;
+      z-index: 1000;
+      bottom: 125%;
+      right: 50%;
+      margin-right: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    
+    .tooltip .tooltiptext::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      right: 50%;
+      margin-right: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #333 transparent transparent transparent;
+    }
+    
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* שורת כלים - חיפוש ומיון */
+    .toolbar {
+      padding: 15px 20px;
+      background: white;
+      border-bottom: 1px solid #e0e6ed;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .search-box {
+      padding: 8px 12px;
+      border: 2px solid #e0e6ed;
+      border-radius: 6px;
+      font-size: 14px;
+      min-width: 200px;
+      direction: rtl;
+    }
+    
+    .search-box:focus {
+      outline: none;
+      border-color: #1e90c1;
+    }
+    
+    .sort-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .sort-btn {
+      padding: 8px 15px;
+      border: 2px solid #1e90c1;
+      background: white;
+      color: #1e90c1;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s;
+    }
+    
+    .sort-btn:hover, .sort-btn.active {
+      background: #1e90c1;
+      color: white;
+    }
+    
+    /* אזהרות רפואיות */
+    .medical-alert {
+      font-size: 18px;
+      cursor: help;
+    }
+    
+    .alert-warning {
+      color: #ff9800;
+    }
+    
+    .alert-ok {
+      color: #4caf50;
+    }
+    
+    /* עיצוב רספונסיבי */
     @media (max-width: 768px) {
-      .modal-content {
-        width: 90%;
-        height: 90%;
+      .container {
+        flex-direction: column;
       }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 10px;
+      }
+      
+      .sidebar .menu {
+        display: flex;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .sidebar .menu-item {
+        margin-bottom: 0;
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+      
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      
+      .search-box {
+        min-width: auto;
+        width: 100%;
+      }
+      
+      .sort-buttons {
+        justify-content: center;
+      }
+      
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      
+      thead tr {
+        position: absolute;
+        top: -9999px;
+        right: -9999px;
+      }
+      
+      tr {
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 8px;
+        background: white;
+      }
+      
+      td {
+        border: none !important;
+        position: relative;
+        padding: 8px 8px 8px 40% !important;
+        text-align: right;
+      }
+      
+      td:before {
+        content: attr(data-label) ": ";
+        position: absolute;
+        right: 6px;
+        width: 35%;
+        text-align: right;
+        font-weight: bold;
+        color: #1e90c1;
+      }
+    }
+    
+    /* תוצאות לא נמצאו */
+    .no-results {
+      text-align: center;
+      padding: 40px 20px;
+      color: #666;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <div class="image-wrapper">
-    <img src="/static/img/provider.png" alt="provider" />
-    <a href="#" class="corner-link" title="סיכום הכנה לביקור" id="open-modal"></a>
-  </div>
-
-  <!-- Modal -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal-content" id="modalContent">
-      <button class="modal-close" onclick="closeModal()">close</button>
-      <iframe src="/provider_deashboard.html" width="100%" height="100%" frameborder="0"></iframe>
+  <div class="container">
+    <div class="sidebar">
+      <div class="logo">
+        <span style="color:#1e90c1;">מאוחדת</span>
+        <span style="color:#ff9800;">❤</span>
+      </div>
+      <div class="timebox" id="timebox">--:--</div>
+      <div class="date" id="datebox">--/--/----</div>
+      <div class="menu" style="text-align: right;">
+        <div class="menu-item active">ביקור ללא כרטיס</div>
+        <div class="menu-item">רישום רפואי</div>
+        <div class="menu-item">ביקור מתוזמן</div>
+        <div class="menu-item">עיון בתיק</div>
+      </div>
+      <div class="footer">
+        גרסה אחרונה: 7.7.41 &nbsp; | &nbsp; 3001<br>
+        10מעמד
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div class="user-info">
+          שם מתאם: ד"ר חסון שחר &nbsp; | &nbsp; תחום עיסוק: רפואה פנימית
+        </div>
+      </div>
+      
+      <!-- שורת כלים -->
+      <div class="toolbar">
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 חיפוש לפי שם מטופל...">
+        <div class="sort-buttons">
+          <button class="sort-btn active" id="sortStatus">מיון לפי סטטוס</button>
+          <button class="sort-btn" id="sortTime">מיון לפי שעה</button>
+          <button class="sort-btn" id="sortName">מיון לפי שם</button>
+        </div>
+      </div>
+      
+      <div class="table-section" style="padding: 20px; overflow: auto;">
+        <table style="width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 8px #0001;">
+          <thead>
+            <tr>
+              <th style="border: 1px solid #e0e6ed; padding: 8px; background: #e9f0f7; color: #1e90c1;">פעולות</th>
+              <th style="border: 1px solid #e0e6ed; padding: 8px; background: #e9f0f7; color: #1e90c1;">סטטוס</th>
+              <th style="border: 1px solid #e0e6ed; padding: 8px; background: #e9f0f7; color: #1e90c1;">שם פונה</th>
+              <th style="border: 1px solid #e0e6ed; padding: 8px; background: #e9f0f7; color: #1e90c1;">סוג פנייה</th>
+              <th style="border: 1px solid #e0e6ed; padding: 8px; background: #e9f0f7; color: #1e90c1;">תאריך</th>
+              <th style="border: 1px solid #e0e6ed; padding: 8px; background: #e9f0f7; color: #1e90c1;">שעה</th>
+              <th style="border: 1px solid #e0e6ed; padding: 8px; background: #e9f0f7; color: #1e90c1;">סטטוס רפואי</th>
+            </tr>
+          </thead>
+          <tbody id="patient-table-body"></tbody>
+        </table>
+        <div id="noResults" class="no-results" style="display: none;">
+          <p>לא נמצאו תוצאות החיפוש</p>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script>
-    const modal = document.getElementById('modal');
-    const openBtn = document.getElementById('open-modal');
+<div class="modal-overlay" id="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:9999;">
+  <div class="modal-content" style="background:white; width:80%; height:80%; border-radius:8px; overflow:hidden; position:relative;">
+    <button class="modal-close" onclick="closeModal()" style="position:absolute; top:10px; left:10px; background:#ff9800; color:#fff; border:none; padding:6px 12px; cursor:pointer; border-radius:4px;">סגור</button>
+    <iframe src="/provider_deashboard.html" width="100%" height="100%" frameborder="0"></iframe>
+  </div>
+</div>
 
-    openBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      modal.style.display = 'flex';
+<script>
+  // נתונים עם מידע רפואי
+  const patientData = [
+    { name: "יוחאי נבון", hasAlert: true, alertType: "warning", alertMessage: "אלרגיה לפניצילין - זהירות במתן אנטיביוטיקה" },
+    { name: "מאיה גבאי", hasAlert: false },
+    { name: "גדי עמר", hasAlert: true, alertType: "warning", alertMessage: "לחץ דם גבוה - נדרש מעקב צמוד" },
+    { name: "אפרת בר", hasAlert: false },
+    { name: "דנה כהן", hasAlert: true, alertType: "ok", alertMessage: "כל הבדיקות תקינות" },
+    { name: "יוסי לוי", hasAlert: false },
+    { name: "מוחמד עבדאללה", hasAlert: true, alertType: "warning", alertMessage: "סוכרת סוג 2 - נדרש ניטור רמת סוכר" },
+    { name: "יוסף חיים", hasAlert: false },
+    { name: "אחמד כותייב", hasAlert: true, alertType: "ok", alertMessage: "מצב בריאותי יציב" },
+    { name: "חיים אליהו", hasAlert: false },
+    { name: "עלי חסן", hasAlert: true, alertType: "warning", alertMessage: "בעיות לב - דרוש אישור קרדיולוג" }
+  ];
+
+  let allPatients = [];
+  let filteredPatients = [];
+
+  function updateClock() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('timebox').textContent = `${hours}:${minutes}`;
+    const day = now.getDate().toString().padStart(2, '0');
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const year = now.getFullYear();
+    document.getElementById('datebox').textContent = `${day}/${month}/${year}`;
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  function createPatientData() {
+    const table = document.getElementById('patient-table-body');
+    
+    patientData.forEach((patient, index) => {
+      const now = new Date();
+      const offset = Math.floor(Math.random() * 30);
+      now.setMinutes(now.getMinutes() - offset);
+      
+      const patientRecord = {
+        name: patient.name,
+        date: now.toLocaleDateString('he-IL'),
+        time: now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' }),
+        timeStamp: now.getTime(),
+        isWaiting: index < 4,
+        hasAlert: patient.hasAlert,
+        alertType: patient.alertType,
+        alertMessage: patient.alertMessage,
+        unread: index < 4
+      };
+      
+      allPatients.push(patientRecord);
     });
+    
+    filteredPatients = [...allPatients];
+    renderTable();
+  }
 
-    function closeModal() {
-      modal.style.display = 'none';
+  function renderTable() {
+    const table = document.getElementById('patient-table-body');
+    const noResults = document.getElementById('noResults');
+    
+    table.innerHTML = '';
+    
+    if (filteredPatients.length === 0) {
+      noResults.style.display = 'block';
+      return;
     }
-  </script>
+    
+    noResults.style.display = 'none';
+    
+    filteredPatients.forEach(patient => {
+      const row = document.createElement('tr');
+      row.className = patient.unread ? 'unread' : '';
+      
+      const statusText = patient.isWaiting ? 'ממתין' : 'סיום';
+      const statusClass = patient.isWaiting ? 'status-waiting' : 'status-completed';
+      const tooltipText = patient.isWaiting ? 'המטופל ממתין לטיפול רפואי' : 'הטיפול הסתיים בהצלחה';
+      const visitType = patient.isWaiting ? 'המתנה לטיפול' : 'טיפול הסתיים';
+      
+      let medicalAlert = '';
+      if (patient.hasAlert) {
+        const alertIcon = patient.alertType === 'warning' ? '⚠️' : '✅';
+        const alertClass = patient.alertType === 'warning' ? 'alert-warning' : 'alert-ok';
+        medicalAlert = `
+          <div class="tooltip medical-alert ${alertClass}">
+            ${alertIcon}
+            <span class="tooltiptext">${patient.alertMessage}</span>
+          </div>
+        `;
+      }
+      
+      row.innerHTML = `
+        <td data-label="פעולות" style='border:1px solid #e0e6ed; padding:8px;'>📞 💬 <button style="margin-right: 5px; padding: 4px 8px; font-size: 0.85em; background-color: #1e90c1; color: white; border: none; border-radius: 4px; cursor: pointer;">סיכום לקראת פגישה</button></td>
+        <td data-label="סטטוס" style='border:1px solid #e0e6ed; padding:8px;'>
+          <div class="tooltip ${statusClass}">
+            ${statusText}
+            <span class="tooltiptext">${tooltipText}</span>
+          </div>
+        </td>
+        <td data-label="שם פונה" style='border:1px solid #e0e6ed; padding:8px; display:flex; align-items:center; gap:8px;'>
+          <div style="border-radius: 50%; width: 24px; height: 24px; background: linear-gradient(45deg, #1e90c1, #ff9800); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">${patient.name.charAt(0)}</div>
+          ${patient.name}
+        </td>
+        <td data-label="סוג פנייה" style='border:1px solid #e0e6ed; padding:8px;'>${visitType}</td>
+        <td data-label="תאריך" style='border:1px solid #e0e6ed; padding:8px;'>${patient.date}</td>
+        <td data-label="שעה" style='border:1px solid #e0e6ed; padding:8px;'>${patient.time}</td>
+        <td data-label="סטטוס רפואי" style='border:1px solid #e0e6ed; padding:8px; text-align:center;'>${medicalAlert}</td>
+      `;
+      table.appendChild(row);
+    });
+  }
+
+  // פונקציות מיון
+  function sortByStatus() {
+    filteredPatients.sort((a, b) => {
+      if (a.isWaiting && !b.isWaiting) return -1;
+      if (!a.isWaiting && b.isWaiting) return 1;
+      return 0;
+    });
+    renderTable();
+  }
+
+  function sortByTime() {
+    filteredPatients.sort((a, b) => b.timeStamp - a.timeStamp);
+    renderTable();
+  }
+
+  function sortByName() {
+    filteredPatients.sort((a, b) => a.name.localeCompare(b.name, 'he'));
+    renderTable();
+  }
+
+  // פונקציית חיפוש
+  function searchPatients(query) {
+    if (!query.trim()) {
+      filteredPatients = [...allPatients];
+    } else {
+      filteredPatients = allPatients.filter(patient => 
+        patient.name.includes(query.trim())
+      );
+    }
+    renderTable();
+  }
+
+  // Event listeners
+  document.getElementById('searchBox').addEventListener('input', (e) => {
+    searchPatients(e.target.value);
+  });
+
+  document.getElementById('sortStatus').addEventListener('click', () => {
+    document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('sortStatus').classList.add('active');
+    sortByStatus();
+  });
+
+  document.getElementById('sortTime').addEventListener('click', () => {
+    document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('sortTime').classList.add('active');
+    sortByTime();
+  });
+
+  document.getElementById('sortName').addEventListener('click', () => {
+    document.querySelectorAll('.sort-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById('sortName').classList.add('active');
+    sortByName();
+  });
+
+  function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+  }
+
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.innerText === 'סיכום לקראת פגישה') {
+      const row = e.target.closest('tr');
+      const statusCell = row.querySelectorAll('td')[1];
+      if (statusCell && statusCell.textContent.includes('ממתין')) {
+        e.preventDefault();
+        document.getElementById('modal').style.display = 'flex';
+      }
+    }
+  });
+
+  // אתחול
+  createPatientData();
+  sortByStatus(); // מיון ראשוני לפי סטטוס
+</script>
 </body>
 </html>
