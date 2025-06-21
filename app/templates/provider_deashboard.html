@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="patient-name" content="שם החולה: {{ patient_name }}">
+  <meta name="patient-name" content="שם המטופל: {{ patient_name }}">
   <title>לוח בקרה של ספק</title>
   <style>
     body {
@@ -180,7 +180,6 @@
     <div class="header-title">
       <strong id="patient-name" style="color: #3b82f6; font-size: 20px;"></strong><br />
       <span data-lang-key="dob_label">תאריך לידה: <strong>24/7/1997</strong></span> |
-      <span data-lang-key="gender_label">מין: <strong>נקבה</strong></span> |
       <span data-lang-key="country_label">מדינה: <strong>ישראל</strong></span> |
       <span data-lang-key="patient_id_label">מזהה מטופל: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code></span>
     </div>
@@ -275,7 +274,7 @@
 
   <div class="main-content">
     <h2 style="font-size: 26px; font-weight: 600; color: #3B82F6; border-bottom: 1px solid #3B82F6; padding-bottom: 10px; margin-bottom: 20px;" data-lang-key="main_heading">
-      תיעוד קליני מקדים על בסיס דיווח החולה
+      תיעוד קליני מקדים על בסיס דיווח המטופל
     </h2>
     <div class="tabs">
     <div class="tab ai-screening" data-lang-key="pre_visit_info">מידע טרום ביקור</div>
@@ -289,7 +288,7 @@
     const translations = {
       he: {
         title: "לוח בקרה של ספק",
-        main_heading: "תיעוד קליני מקדים על בסיס דיווח החולה – {{ patient_name }}",
+        main_heading: "תיעוד קליני מקדים על בסיס דיווח המטופל",
         patient_name_label: "שם המטופל",
         dob_label: "תאריך לידה",
         gender_label: "מין",
@@ -317,7 +316,7 @@
       },
       en: {
         title: "Provider Dashboard",
-        main_heading: "Pre-visit Clinical Documentation Based on Patient Report – {{ patient_name }}",
+        main_heading: "Pre-visit Clinical Documentation Based on Patient Report",
         patient_name_label: "Patient Name",
         dob_label: "Date of Birth",
         gender_label: "Gender",
@@ -345,7 +344,7 @@
       },
       ar: {
         title: "لوحة تحكم مقدم الخدمة",
-        main_heading: "التوثيق السريري قبل الزيارة بناءً على تقرير المريض – {{ patient_name }}",
+        main_heading: "التوثيق السريري قبل الزيارة بناءً على تقرير المريض",
         patient_name_label: "اسم المريض",
         dob_label: "تاريخ الميلاد",
         gender_label: "الجنس",
@@ -373,7 +372,7 @@
       },
       ru: {
         title: "Панель управления провайдера",
-        main_heading: "Предварительная клиническая документация на основе отчета пациента – {{ patient_name }}",
+        main_heading: "Предварительная клиническая документация на основе отчета пациента",
         patient_name_label: "Имя пациента",
         dob_label: "Дата рождения",
         gender_label: "Пол",

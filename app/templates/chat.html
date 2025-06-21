@@ -8,40 +8,78 @@
   <style>
     body {
       font-family: 'Alef', sans-serif;
-      background: #f7f7f7;
+      background: linear-gradient(135deg, #dddff3 0%, #eae3da 100%);
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      min-height: 100vh;
     }
 
     header {
-      background: #f7941d;
+      background: linear-gradient(135deg, #f7941d 0%, #ff6b35 100%);
       color: white;
-      padding: 15px;
+      padding: 20px;
       text-align: center;
-      font-size: 1.2em;
-      border-radius: 0 0 10px 10px;
+      font-size: 1.3em;
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 4px 20px rgba(247, 148, 29, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
 
     .container {
-      background: white;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
       margin: 30px auto;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      max-width: 600px;
+      padding: 30px;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      max-width: 700px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: slideInUp 0.8s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .title {
-      color: #f7941d;
+      background: linear-gradient(135deg, #f7941d, #ff6b35);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       font-weight: bold;
-      font-size: 1.4em;
-      margin-bottom: 20px;
+      font-size: 1.6em;
+      margin-bottom: 25px;
+      text-align: center;
     }
 
     .delimiter {
       margin: 0 8px;
-      color: #eb5d0b;
+      color: #ff6b35;
       font-weight: bold;
       font-size: 1.2em;
       vertical-align: middle;
@@ -49,167 +87,237 @@
 
     .tabs {
       display: flex;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 4px;
     }
 
     .message-content {
-      color: #181717;
+      color: #2d3748;
+      line-height: 1.6;
     }
 
     .tab {
       flex: 1;
-      padding: 10px;
+      padding: 12px;
       text-align: center;
-      background: #f7f7f7;
+      background: transparent;
       border: none;
       cursor: pointer;
-      font-weight: normal;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      color: #718096;
     }
 
     .tab.active {
-      font-weight: normal;
-      background: #f7f7f7;
-      border: none;
-      color: #f7941d;
-      border-bottom: 2px solid #f7941d;
+      font-weight: 600;
+      background: linear-gradient(135deg, #f7941d, #ff6b35);
+      color: white;
+      box-shadow: 0 4px 12px rgba(247, 148, 29, 0.3);
     }
 
     .chat-container {
       background: white;
-      border-radius: 16px;
-      padding: 10px;
-      max-width: 570px;
+      border-radius: 20px;
+      padding: 20px;
+      max-width: 650px;
       width: 100%;
-      box-shadow: 0 4px 12px rgba(235, 199, 145, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       margin-top: 40px;
       display: flex;
       flex-direction: column;
-      animation: fadeIn 0.8s ease-in-out;
+      animation: fadeIn 1s ease-in-out;
       transition: all 0.4s ease;
-      min-height: 450px;
-      max-height: 600px;
+      min-height: 500px;
+      max-height: 700px;
       overflow-y: auto;
       position: relative;
+      border: 1px solid #e2e8f0;
+    }
+
+    .chat-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .chat-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 4px;
+    }
+
+    .chat-container::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
     }
 
     .input-area {
       display: flex;
       margin-top: auto;
-      gap: 10px;
+      gap: 12px;
       animation: fadeIn 1.2s ease;
       align-items: center;
       position: sticky;
       bottom: 0;
       background: white;
-      padding: 10px 0;
+      padding: 15px 0;
       z-index: 1;
       border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .input-area input {
       flex-grow: 1;
-      padding: 12px 16px;
-      border-radius: 24px;
-      border: 1px solid #ff9800;
+      padding: 16px 20px;
+      border-radius: 25px;
+      border: 2px solid #e2e8f0;
       font-size: 16px;
-      background-color: #fff3e0;
-      color: #181717;
+      background-color: #f8f9fa;
+      color: #2d3748;
       transition: all 0.3s ease;
     }
 
     .input-area input:focus {
       outline: none;
-      box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.3);
+      border-color: #f7941d;
+      box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.1);
       background-color: white;
+      transform: translateY(-2px);
     }
 
     .input-area input::placeholder {
-      color: #181717;
+      color: #a0aec0;
     }
 
     .input-area button {
-      background-color: #ff9800;
+      background: linear-gradient(135deg, #f7941d, #ff6b35);
       color: white;
       border: none;
-      border-radius: 24px;
-      padding: 12px 20px;
+      border-radius: 25px;
+      padding: 16px 24px;
       font-size: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
-      font-weight: 500;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .input-area button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .input-area button:hover::before {
+      left: 100%;
     }
 
     .input-area button:hover {
-      background-color: green;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(247, 148, 29, 0.4);
     }
 
     .input-area button:active {
       transform: translateY(0);
     }
 
+    .input-area button:disabled {
+      background: #a0aec0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
     .mic-btn {
-      background: #fff3e0;
-      border: 1.5px solid #ff9800;
+      background: #f8f9fa;
+      border: 2px solid #f7941d;
       border-radius: 50%;
-      width: 55px;
-      height: 42px;
+      width: 60px;
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.2s, border 0.2s;
-      margin-left: 2px;
-      margin-right: 2px;
+      transition: all 0.3s ease;
+      margin-left: 4px;
+      margin-right: 4px;
       position: relative;
     }
 
+    .mic-btn:hover {
+      background: #fff3e0;
+      transform: scale(1.05);
+    }
+
     .mic-btn.active {
-      background: #ffe0b2;
-      border: 2.5px solid #fb8c00;
-      box-shadow: 0 0 0 2px #ff9800;
+      background: linear-gradient(135deg, #f7941d, #ff6b35);
+      border: 2px solid #ff6b35;
+      box-shadow: 0 0 0 4px rgba(247, 148, 29, 0.3);
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(247, 148, 29, 0.7);
+      }
+      70% {
+        box-shadow: 0 0 0 10px rgba(247, 148, 29, 0);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(247, 148, 29, 0);
+      }
     }
 
     .mic-btn svg {
-      width: 32px;
-      height: 32px;
-      color: white;
+      width: 24px;
+      height: 24px;
+      color: #f7941d;
+      transition: color 0.3s ease;
     }
 
     .mic-btn.active svg {
       color: white;
-      animation: pulse 1s infinite;
     }
 
     .footer {
-      background: #f7941d;
-      padding: 20px;
+      background: linear-gradient(135deg, #f7941d, #ff6b35);
+      padding: 25px;
       text-align: center;
       color: white;
-      margin-top: 20px;
+      margin-top: 30px;
       font-size: 1.1em;
-      border-radius: 10px;
-      max-width: 600px;
+      border-radius: 16px;
+      max-width: 700px;
       margin-left: auto;
       margin-right: auto;
+      box-shadow: 0 8px 25px rgba(247, 148, 29, 0.3);
     }
 
     .footer a {
       display: inline-block;
       margin-top: 15px;
-      padding: 10px 25px;
-      background: #f7941d;
+      padding: 12px 30px;
+      background: rgba(255, 255, 255, 0.2);
       color: white;
-      border: 2px solid white;
-      border-radius: 24px;
-      font-weight: bold;
       text-decoration: none;
-      transition: background 0.3s, color 0.3s;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
     }
 
     .footer a:hover {
-      background: white;
-      color: #f7941d;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
     }
 
     .chat-bubble {
@@ -236,16 +344,16 @@
     .chat-bubble.bot {
       background-color: #ffe0b2;
       color: #e65100;
-      align-self: flex-start;
-      margin-right: auto;
+      align-self: stretch;
+      margin-right: stretch;
       margin-left: 0;
     }
 
     .chat-bubble.user {
       background-color: #e3f2fd;
       color: #0d47a1;
-      align-self:stretch
-      margin-left: auto;
+      align-self: stretch;
+      margin-left: stretch;
       margin-right: 0;
     }
 
@@ -359,7 +467,6 @@
     }
 
     @keyframes typingDot {
-
       0%,
       60%,
       100% {
@@ -555,7 +662,11 @@
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ patient_id: PATIENT_ID, message })
+          body: JSON.stringify({ 
+            patient_id: PATIENT_ID, 
+            message,
+            patient_name: PATIENT_NAME 
+          })
         });
         const data = await res.json();
         typing.remove();
@@ -778,7 +889,7 @@
   </header>
 
   <div class="container">
-    <div class="title"><span id="patientName"></span> ,</span> לפני המפגש עם הרופא:</div>
+    <div class="title"><span id="patientName"></span>,</span> לפני המפגש עם הרופא:</div>
 
     <div class="tabs">
       <div class="tab active">סיבת הביקור</div>
@@ -834,7 +945,7 @@
       </div>
 
       <div class="modal-body">
-        <span class="modal-title">סיכום סיבת הביקור כפי שדיווח/ה המטופל/ת</span>
+        <span class="modal-title">סיבת הביקור – לפי דיווח המטופל</span>
         <p id="summaryText"></p>
       </div>
     </div>
