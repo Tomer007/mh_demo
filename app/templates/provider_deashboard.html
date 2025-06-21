@@ -462,16 +462,20 @@
         const data = await response.json();
         
         const formattedSummary = (data.summary || '')
-          .split(/\n|\*/)
-          .filter(line => line.trim())
-          .map(item => {
-            const cleaned = item.replace(/^(\d+)\.\s*/, '$1 ');
-            const parts = cleaned.split(':');
-            const label = parts[0]?.trim() || '';
-            const value = parts.slice(1).join(':').replace(/[:]+$/, '').trim();
-            return `<li dir="${lang === 'en' || lang === 'ru' ? 'ltr' : 'rtl'}" style="margin-bottom: 10px;">🔹 <strong>${label}:</strong> ${value}</li>`;
-          })
-          .join('');
+  .split(/\n|\*/)
+  .filter(line => line.trim())
+  .map(item => {
+    // הסרה של מספרים ונקודות (למשל "1. " או "2) ")
+    const cleaned = item.replace(/^\d+[\.\)]\s*/, '');
+    
+    // פיצול לפי נקודתיים
+    const parts = cleaned.split(':');
+    const label = parts[0]?.trim() || '';
+    const value = parts.slice(1).join(':').replace(/[:]+$/, '').trim();
+
+    return `<li dir="${lang === 'en' || lang === 'ru' ? 'ltr' : 'rtl'}" style="margin-bottom: 10px;"><strong>${label}:</strong> ${value}</li>`;
+  })
+  .join('');
         
         summaryContainer.innerHTML = `
           <div class="summary-item">
