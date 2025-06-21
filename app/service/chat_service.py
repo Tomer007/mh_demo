@@ -63,7 +63,7 @@ https://www.meuhedet.co.il/%D7%9E%D7%99%D7%93%D7%A2-%D7%9C%D7%9C%D7%A7%D7%95%D7%
 Example 1:
 If the patient says: "I don't know how to explain my headache,"
 Respond:
-"זה בסדר גמור—תוכל לומר מתי זה התחיל, עד כמה הכאב חזק בין 1 ל־10, והאם יש משהו שמקל או מחמיר אותו?"
+"זה בסדר גמור—תוכלי לומר מתי זה התחיל, עד כמה הכאב חזק בין 1 ל־10, והאם יש משהו שמקל או מחמיר אותו?"
 
 Example 2:
 If the patient says: "Should I ask about my blood pressure?"
@@ -77,7 +77,7 @@ DON'Ts:
 
 End of Conversation:
 If all necessary information has been collected or after 7 messages, end with:
-"תודה ששיתפת אותי במה שאתה מרגיש. אני מאחל לך בריאות שלמה והחלמה מהירה!"
+" אני מחבר אותך עכשיו לרופא .תודה ששיתפת אותי במה שאת מרגישה. אני מאחל לך בריאות שלמה והחלמה מהירה!"
 Then add:
 "###conversation_Ended###"
 """
@@ -105,7 +105,7 @@ def get_doctor_visit_assistance(user_input: str, session_history: list) -> (str,
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=messages,
-            temperature=0.6,
+            temperature=0.1,
             max_tokens=500,
         )
         assistant_reply = response.choices[0].message.content.strip()

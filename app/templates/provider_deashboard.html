@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="patient-name" content="Ami">
+  <meta name="patient-name" content="שם החולה: {{ patient_name }}">
   <title>לוח בקרה של ספק</title>
   <style>
     body {
@@ -79,14 +79,17 @@
       box-shadow: 0 0 8px 2px rgba(59, 130, 246, 0.7);
       transform: scale(1.1);
     }
-    .sidebar-item.selected .item-label {
+    .sidebar-item.selected {
       font-weight: bold;
       color: #3B82F6;
     }
     .item-label {
       display: block;
-      font-size: 0.75rem;
-      margin-top: 0.25rem;
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+      font-weight: 500;
+      color: #cbd5e1;
+      letter-spacing: 0.5px;
     }
     .icon-container {
       display: inline-flex;
@@ -176,9 +179,9 @@
     </div>
     <div class="header-title">
       <strong id="patient-name" style="color: #3b82f6; font-size: 20px;"></strong><br />
-      <span data-lang-key="patient_name_label">שם המטופל: <strong>Ami</strong></span> |
+      <span data-lang-key="patient_name_label">שם החולה: <strong>{{ patient_name }}</strong></span> |
       <span data-lang-key="dob_label">תאריך לידה: <strong>24/7/1997</strong></span> |
-      <span data-lang-key="gender_label">מין: <strong>זכר</strong></span> |
+      <span data-lang-key="gender_label">מין: <strong>נקבה</strong></span> |
       <span data-lang-key="country_label">מדינה: <strong>ישראל</strong></span> |
       <span data-lang-key="patient_id_label">מזהה מטופל: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code></span>
     </div>
@@ -189,7 +192,7 @@
       <div class="icon-container bg-blue">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" /></svg>
       </div>
-      <span class="item-label" data-lang-key="today_visit">ביקור היום</span>
+      <span class="item-label" data-lang-key="today_visit"> הכנה קלינית </span>
     </div>
     <div class="sidebar-item">
       <div class="icon-container bg-purple">
@@ -272,9 +275,11 @@
   </div>
 
   <div class="main-content">
-    <h2 data-lang-key="today_visit">ביקור היום</h2>
+    <h2 style="font-size: 26px; font-weight: 600; color: #3B82F6; border-bottom: 1px solid #3B82F6; padding-bottom: 10px; margin-bottom: 20px;" data-lang-key="main_heading">
+      תיעוד קליני מקדים על בסיס דיווח החולה
+    </h2>
     <div class="tabs">
-      <div class="tab ai-screening" data-lang-key="pre_visit_info">מידע טרום ביקור</div>
+    <div class="tab ai-screening" data-lang-key="pre_visit_info">מידע טרום ביקור</div>
     </div>
     <div class="summary-box" id="summary-container">
       <div class="loading" data-lang-key="loading_summary">טוען סיכום ביקור...</div>
@@ -285,6 +290,7 @@
     const translations = {
       he: {
         title: "לוח בקרה של ספק",
+        main_heading: "תיעוד קליני מקדים על בסיס דיווח החולה – {{ patient_name }}",
         patient_name_label: "שם המטופל",
         dob_label: "תאריך לידה",
         gender_label: "מין",
@@ -312,6 +318,7 @@
       },
       en: {
         title: "Provider Dashboard",
+        main_heading: "Pre-visit Clinical Documentation Based on Patient Report – {{ patient_name }}",
         patient_name_label: "Patient Name",
         dob_label: "Date of Birth",
         gender_label: "Gender",
@@ -339,6 +346,7 @@
       },
       ar: {
         title: "لوحة تحكم مقدم الخدمة",
+        main_heading: "التوثيق السريري قبل الزيارة بناءً على تقرير المريض – {{ patient_name }}",
         patient_name_label: "اسم المريض",
         dob_label: "تاريخ الميلاد",
         gender_label: "الجنس",
@@ -366,6 +374,7 @@
       },
       ru: {
         title: "Панель управления провайдера",
+        main_heading: "Предварительная клиническая документация на основе отчета пациента – {{ patient_name }}",
         patient_name_label: "Имя пациента",
         dob_label: "Дата рождения",
         gender_label: "Пол",
@@ -395,24 +404,35 @@
 
     function changeLanguage() {
       const lang = document.getElementById('language-select').value;
+      
       document.documentElement.lang = lang;
       document.documentElement.dir = lang === 'en' || lang === 'ru' ? 'ltr' : 'rtl';
       document.title = translations[lang].title;
 
-      document.querySelectorAll('[data-lang-key]').forEach(element => {
+      // Get patient name from meta tag
+      const patientName = document.querySelector('meta[name="patient-name"]').getAttribute('content');
+
+      const elementsToUpdate = document.querySelectorAll('[data-lang-key]');
+
+      elementsToUpdate.forEach(element => {
         const key = element.getAttribute('data-lang-key');
+        
         if (element.tagName === 'SPAN' && element.parentElement.classList.contains('header-title')) {
           if (key === 'patient_name_label') {
-            element.innerHTML = `${translations[lang][key]}: <strong>Ami</strong>`;
+            element.innerHTML = `${translations[lang][key]}: <strong>${patientName}</strong>`;
           } else if (key === 'dob_label') {
             element.innerHTML = `${translations[lang][key]}: <strong>24/7/1997</strong>`;
           } else if (key === 'gender_label') {
-            element.innerHTML = `${translations[lang][key]}: <strong>${translations[lang].gender_label === 'Gender' ? 'Male' : translations[lang].gender_label === 'الجنس' ? 'ذكر' : translations[lang].gender_label === 'Пол' ? 'Мужской' : 'זכר'}</strong>`;
+            element.innerHTML = `${translations[lang][key]}: <strong>${translations[lang].gender_label === 'Gender' ? 'Female' : translations[lang].gender_label === 'الجنس' ? 'أنثى' : translations[lang].gender_label === 'Пол' ? 'Женский' : 'נקבה'}</strong>`;
           } else if (key === 'country_label') {
             element.innerHTML = `${translations[lang][key]}: <strong>${translations[lang].country_label === 'Country' ? 'Israel' : translations[lang].country_label === 'البلد' ? 'إسرائيل' : translations[lang].country_label === 'Страна' ? 'Израиль' : 'ישראל'}</strong>`;
           } else if (key === 'patient_id_label') {
             element.innerHTML = `${translations[lang][key]}: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code>`;
           }
+        } else if (element.tagName === 'H2' && key === 'main_heading') {
+          // Handle main heading with patient name replacement
+          const headingText = translations[lang][key].replace('{{ patient_name }}', patientName);
+          element.textContent = headingText;
         } else {
           element.textContent = translations[lang][key];
         }

@@ -15,7 +15,7 @@
     }
 
     header {
-      background: #92278f;
+      background: #f7941d;
       color: white;
       padding: 15px;
       text-align: center;
@@ -50,6 +50,10 @@
     .tabs {
       display: flex;
       margin-bottom: 10px;
+    }
+
+    .message-content {
+      color: #181717;
     }
 
     .tab {
@@ -109,7 +113,7 @@
       border: 1px solid #ff9800;
       font-size: 16px;
       background-color: #fff3e0;
-      color: #e65100;
+      color: #181717;
       transition: all 0.3s ease;
     }
 
@@ -120,7 +124,7 @@
     }
 
     .input-area input::placeholder {
-      color: #ffa726;
+      color: #181717;
     }
 
     .input-area button {
@@ -136,7 +140,7 @@
     }
 
     .input-area button:hover {
-      background-color: #fb8c00;
+      background-color: #181717;;
       transform: translateY(-1px);
     }
 
@@ -256,7 +260,7 @@
       top: 4px;
       right: 12px;
       font-size: 0.75em;
-      color: #e65100;
+      color: #181717;
       font-weight: 500;
       opacity: 0.9;
     }
@@ -266,7 +270,7 @@
       top: 4px;
       right: 12px;
       font-size: 0.75em;
-      color: #0d47a1;
+      color: #181717;
       font-weight: 500;
       opacity: 0.9;
     }
@@ -327,7 +331,7 @@
       padding: 8px 12px;
       background: #ffe0b2;
       border-radius: 12px;
-      color: #e65100;
+      color: #181717;
       font-size: 0.9em;
       margin-bottom: 10px;
       width: fit-content;
@@ -341,7 +345,7 @@
     .typing-dot {
       width: 6px;
       height: 6px;
-      background: #e65100;
+      background: #181717;
       border-radius: 50%;
       animation: typingDot 1.4s infinite;
     }
@@ -746,7 +750,9 @@
         <div class="bot-message">
           <span class="bot-label">מאוחדת עוזר רפואי</span></br>
           <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
-          <div class="message-content">שלום ${PATIENT_NAME} 👋 , תודה שפנית אלינו. כדי להתכונן לביקור נשמח לדעת למה פנית לרופא, מה את מרגישה, אילו סימפטומים יש לך, ואילו תרופות את נוטלת – נתחיל?</div>
+          <div class="message-content">
+            שלום ${PATIENT_NAME} תודה שפנית אלינו. כדי להתכונן לביקור, נשמח לדעת מה מצבך הבריאותי כרגע.
+          </div>          
           <div class="message-meta">
             <span class="message-time">${getCurrentTime()}</span>
           </div>
@@ -766,8 +772,9 @@
 </head>
 
 <body>
-  <header>
-    הכנה לביקור
+  <header style="display: flex; align-items: center; gap: 10px;">
+    <img  src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="50">
+    הכנה לביקור רופא 
   </header>
 
   <div class="container">
@@ -775,8 +782,13 @@
 
     <div class="tabs">
       <div class="tab active">סיבת הביקור</div>
-      <div class="tab">יצירת קשר</div>
-      <div class="tab">צירוף מסמכים</div>
+      <div class="tab" onclick="window.open('https://www.meuhedet.co.il/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F-%D7%90%D7%AA%D7%A8-%D7%95%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%94/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F/', '_blank')">
+        יצירת קשר
+      </div>
+      <div class="tab" onclick="document.getElementById('fileInput').click();">
+        צירוף מסמכים
+      </div>  
+    <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)">
     </div>
 
     <div class="chat-container">
@@ -794,11 +806,21 @@
       </div>
     </div>
   </div>
-
   <div class="footer">
-    <div>מעוניין לעדכן את התור או להיערך טוב יותר לפגישה עם הרופא?</div>
-    <a href="#">שינוי תור</a>
+    <div>
+      <strong>חזון מאוחדת:</strong><br>
+      מאוחדת תהפוך לארגון שירותי בריאות בוטיק המעניק ללקוחותיו רפואה איכותית, זמינה ונגישה – בשירות אישי, אכפתי ויוצא דופן, ותהווה אבן שואבת לעובדים טובים ומסורים.
+    </div>
+    <div class="appointment-link" style="margin-top: 16px; text-align: center;">
+      <a href="https://www.meuhedet.co.il/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F-%D7%90%D7%AA%D7%A8-%D7%95%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%94/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F/"
+         target="_blank"
+         style="display: inline-block; background-color: orange; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 16px; transition: background-color 0.3s ease;">
+        שינוי תור באונליין 
+      </a>
+    </div>
+    
   </div>
+  
 
   <div id="summaryModal" class="modal-overlay" style="display:none;">
     <div class="modal-content">
