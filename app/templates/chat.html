@@ -857,12 +857,15 @@
       const chatContainer = document.querySelector(".chat-container");
       const initialBot = document.createElement("div");
       initialBot.className = "chat-bubble bot animated";
+      const rawMessage = `שלום ${PATIENT_NAME}, תודה שפנית אלינו!\nכדי שנוכל להתכונן בצורה הטובה ביותר לביקור שלך, נשמח לדעת:\nמהי הסיבה המרכזית לפנייה?`;
+      const formattedMessage = rawMessage.replace(/\n/g, '<br>');
+
       initialBot.innerHTML = `
         <div class="bot-message">
-          <span class="bot-label">מאוחדת עוזר רפואי</span></br>
+          <span class="bot-label">מאוחדת עוזר רפואי</span><br>
           <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
           <div class="message-content">
-            שלום ${PATIENT_NAME} תודה שפנית אלינו. כדי להתכונן לביקור, נשמח לדעת מה מצבך הבריאותי כרגע.
+            ${formattedMessage}
           </div>          
           <div class="message-meta">
             <span class="message-time">${getCurrentTime()}</span>
