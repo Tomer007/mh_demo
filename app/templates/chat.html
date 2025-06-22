@@ -432,6 +432,13 @@
       color: #2196F3;
     }
 
+    .summaryText {
+      direction: rtl;
+      font-family: "Arial", sans-serif;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
     .typing-indicator {
       display: flex;
       align-items: center;
@@ -876,10 +883,41 @@
     });
 
     function showSummaryModal(summary) {
-      document.getElementById("summaryText").innerHTML = marked.parse(summary);
-      document.getElementById("summaryModal").style.display = "flex";
+  const sectionLabels = {
+    "S – תלונה עיקרית:": "S – תלונה עיקרית",
+    "S – חומרה:": "S – חומרה",
+    "S – משך:": "S – משך",
+    "S – טריגרים/גורמים מקלים:": "S – טריגרים/גורמים מקלים",
+    "S – תסמינים נלווים:": "S – תסמינים נלווים",
+    "S – היסטוריה רפואית רלוונטית:": "S – היסטוריה רפואית רלוונטית",
+    "O – תרופות נוכחיות:": "O – תרופות נוכחיות",
+    "A – הערכה ראשונית:": "A – הערכה ראשונית",
+    "P – המלצות/בירור:": "P – המלצות/בירור"
+  };
+
+  const regex = /(S – תלונה עיקרית:|S – חומרה:|S – משך:|S – טריגרים\/גורמים מקלים:|S – תסמינים נלווים:|S – היסטוריה רפואית רלוונטית:|O – תרופות נוכחיות:|A – הערכה ראשונית:|P – המלצות\/בירור:)/g;
+
+  const sections = summary.split(regex).filter(Boolean);
+
+  let htmlOutput = '';
+  for (let i = 0; i < sections.length; i += 2) {
+    const title = sectionLabels[sections[i].trim()] || '';
+    const content = (sections[i + 1] || '').trim();
+    if (title && content) {
+      htmlOutput += `
+        <div style="margin-bottom: 1em;">
+          <div style="font-weight: bold; color: #e65100; font-size: 1.1em;">${title}</div>
+          <div style="margin-top: 4px;">${content}</div>
+        </div>
+      `;
     }
-    function closeSummaryModal() {
+  }
+
+  document.getElementById("summaryText").innerHTML = htmlOutput;
+  document.getElementById("summaryModal").style.display = "flex";
+}
+
+   function closeSummaryModal() {
       document.getElementById("summaryModal").style.display = "none";
     }
   </script>
