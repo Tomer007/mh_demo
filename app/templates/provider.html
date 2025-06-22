@@ -133,7 +133,6 @@
       background-color: #fff7e6;
     }
     
-    /* עיצוב סטטוס משופר */
     .status-waiting {
       background-color: #fff3e0 !important;
       color: #e65100;
@@ -333,7 +332,6 @@
       }
     }
     
-    /* תוצאות לא נמצאו */
     .no-results {
       text-align: center;
       padding: 40px 20px;
@@ -369,7 +367,6 @@
         </div>
       </div>
       
-      <!-- שורת כלים -->
       <div class="toolbar">
         <input type="text" class="search-box" id="searchBox" placeholder="🔍 חיפוש לפי שם מטופל...">
         <div class="sort-buttons">
@@ -502,7 +499,7 @@
       }
       
       row.innerHTML = `
-        <td data-label="פעולות" style='border:1px solid #e0e6ed; padding:8px;'>📞 💬 <button style="margin-right: 5px; padding: 4px 8px; font-size: 0.85em; background-color: #1e90c1; color: white; border: none; border-radius: 4px; cursor: pointer;">סיכום לקראת פגישה</button></td>
+        <td data-label="פעולות" style='border:1px solid #e0e6ed; padding:8px;'>📞 💬 <button style="margin-right: 5px; padding: 4px 8px; font-size: 0.85em; background-color: #1e90c1; color: white; border: none; border-radius: 4px; cursor: pointer;">תיעוד מקדים</button></td>
         <td data-label="סטטוס" style='border:1px solid #e0e6ed; padding:8px;'>
           <div class="tooltip ${statusClass}">
             ${statusText}
@@ -542,7 +539,6 @@
     renderTable();
   }
 
-  // פונקציית חיפוש
   function searchPatients(query) {
     if (!query.trim()) {
       filteredPatients = [...allPatients];
@@ -582,7 +578,7 @@
   }
 
   document.addEventListener('click', function(e) {
-    if (e.target && e.target.innerText === 'סיכום לקראת פגישה') {
+    if (e.target && e.target.innerText === 'תיעוד מקדים') {
       const row = e.target.closest('tr');
       const statusCell = row.querySelectorAll('td')[1];
       if (statusCell && statusCell.textContent.includes('ממתין')) {
@@ -592,9 +588,9 @@
     }
   });
 
-  // אתחול
+  
   createPatientData();
-  sortByStatus(); // מיון ראשוני לפי סטטוס
+  sortByStatus(); 
 </script>
 </body>
 </html>
