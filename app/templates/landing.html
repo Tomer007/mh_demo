@@ -322,12 +322,26 @@
     
     <div class="patient-form">
       <div class="form-header">
-        <h2>
-          <img src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת לוגו" />
-          ברוכים הבאים למערכת הכנה לביקור רופא במאוחדת  
+        <h2 style="font-size: 18px;">
+          <img src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת לוגו" style="
+          width: 70px;
+          height: 70px;
+      "/>
+          ברוכים הבאים למערכת הכנה לביקור במאוחדת  
         </h2>
-        <p>הזינו את השם כדי להתחיל את תהליך ההכנה לביקור</p>
-      </div>
+        <p id="current-date-time"></p>
+
+<script>
+  const now = new Date();
+  const date = now.toLocaleDateString('he-IL');      
+  const time = now.toLocaleTimeString('he-IL', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });                                              
+
+  document.getElementById('current-date-time').innerText = `${time} ${date} `;
+</script>
+        </div>
       
       <form id="patientForm">
         <div class="form-group">
