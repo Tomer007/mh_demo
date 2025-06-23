@@ -27,6 +27,8 @@ render.yaml
 
 ## Running Locally
 
+*** MAKE SURE TO OVERRIDE env FILE AS WELL AS privateKey.pem FILE
+
 ```sh
 cd app
 python3 -m venv venv

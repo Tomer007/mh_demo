@@ -1,14 +1,16 @@
-from fastapi import FastAPI, Request, Form
-from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from fastapi import FastAPI, Request, Form, Response
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import Dict, List
-from app.service.chat_service import get_doctor_visit_assistance, generate_summary
+from app.service.chat_service import get_doctor_visit_assistance, reset_patient_session
 import os
 from dotenv import load_dotenv
 import random
 import logging
+from starlette.middleware.base import BaseHTTPMiddleware
+import json
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -25,27 +27,26 @@ templates = Jinja2Templates(directory=os.path.join(BASE_DIR, "templates"))
 conversations: Dict[str, List[str]] = {}
 patient_names: Dict[str, str] = {}  # Store patient names by patient_id
 
-# Global variable for current patient ID
-_current_patient_id = "65387911-0da8-40d0-a7c1-2da29b4acb33"
-_summary_current_patient_id = ""
+class LoggingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        # Log request
+        body = await request.body()
+        logger.info(f"HTTP Request: {request.method} {request.url.path}?{request.url.query}\nHeaders: {dict(request.headers)}\nBody: {body.decode('utf-8') if body else ''}")
+        response = await call_next(request)
+        response_body = b""
+        async for chunk in response.__dict__.get("body_iterator", []):
+            response_body += chunk
+        if not response_body and hasattr(response, 'body'):
+            response_body = response.body
+        # Ensure response_body is bytes for decode
+        if isinstance(response_body, memoryview):
+            response_body = response_body.tobytes()
+        elif not isinstance(response_body, bytes):
+            response_body = bytes(response_body)
+        logger.info(f"HTTP Response: {request.method} {request.url.path} - Status: {response.status_code}\nBody: {response_body.decode('utf-8', errors='replace')}")
+        return StreamingResponse(iter([response_body]), status_code=response.status_code, headers=dict(response.headers), media_type=response.media_type)
 
-def get_current_patient_id() -> str:
-    """Getter function for current patient ID"""
-    return _current_patient_id
-
-def set_current_patient_id(patient_id: str):
-    global _current_patient_id
-    _current_patient_id = patient_id
-
-def get_summary_current_patient_id() -> str:
-    """Getter function for summary current patient ID"""
-    return _summary_current_patient_id
-
-def set_summary_current_patient_id(summary_patient_id: str) -> None:
-    """Setter function for summary current patient ID"""
-    global _summary_current_patient_id
-    _summary_current_patient_id = summary_patient_id
-    logger.info("Summary current patient ID set to: %s", summary_patient_id)
+app.add_middleware(LoggingMiddleware)
 
 @app.get("/", response_class=HTMLResponse)
 def landing(request: Request):
@@ -60,9 +61,6 @@ def chat_get(request: Request, patient_id: str = "demo-patient", patient_name: s
     if patient_name:
         patient_names[patient_id] = patient_name
         logger.info("Stored patient name '%s' for patient ID: %s", patient_name, patient_id)
-    
-    # Set the current patient ID when chat page is accessed
-    set_current_patient_id(patient_id)
     
     # Get stored patient name or use default
     stored_patient_name = patient_names.get(patient_id, "מטופל")
@@ -83,17 +81,14 @@ class ChatRequest(BaseModel):
     patient_id: str
     message: str
     patient_name: str = None  # Optional patient name
+    integration: str = "aingelz"
 
 class ChatResponse(BaseModel):
     response: str
 
-class SummaryResponse(BaseModel):
-    patient_id: str
-    summary: str
-
-@app.post("/api/chat", response_model=ChatResponse)
+@app.post("/api/chat")
 def chat_endpoint(req: ChatRequest):
-    logger.info("Chat API called - Patient ID: %s, Message length: %d", req.patient_id, len(req.message))
+    logger.info("Chat API called - Patient ID: %s, Message length: %d, Integration: %s", req.patient_id, len(req.message), req.integration)
     
     # Store patient name if provided
     if req.patient_name:
@@ -101,54 +96,64 @@ def chat_endpoint(req: ChatRequest):
         logger.info("Stored patient name '%s' for patient ID: %s", req.patient_name, req.patient_id)
     
     conv = conversations.setdefault(req.patient_id, [])
-    reply, updated_conv = get_doctor_visit_assistance(req.message, conv)
+    reply, updated_conv, summary = get_doctor_visit_assistance(req.message, conv, req.patient_id, req.integration)
     conversations[req.patient_id] = updated_conv 
     logger.info("Chat response generated for Patient ID: %s", req.patient_id)
-    return {"response": reply}
+    response = {"response": reply}
+    
+    # Check if summary contains result status
+    if summary and isinstance(summary, dict) and "result" in summary:
+        response["result"] = summary["result"]
+    elif summary:
+        if not isinstance(summary, dict):
+            response["summary"] = str(summary)
+        else:
+            response["summary"] = str(summary)
+    
+    return response
 
-@app.get("/api/summary/{patient_id}", response_model=SummaryResponse)
-def summary_endpoint(patient_id: str):
+@app.get("/api/summary/{patient_id}")
+def get_summary(patient_id: str):
     logger.info("Summary API called - Patient ID: %s", patient_id)
-    conv = conversations.get(patient_id, [])
-    summary = generate_summary(conv)
-    logger.info("Summary generated for Patient ID: %s", patient_id)
-    set_summary_current_patient_id(summary)
-    return {"patient_id": patient_id, "summary": summary}
-
-@app.get("/api/summary_for_provider", response_model=SummaryResponse)
-def summary_endpoint():
-    summary = get_summary_current_patient_id()
-    logger.info("Summary generated for patient ID: %s summary %s ", summary ,get_current_patient_id)
-    return {"patient_id": get_current_patient_id(), "summary": summary}
+    from app.service.chat_service import PATIENT_SESSIONS
+    if patient_id in PATIENT_SESSIONS:
+        session_mgr = PATIENT_SESSIONS[patient_id]
+        if hasattr(session_mgr, "session_id") and session_mgr.session_id:
+            try:
+                soap_note = session_mgr.get_soap_note(session_mgr.session_id)
+                return {"summary": soap_note}
+            except Exception as e:
+                logger.error(f"Error getting SOAP note for {patient_id}: {e}")
+                return {"error": f"Failed to get SOAP note: {str(e)}"}, 500
+        else:
+            return {"error": "No active session found"}, 404
+    else:
+        return {"error": "Patient session not found"}, 404 
 
 @app.delete("/api/session/{patient_id}")
 def clear_session(patient_id: str):
     logger.info("Session clear API called - Patient ID: %s", patient_id)
     if patient_id in conversations:
         del conversations[patient_id]
+        reset_patient_session(patient_id)
         logger.info("Session cleared for Patient ID: %s", patient_id)
         return {"success": True, "message": f"Session for {patient_id} cleared."}
     logger.warning("No session found for Patient ID: %s", patient_id)
+    reset_patient_session(patient_id)
     return {"success": False, "message": f"No session found for {patient_id}."}, 404 
 
 @app.get("/provider", response_class=HTMLResponse)
 def provider(request: Request):
     logger.info("Provider page accessed - Request URL: %s", request.url)
     # Get current patient name from stored names or use default
-    current_patient_name = patient_names.get(get_current_patient_id(), "מטופל")
+    current_patient_id = "demo-patient" # Example, you might get this dynamically
+    current_patient_name = patient_names.get(current_patient_id, "מטופל")
     return templates.TemplateResponse("provider.html", {"request": request, "patient_name": current_patient_name})
 
 @app.get("/provider_deashboard", response_class=HTMLResponse)
 def provider_dashboard(request: Request):
     logger.info("Provider dashboard page accessed - Request URL: %s", request.url)
     # Get current patient name from stored names or use default
-    current_patient_name = patient_names.get(get_current_patient_id(), "מטופל")
-    return templates.TemplateResponse("provider_deashboard.html", {"request": request, "patient_name": current_patient_name})
-
-@app.get("/provider_deashboard.html", response_class=HTMLResponse)
-def provider_dashboard_html(request: Request):
-    logger.info("Provider dashboard HTML page accessed - Request URL: %s", request.url)
-    # Get current patient name from stored names or use default
-    current_patient_name = patient_names.get(get_current_patient_id(), "מטופל")
-    return templates.TemplateResponse("provider_deashboard.html", {"request": request, "patient_name": current_patient_name})
-
+    current_patient_id = "demo-patient" # Example, you might get this dynamically
+    current_patient_name = patient_names.get(current_patient_id, "מטופל")
+    return templates.TemplateResponse("provider_deashboard.html", {"request": request, "patient_name": current_patient_name}) 
