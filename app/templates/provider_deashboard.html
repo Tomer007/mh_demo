@@ -33,7 +33,7 @@
     .language-selector {
       position: absolute;
       top: 20px;
-      right: 120px;
+      right: 100px;
     }
     .language-selector select {
       background-color: #374151;
@@ -171,16 +171,16 @@
 </head>
 <body>
   <div class="header">
-    <!-- <div class="language-selector">
+    <div class="language-selector">
       <select id="language-select" onchange="changeLanguage()">
         <option value="he" selected>עברית</option>
         <option value="en">English</option>
         <option value="ar">العربية</option>
         <option value="ru">Русский</option>
       </select>
-    </div> -->
+    </div>
     <div class="header-title">
-      <strong  id="patient-name" style="color: #3b82f6; font-size: 20px;"></strong><br />
+      <strong id="patient-name" style="color: #3b82f6; font-size: 20px;"></strong><br />
       <span data-lang-key="dob_label">תאריך לידה: <strong>24/7/1997</strong></span> |
       <span data-lang-key="country_label">מדינה: <strong>ישראל</strong></span> |
       <span data-lang-key="patient_id_label">מזהה מטופל: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code></span>
@@ -276,11 +276,10 @@
 
   <div class="main-content">
     <h2 style="font-size: 26px; font-weight: 600; color: #3B82F6; border-bottom: 1px solid #3B82F6; padding-bottom: 10px; margin-bottom: 20px;" data-lang-key="main_heading">
-      תיעוד מקדים - על בסיס דיווח המטופל
+      תיעוד קליני מקדים - על בסיס דיווח המטופל
     </h2>
     <div class="tabs">
-      <div class="tab ai-screening" data-lang-key="pre_visit_info">דו״ח תיעוד קליני מקדים</div>
-
+    <div class="tab ai-screening" data-lang-key="pre_visit_info">דו״ח תיעוד קליני מקדים</div>
     </div>
     <div class="summary-box" id="summary-container">
       <div class="loading" data-lang-key="loading_summary">טוען סיכום ביקור...</div>
@@ -313,7 +312,7 @@
         blood_pressure: "לחץ דם",
         pre_visit_info: "מידע טרום ביקור",
         loading_summary: "טוען סיכום ביקור...",
-        summary_label: "",
+        summary_label: "סיכום ביקור",
         no_summary: "אין סיכום זמין עבור ביקור זה.",
         error_message: "שגיאה בטעינת הסיכום. נסה שוב מאוחר יותר."
       },
@@ -480,6 +479,7 @@
         
         summaryContainer.innerHTML = `
           <div class="summary-item">
+            <strong>${translations[lang].summary_label}:</strong>
             <ul style="margin-top: 10px; line-height: 1.8; color: #ccc; padding-${lang === 'en' || lang === 'ru' ? 'left' : 'right'}: 1rem; direction: ${lang === 'en' || lang === 'ru' ? 'ltr' : 'rtl'}; text-align: ${lang === 'en' || lang === 'ru' ? 'left' : 'right'};">
               ${formattedSummary || `<li>${translations[lang].no_summary}</li>`}
             </ul>

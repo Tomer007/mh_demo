@@ -278,8 +278,8 @@
     }
 
     .mic-btn svg {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       color: #f7941d;
       transition: color 0.3s ease;
     }
@@ -296,6 +296,7 @@
       margin-top: 30px;
       font-size: 1.1em;
       border-radius: 16px;
+      max-width: 700px;
       margin-left: auto;
       margin-right: auto;
       box-shadow: 0 8px 25px rgba(247, 148, 29, 0.3);
@@ -346,14 +347,6 @@
       align-self: stretch;
       margin-right: stretch;
       margin-left: 0;
-    }
-
-    .disabled-summary-button {
-      background-color: #f7941d !important;
-      cursor: not-allowed;
-      opacity: 0.7;
-      box-shadow: none;
-      transform: none;
     }
 
     .chat-bubble.user {
@@ -437,13 +430,6 @@
 
     .message-status.read svg {
       color: #2196F3;
-    }
-
-    .summaryText {
-      direction: rtl;
-      font-family: "Arial", sans-serif;
-      line-height: 1.6;
-      font-size: 1rem;
     }
 
     .typing-indicator {
@@ -602,30 +588,6 @@
       padding: 2px 4px;
       object-fit: contain;
     }
-
-    .close-button {
-      background: linear-gradient(135deg, #ff6b35 0%, #f7941d 100%);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
-      margin-top: 20px;
-      width: 100%;
-    }
-
-    .close-button:hover {
-      background: linear-gradient(135deg, #e55a2b 0%, #e67e22 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-    }
-
-    .close-button:active {
-      transform: translateY(-1px);
-    }
   </style>
   <script src="/static/marked.min.js"></script>
   <script>
@@ -639,6 +601,8 @@
       const minutes = now.getMinutes().toString().padStart(2, '0');
       return `${hours}:${minutes}`;
     }
+
+///main start
 
     async function sendMessage() {
       const input = document.getElementById("userInput");
@@ -755,7 +719,6 @@
           if (sendBtn) sendBtn.disabled = true;
 
           const summaryButton = document.createElement("button");
-          summaryButton.id = "summaryButton";
           summaryButton.textContent = "מידע טרום ביקור";
           summaryButton.style.cssText = `
     background-color: #f7941d;
@@ -766,7 +729,6 @@
   font-size: 17px;
   font-weight: 600;
   margin: 24px auto 0;
-  margin-bottom: 10px;
   cursor: pointer;
   display: block;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -774,7 +736,7 @@
   `;
 
           // Add disabled state styles
-    const disabledStyles = `
+          const disabledStyles = `
     background-color: #f7941d !important;
     cursor: not-allowed;
     opacity: 0.7;
@@ -785,7 +747,7 @@
           summaryButton.onclick = async () => {
             // Disable button immediately
             summaryButton.disabled = true;
-            summaryButton.classList.add('disabled-summary-button');
+            summaryButton.style.cssText += disabledStyles;
             summaryButton.textContent = "טוען...";
 
             try {
@@ -798,7 +760,7 @@
             } catch (err) {
               // Re-enable button only on error
               summaryButton.disabled = false;
-              summaryButton.classList.remove('disabled-summary-button');
+              summaryButton.style.cssText = summaryButton.style.cssText.replace(disabledStyles, '');
               summaryButton.textContent = "דו״ח סיכום הכנה לרופא";
               alert("שגיאה בטעינת הסיכום. נא לנסות שוב מאוחר יותר.");
             }
@@ -887,6 +849,7 @@
       }
     }
 
+///main end
     document.addEventListener("DOMContentLoaded", function () {
       // Set patient name in the title
       document.getElementById("patientName").innerText = PATIENT_NAME;
@@ -894,18 +857,329 @@
         method: "DELETE"
       });
 
+      let chatStarted = false;
+      async function sendMessage() {
+        const input = document.getElementById("userInput");
+        const micBtn = document.getElementById("micBtn");
+        const sendBtn = document.querySelector(".input-area button[onclick='sendMessage()']");
+        const chatContainer = document.querySelector(".chat-container");
+        const inputArea = document.querySelector(".input-area");
+
+        const message = input.value.trim();
+        if (message === "") return;
+
+        // Disable input and mic while waiting for bot
+        input.disabled = true;
+        micBtn.disabled = true;
+        if (sendBtn) sendBtn.disabled = true;
+
+        const userBubble = document.createElement("div");
+        userBubble.className = "chat-bubble user animated";
+        userBubble.innerHTML = `
+          <div class="user-message">
+            <span class="user-label">${PATIENT_NAME}</span>
+            <div class="message-content"></div>
+            <div class="message-meta">
+              <span class="message-status sent">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                </svg>
+              </span>
+              <span class="message-time">${getCurrentTime()}</span>
+            </div>
+          </div>
+        `;
+        // Render markdown for user message
+        userBubble.querySelector('.message-content').innerHTML = marked.parse(message);
+        chatContainer.insertBefore(userBubble, inputArea);
+
+        // Scroll to bottom after user message
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        input.value = "";
+
+        const typing = document.createElement("div");
+        typing.className = "typing-indicator";
+        typing.innerHTML = `
+          <span>עוזר רפואי מאוחדת  מקליד</span>
+          <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+          </div>
+        `;
+        chatContainer.insertBefore(typing, inputArea);
+
+        // Scroll to bottom after typing indicator
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Call backend API for bot response
+        try {
+          if (!chatStarted) {
+            chatStarted = true;
+          }
+          const res = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ patient_id: PATIENT_ID, message })
+          });
+          const data = await res.json();
+          console.log(data.summary);
+          typing.remove();
+          const botBubble = document.createElement("div");
+          botBubble.className = "chat-bubble bot animated";
+          botBubble.innerHTML = `
+            <div class="bot-message">
+              <span class="bot-label">עוזר רפואי מאוחדת</span></br>
+              <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
+              <div class="message-content"></div>
+              <div class="message-meta">
+                <span class="message-time">${getCurrentTime()}</span>
+              </div>
+            </div>
+          `;
+          // Render conversation ended message and summary button if status is complete
+          if (data && data.result && data.result.status === 'complete') {
+            // Disable chat interface
+            input.disabled = true;
+            micBtn.disabled = true;
+            if (sendBtn) sendBtn.disabled = true;
+
+            const endBubble = document.createElement("div");
+            endBubble.className = "chat-bubble bot animated";
+            endBubble.innerHTML = `
+              <div class="bot-message">
+                <span class="bot-label">עוזר רפואי מאוחדת</span></br>
+                <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
+                <div class="message-content">השיחה הסתיימה. תודה על המידע שסיפקת!</div>
+                <div class="message-meta">
+                  <span class="message-time">${getCurrentTime()}</span>
+                </div>
+              </div>
+            `;
+            chatContainer.insertBefore(endBubble, inputArea);
+
+            const summaryButton = document.createElement("button");
+            summaryButton.textContent = "דו״ח סיכום הכנה לרופא";
+            summaryButton.style.cssText = `
+      background-color: #f7941d;
+    color: white !important;
+    border: none;
+    border-radius: 28px;
+    padding: 14px 28px;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 24px auto 0;
+    cursor: pointer;
+    display: block;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    `;
+
+            summaryButton.onclick = async () => {
+              try {
+                const res = await fetch(`/api/summary/${PATIENT_ID}`);
+                const data = await res.json();
+                console.log("Summary data:", data);
+                
+                if (data.summary && data.summary.soap_note) {
+                  const soap = data.summary.soap_note;
+                  let html = '';
+                  if (soap.subjective) {
+                    html += `<b>Subjective:</b><br>${marked.parse(soap.subjective)}<br><br>`;
+                  }
+                  if (soap.objective) {
+                    html += `<b>Objective:</b><br>${marked.parse(soap.objective)}<br>`;
+                  }
+                  showSummaryModal(html);
+                } else {
+                  showSummaryModal(JSON.stringify(data.summary, null, 2));
+                }
+              } catch (err) {
+                console.error("Error fetching summary:", err);
+                alert("שגיאה בטעינת הסיכום. נא לנסות שוב מאוחר יותר.");
+              }
+            };
+            chatContainer.insertBefore(summaryButton, inputArea);
+
+            // Add smooth scroll to bottom
+            setTimeout(() => {
+              chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: 'smooth'
+              });
+            }, 100);
+
+            return;
+          }
+
+          // If summary (SOAP note) is present, show it in the summary modal and do NOT show a bot bubble
+          if (data.summary && data.summary.summary) {
+            let html = '';
+            if (data.summary.summary.subjective) {
+              html += `<b>Subjective:</b><br>${marked.parse(data.summary.summary.subjective)}<br>`;
+            }
+            if (data.summary.summary.objective) {
+              html += `<b>Objective:</b><br>${marked.parse(data.summary.summary.objective)}<br>`;
+            }
+            showSummaryModal(html);
+          } else {
+            // Render markdown for bot message as usual
+            botBubble.querySelector('.message-content').innerHTML = marked.parse(data.response.replace("###conversation_Ended###", ""));
+            chatContainer.insertBefore(botBubble, inputArea);
+            messageSound.play();
+          }
+
+          // Scroll to bottom after bot message
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+
+          // Update message status to delivered
+          setTimeout(() => {
+            userBubble.querySelector('.message-status').className = 'message-status delivered';
+            userBubble.querySelector('.message-status').innerHTML = `
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
+              </svg>
+            `;
+          }, 1000);
+
+          // Update message status to read
+          setTimeout(() => {
+            userBubble.querySelector('.message-status').className = 'message-status read';
+            userBubble.querySelector('.message-status').innerHTML = `
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 7l-1.41-1.41-6.34 6.34 1.41 1.41L18 7zm4.24-1.41L11.66 16.17 7.48 12l-1.41 1.41L11.66 19l12-12-1.42-1.41zM.41 13.41L6 19l1.41-1.41L1.83 12 .41 13.41z"/>
+              </svg>
+            `;
+          }, 2000);
+
+          if (data.response.includes("###conversation_Ended###")) {
+            // Disable chat interface first
+            input.disabled = true;
+            micBtn.disabled = true;
+            if (sendBtn) sendBtn.disabled = true;
+
+            const summaryButton = document.createElement("button");
+            summaryButton.textContent = "דו״ח סיכום הכנה לרופא";
+            summaryButton.style.cssText = `
+      background-color: #f7941d;
+    color: white !important;
+    border: none;
+    border-radius: 28px;
+    padding: 14px 28px;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 24px auto 0;
+    cursor: pointer;
+    display: block;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    `;
+
+            summaryButton.onclick = async () => {
+              try {
+                const res = await fetch(`/api/summary/${PATIENT_ID}`);
+                const data = await res.json();
+                showSummaryModal(data.summary);
+              } catch (err) {
+                console.error("Error fetching summary:", err);
+                alert("שגיאה בטעינת הסיכום. נא לנסות שוב מאוחר יותר.");
+              }
+            };
+            chatContainer.insertBefore(summaryButton, inputArea);
+
+            // Add smooth scroll to bottom
+            setTimeout(() => {
+              chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: 'smooth'
+              });
+            }, 100);
+
+            return;
+          }
+
+          // Only re-enable if conversation hasn't ended
+          if (!data.response.includes("הגעת למספר השיחות המרבי")) {
+            input.disabled = false;
+            micBtn.disabled = false;
+            if (sendBtn) sendBtn.disabled = false;
+            input.focus();
+          }
+        } catch (err) {
+          typing.remove();
+          const botBubble = document.createElement("div");
+          botBubble.className = "chat-bubble bot animated";
+          botBubble.innerHTML = `
+            <div class="bot-message">
+              <span class="bot-label">מאוחדת עוזר רפואי</span></br>
+              <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
+              <div class="message-content">שגיאה בשליחת ההודעה לשרת</div>
+              <div class="message-meta">
+                <span class="message-time">${getCurrentTime()}</span>
+              </div>
+            </div>
+          `;
+          chatContainer.insertBefore(botBubble, inputArea);
+          // Scroll to bottom after error message
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+      }
+      window.sendMessage = sendMessage;
+
+      // Voice recognition support
+      let recognition;
+      let recognizing = false;
+      function toggleMic() {
+        const micBtn = document.getElementById("micBtn");
+        if (micBtn.disabled) return;
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+          alert('Voice recognition is not supported in this browser.');
+          return;
+        }
+        if (!recognition) {
+          const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+          recognition = new SpeechRecognition();
+          recognition.lang = 'he-IL'; // Default to Hebrew
+          recognition.interimResults = false;
+          recognition.maxAlternatives = 1;
+          recognition.onresult = function (event) {
+            const transcript = event.results[0][0].transcript;
+            document.getElementById("userInput").value = transcript;
+          };
+          recognition.onend = function () {
+            recognizing = false;
+            document.getElementById('micBtn').classList.remove('active');
+          };
+          recognition.onerror = function () {
+            recognizing = false;
+            document.getElementById('micBtn').classList.remove('active');
+          };
+        }
+        if (!recognizing) {
+          // Try to detect language from input placeholder or browser
+          const input = document.getElementById("userInput");
+          const lang = input.lang || navigator.language || 'he-IL';
+          recognition.lang = lang.match(/^he/) ? 'he-IL' : 'en-US';
+          recognition.start();
+          recognizing = true;
+          document.getElementById('micBtn').classList.add('active');
+        } else {
+          recognition.stop();
+          recognizing = false;
+          document.getElementById('micBtn').classList.remove('active');
+        }
+      }
+
       const chatContainer = document.querySelector(".chat-container");
       const initialBot = document.createElement("div");
       initialBot.className = "chat-bubble bot animated";
-      const rawMessage = `שלום ${PATIENT_NAME}, תודה שפנית אלינו!\nכדי שנוכל להתכונן בצורה הטובה ביותר לביקור שלך, נשמח לדעת:\nמהי הסיבה המרכזית לפנייה?`;
-      const formattedMessage = rawMessage.replace(/\n/g, '<br>');
-
       initialBot.innerHTML = `
-        <div class="bot-message">
-          <span class="bot-label">מאוחדת עוזר רפואי</span><br>
+        <div class="bot-message" id="initialBot">
+          <span class="bot-label">מאוחדת עוזר רפואי</span></br>
           <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
           <div class="message-content">
-            ${formattedMessage}
+            שלום ${PATIENT_NAME} תודה שפנית אלינו. כדי להתכונן לביקור, נשמח לדעת מה מצבך הבריאותי כרגע.
           </div>          
           <div class="message-meta">
             <span class="message-time">${getCurrentTime()}</span>
@@ -913,60 +1187,39 @@
         </div>
       `;
       chatContainer.insertBefore(initialBot, document.querySelector(".input-area"));
+
+      document.getElementById('resetSessionBtn').onclick = async function() {
+        if (!confirm('האם לאפס את השיחה?')) return;
+        await fetch(`/api/session/${PATIENT_ID}`, { method: 'DELETE' });
+        chatStarted = false;
+        // Clear chat bubbles except input area
+        const chatContainer = document.querySelector('.chat-container');
+        Array.from(chatContainer.children).forEach(child => {
+          if (!child.classList.contains('input-area')) child.remove();
+        });
+        // Re-insert the initial bot message after reset
+        const initialBot = document.createElement("div");
+        initialBot.className = "chat-bubble bot animated";
+        initialBot.innerHTML = `
+          <div class="bot-message" id="initialBot">
+            <span class="bot-label">מאוחדת עוזר רפואי</span></br>
+            <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
+            <div class="message-content">שלום ${PATIENT_NAME} 👋 , תודה שפנית אלינו. כדי להתכונן לביקור נשמח לדעת למה פנית לרופא, מה את מרגישה, אילו סימפטומים יש לך, ואילו תרופות את נוטלת – נתחיל?</div>
+            <div class="message-meta">
+              <span class="message-time">${getCurrentTime()}</span>
+            </div>
+          </div>
+        `;
+        chatContainer.insertBefore(initialBot, document.querySelector(".input-area"));
+      };
     });
 
     function showSummaryModal(summary) {
-  const sectionLabels = {
-    "S – תלונה עיקרית:": "S – תלונה עיקרית",
-    "S – חומרה:": "S – חומרה",
-    "S – משך:": "S – משך",
-    "S – טריגרים/גורמים מקלים:": "S – טריגרים/גורמים מקלים",
-    "S – תסמינים נלווים:": "S – תסמינים נלווים",
-    "S – היסטוריה רפואית רלוונטית:": "S – היסטוריה רפואית רלוונטית",
-    "O – תרופות נוכחיות:": "O – תרופות נוכחיות",
-    "A – הערכה ראשונית:": "A – הערכה ראשונית",
-    "P – המלצות/בירור:": "P – המלצות/בירור"
-  };
-
-  const regex = /(S – תלונה עיקרית:|S – חומרה:|S – משך:|S – טריגרים\/גורמים מקלים:|S – תסמינים נלווים:|S – היסטוריה רפואית רלוונטית:|O – תרופות נוכחיות:|A – הערכה ראשונית:|P – המלצות\/בירור:)/g;
-
-  const sections = summary.split(regex).filter(Boolean);
-
-  let htmlOutput = '';
-  for (let i = 0; i < sections.length; i += 2) {
-    const title = sectionLabels[sections[i].trim()] || '';
-    const content = (sections[i + 1] || '').trim();
-    if (title && content) {
-      htmlOutput += `
-        <div style="margin-bottom: 1em;">
-          <div style="font-weight: bold; color: #e65100; font-size: 1.1em;">${title}</div>
-          <div style="margin-top: 4px;">${content}</div>
-        </div>
-      `;
+      document.getElementById("summaryText").innerHTML = marked.parse(summary);
+      document.getElementById("summaryModal").style.display = "flex";
     }
-  }
-
-  document.getElementById("summaryText").innerHTML = htmlOutput;
-  document.getElementById("summaryModal").style.display = "flex";
-}
-
-   function closeSummaryModal() {
+    function closeSummaryModal() {
       document.getElementById("summaryModal").style.display = "none";
-    }
-
-    function closeModal() {
-      const modal = document.getElementById('summaryModal');
-      if (modal) {
-        modal.style.display = 'none';
-      }
-      
-      // Re-enable the button
-      const summaryButton = document.getElementById('summaryButton');
-      if (summaryButton) {
-        summaryButton.disabled = false;
-        summaryButton.textContent = 'צפה בסיכום הביקור';
-        summaryButton.classList.remove('disabled-summary-button');
-      }
     }
   </script>
 </head>
@@ -974,37 +1227,33 @@
 <body>
   <header style="display: flex; align-items: center; gap: 10px;">
     <img  src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="50">
-    <div style="text-align: center; width: 100%;">
-      <h2 >הכנה לביקור רופא </h2>
-    </div>  </header>
+    הכנה לביקור רופא 
+  </header>
 
   <div class="container">
     <div class="title"><span id="patientName"></span>,</span> לפני המפגש עם הרופא:</div>
 
     <div class="tabs">
       <div class="tab active">סיבת הביקור</div>
-    
-      <div class="tab" onclick="document.getElementById('fileInput').click();">
-        צירוף מסמכים
-      </div>  
       <div class="tab" onclick="window.open('https://www.meuhedet.co.il/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F-%D7%90%D7%AA%D7%A8-%D7%95%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%94/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F/', '_blank')">
         יצירת קשר
       </div>
+      <div class="tab" onclick="document.getElementById('fileInput').click();">
+        צירוף מסמכים
+      </div>  
     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)">
     </div>
 
     <div class="chat-container">
       <!-- Chat messages will be inserted here -->
       <div class="input-area">
-        <input id="userInput" type="text" placeholder="הקלד/י הודעה..." lang="he-IL"
+        <input id="userInput" type="text" placeholder="הקלד הודעה..." lang="he-IL"
           onkeydown="if(event.key==='Enter'){sendMessage()}" />
         <button class="mic-btn" id="micBtn" type="button" onclick="toggleMic()" title="הקלט קול">
-          <svg xmlns="http://www.w3.org/2000/svg" width="50px" height="50px" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-            <line x1="12" y1="19" x2="12" y2="23"/>
-            <line x1="8" y1="23" x2="16" y2="23"/>
-            </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="44" height="44"
+            stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5">
+            <path d="M12 18v3m0 0h4m-4 0H8m6-7a4 4 0 01-8 0V7a4 4 0 018 0v4z" />
+          </svg>
         </button>
         <button onclick="sendMessage()">שלח</button>
       </div>
@@ -1012,7 +1261,8 @@
   </div>
   <div class="footer">
     <div>
-      מאוחדת תהפוך לארגון שירותי בריאות בוטיק המעניק ללקוחותיו רפואה איכותית, זמינה ונגישה – בשירות אישי, אכפתי ויוצא דופן.
+      <strong>חזון מאוחדת:</strong><br>
+      מאוחדת תהפוך לארגון שירותי בריאות בוטיק המעניק ללקוחותיו רפואה איכותית, זמינה ונגישה – בשירות אישי, אכפתי ויוצא דופן, ותהווה אבן שואבת לעובדים טובים ומסורים.
     </div>
     <div class="appointment-link" style="margin-top: 16px; text-align: center;">
       <a href="https://www.meuhedet.co.il/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F-%D7%90%D7%AA%D7%A8-%D7%95%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%94/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F/"
@@ -1039,7 +1289,6 @@
       <div class="modal-body">
         <span class="modal-title">סיבת הביקור – לפי דיווח המטופל</span>
         <p id="summaryText"></p>
-        <button class="close-button" onclick="closeModal()">סגור</button>
       </div>
     </div>
   </div>

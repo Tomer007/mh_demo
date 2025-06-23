@@ -1,0 +1,209 @@
+
+openapi: 3.0.3
+info:
+  title: Intake Flow API
+  version: "1.0.0"
+  description: API for managing agentic intake flow sessions
+
+paths:
+  /intake_flow:
+    post:
+      summary: Start a new intake flow session
+      operationId: startSession
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StartSessionRequest"
+      responses:
+        "201":
+          description: Session started successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StartSessionResponse"
+        "500":
+          description: Internal Server Error
+
+    put:
+      summary: Send a conversation message
+      operationId: sendMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMessageRequest"
+      responses:
+        "200":
+          description: Message processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SendMessageResponse"
+        "400":
+          description: Invalid task_transaction_id
+        "500":
+          description: Internal Server Error
+
+  /intake_flow/soap_note/{task_transaction_id}:
+    get:
+      summary: Get SOAP note for a session
+      operationId: getSoapNote
+      parameters:
+        - name: task_transaction_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: SOAP note retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  soap_note:
+                    type: object
+        "202":
+          description: SOAP note not ready yet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        "500":
+          description: Internal Server Error
+
+components:
+  schemas:
+    PatientProxy:
+      type: object
+      properties:
+        relation_to_patient:
+          type: string
+          example: "parent"
+        gender:
+          type: string
+          example: "M"
+      required: [relation_to_patient, gender]
+
+    Patient:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "67hy-75u6-ju56-jrygt"
+        age:
+          type: integer
+          minimum: 0
+          example: 13
+        gender:
+          type: string
+          example: "M"
+        patient_proxy:
+          $ref: "#/components/schemas/PatientProxy"
+      required: [id, age, gender]
+
+    Service:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "uy75-juj63-k93g-8474"
+        type:
+          type: string
+          example: "serviceline"
+      required: [id, type]
+
+    TaskData:
+      type: object
+      properties:
+        patient:
+          $ref: "#/components/schemas/Patient"
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/Service"
+      required: [patient]
+
+    DataTransmit:
+      type: object
+      properties:
+        agent:
+          type: string
+          example: "How can we help you today?"
+        user:
+          type: string
+          example: "My son has a cough"
+      required: [user]
+
+    StartSessionRequest:
+      type: object
+      properties:
+        task:
+          type: string
+          default: "Intake Flow"
+        language:
+          type: string
+          example: "HE"
+        interactions_limit:
+          type: integer
+          minimum: 1
+          example: 10
+        task_data:
+          $ref: "#/components/schemas/TaskData"
+        data_transmit:
+          $ref: "#/components/schemas/DataTransmit"
+      required: [language, interactions_limit, task_data, data_transmit]
+
+    SendMessageRequest:
+      type: object
+      properties:
+        task_transaction_id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        data_transmit:
+          $ref: "#/components/schemas/DataTransmit"
+      required: [task_transaction_id, data_transmit]
+
+    ResponseData:
+      type: object
+      properties:
+        agent:
+          type: string
+          example: "I'm sorry to hear that. How long has he been coughing?"
+      required: [agent]
+
+    ResponseResult:
+      type: object
+      properties:
+        services:
+          type: array
+          items:
+            $ref: "#/components/schemas/Service"
+        status:
+          type: string
+          example: "ongoing"
+      required: [status]
+
+    StartSessionResponse:
+      type: object
+      properties:
+        task_transaction_id:
+          type: string
+          format: uuid
+        data:
+          $ref: "#/components/schemas/ResponseData"
+        result:
+          $ref: "#/components/schemas/ResponseResult"
+      required: [task_transaction_id, data, result]
+
+    SendMessageResponse:
+      allOf:
+        - $ref: "#/components/schemas/StartSessionResponse"
