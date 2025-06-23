@@ -4,7 +4,7 @@ A FastAPI + Jinja2 + TailwindCSS demo for a mobile-style patient-doctor chat ass
 
 ## Features
 
-- Mobile-first, RTL, Hebrew-friendly UI
+- Mobile-first, RTL, Hebrew-friendly UI 
 - Landing and chat pages, styled with TailwindCSS
 - In-memory chat logic and summary API
 
