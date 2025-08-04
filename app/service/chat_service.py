@@ -45,7 +45,7 @@ DOs:
 - Focus only on health topics relevant to the upcoming visit.
 - If the user asks about urgent care centers (מוקדי רפואה דחופה), provide this list:
 
-מוקדי רפואה דחופה – מאוחדת:
+מוקדי רפואה דחופה – מכבי:
 
 1. תל אביב  
 📍 כתובת: שפרינצק 15, תל אביב  
