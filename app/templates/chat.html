@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>מאוחדת עוזר רפואי - הכנה לביקור</title>
+  <title>מכבי עוזר רפואי - הכנה לביקור</title>
   <style>
     body {
       font-family: 'Alef', sans-serif;
@@ -16,13 +16,13 @@
     }
 
     header {
-      background: linear-gradient(135deg, #f7941d 0%, #ff6b35 100%);
+      background: linear-gradient(135deg, rgb(16, 74, 163) 0%, rgb(30, 64, 175) 100%);
       color: white;
       padding: 20px;
       text-align: center;
       font-size: 1.3em;
       border-radius: 0 0 20px 20px;
-      box-shadow: 0 4px 20px rgba(247, 148, 29, 0.3);
+      box-shadow: 0 4px 20px rgba(16, 74, 163, 0.3);
       position: relative;
       overflow: hidden;
     }
@@ -67,7 +67,7 @@
     }
 
     .title {
-      background: linear-gradient(135deg, #f7941d, #ff6b35);
+      background: linear-gradient(135deg, rgb(16, 74, 163), rgb(30, 64, 175));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -79,7 +79,7 @@
 
     .delimiter {
       margin: 0 8px;
-      color: #ff6b35;
+      color: rgb(16, 74, 163);
       font-weight: bold;
       font-size: 1.2em;
       vertical-align: middle;
@@ -113,9 +113,9 @@
 
     .tab.active {
       font-weight: 600;
-      background: linear-gradient(135deg, #f7941d, #ff6b35);
+      background: linear-gradient(135deg, rgb(16, 74, 163), rgb(30, 64, 175));
       color: white;
-      box-shadow: 0 4px 12px rgba(247, 148, 29, 0.3);
+      box-shadow: 0 4px 12px rgba(16, 74, 163, 0.3);
     }
 
     .chat-container {
@@ -182,8 +182,8 @@
 
     .input-area input:focus {
       outline: none;
-      border-color: #f7941d;
-      box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.1);
+      border-color: rgb(16, 74, 163);
+      box-shadow: 0 0 0 3px rgba(16, 74, 163, 0.1);
       background-color: white;
       transform: translateY(-2px);
     }
@@ -193,7 +193,7 @@
     }
 
     .input-area button {
-      background: linear-gradient(135deg, #f7941d, #ff6b35);
+      background: linear-gradient(135deg, rgb(16, 74, 163), rgb(30, 64, 175));
       color: white;
       border: none;
       border-radius: 25px;
@@ -223,7 +223,7 @@
 
     .input-area button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(247, 148, 29, 0.4);
+      box-shadow: 0 8px 20px rgba(16, 74, 163, 0.4);
     }
 
     .input-area button:active {
@@ -239,7 +239,7 @@
 
     .mic-btn {
       background: #f8f9fa;
-      border: 2px solid #f7941d;
+      border: 2px solid rgb(16, 74, 163);
       border-radius: 50%;
       width: 60px;
       height: 50px;
@@ -259,28 +259,28 @@
     }
 
     .mic-btn.active {
-      background: linear-gradient(135deg, #f7941d, #ff6b35);
-      border: 2px solid #ff6b35;
-      box-shadow: 0 0 0 4px rgba(247, 148, 29, 0.3);
+      background: linear-gradient(135deg, rgb(16, 74, 163), rgb(30, 64, 175));
+      border: 2px solid rgb(16, 74, 163);
+      box-shadow: 0 0 0 4px rgba(16, 74, 163, 0.3);
       animation: pulse 1.5s infinite;
     }
 
     @keyframes pulse {
       0% {
-        box-shadow: 0 0 0 0 rgba(247, 148, 29, 0.7);
+        box-shadow: 0 0 0 0 rgba(16, 74, 163, 0.7);
       }
       70% {
-        box-shadow: 0 0 0 10px rgba(247, 148, 29, 0);
+        box-shadow: 0 0 0 10px rgba(16, 74, 163, 0);
       }
       100% {
-        box-shadow: 0 0 0 0 rgba(247, 148, 29, 0);
+        box-shadow: 0 0 0 0 rgba(16, 74, 163, 0);
       }
     }
 
     .mic-btn svg {
       width: 32px;
       height: 32px;
-      color: #f7941d;
+      color: rgb(16, 74, 163);
       transition: color 0.3s ease;
     }
 
@@ -289,7 +289,7 @@
     }
 
     .footer {
-      background: linear-gradient(135deg, #f7941d, #ff6b35);
+      background: linear-gradient(135deg, rgb(16, 74, 163), rgb(30, 64, 175));
       padding: 25px;
       text-align: center;
       color: white;
@@ -298,7 +298,7 @@
       border-radius: 16px;
       margin-left: auto;
       margin-right: auto;
-      box-shadow: 0 8px 25px rgba(247, 148, 29, 0.3);
+      box-shadow: 0 8px 25px rgba(16, 74, 163, 0.3);
     }
 
     .footer a {
@@ -341,15 +341,15 @@
     }
 
     .chat-bubble.bot {
-      background-color: #ffe0b2;
-      color: #e65100;
+      background-color: #dbdde1;
+      color: #dbdde1;
       align-self: stretch;
       margin-right: stretch;
       margin-left: 0;
     }
 
     .disabled-summary-button {
-      background-color: #f7941d !important;
+      background-color: rgb(16, 74, 163) !important;
       cursor: not-allowed;
       opacity: 0.7;
       box-shadow: none;
@@ -451,9 +451,9 @@
       align-items: center;
       gap: 4px;
       padding: 8px 12px;
-      background: #ffe0b2;
+      background: #dbdde1;
       border-radius: 12px;
-      color: #181717;
+      color: #0d47a1;
       font-size: 0.9em;
       margin-bottom: 10px;
       width: fit-content;
@@ -562,7 +562,7 @@
     .modal-title {
       font-size: 1.25em;
       font-weight: bold;
-      color: #eb5d0b;
+      color: #0d47a1;
       letter-spacing: 0.5px;
     }
 
@@ -570,7 +570,7 @@
       background: none;
       border: black;
       font-size: 1.7em;
-      color: #ea6e09;
+      color: #0d47a1;
       cursor: pointer;
       font-weight: bold;
       margin-left: 8px;
@@ -604,7 +604,7 @@
     }
 
     .close-button {
-      background: linear-gradient(135deg, #ff6b35 0%, #f7941d 100%);
+      background: linear-gradient(135deg, rgb(16, 74, 163) 0%, rgb(30, 64, 175) 100%);
       color: white;
       border: none;
       padding: 12px 24px;
@@ -618,9 +618,9 @@
     }
 
     .close-button:hover {
-      background: linear-gradient(135deg, #e55a2b 0%, #e67e22 100%);
+      background: linear-gradient(135deg, rgb(15, 65, 145) 0%, rgb(25, 55, 155) 100%);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+      box-shadow: 0 4px 12px rgba(16, 74, 163, 0.3);
     }
 
     .close-button:active {
@@ -683,7 +683,7 @@
       const typing = document.createElement("div");
       typing.className = "typing-indicator";
       typing.innerHTML = `
-        <span>עוזר רפואי מאוחדת  מקליד</span>
+          <span>עוזר רפואי מכבי מקליד</span>
         <div class="typing-dots">
           <div class="typing-dot"></div>
           <div class="typing-dot"></div>
@@ -712,8 +712,8 @@
         botBubble.className = "chat-bubble bot animated";
         botBubble.innerHTML = `
           <div class="bot-message">
-            <span class="bot-label">עוזר רפואי מאוחדת</span></br>
-            <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
+            <span class="bot-label">עוזר רפואי מכבי</span></br>
+            <img class="main-logo" src="https://www.maccabi4u.co.il/media/xtxhwsfh/%D7%9C%D7%95%D7%92%D7%95-%D7%9E%D7%9B%D7%91%D7%99_%D7%90%D7%93%D7%A8-%D7%93%D7%A1%D7%A7%D7%98%D7%95%D7%A4.svg" alt="מכבי" height="38">
             <div class="message-content"></div>
             <div class="message-meta">
               <span class="message-time">${getCurrentTime()}</span>
@@ -758,7 +758,7 @@
           summaryButton.id = "summaryButton";
           summaryButton.textContent = "מידע טרום ביקור";
           summaryButton.style.cssText = `
-    background-color: #f7941d;
+    background-color: rgb(16, 74, 163);
   color: white !important;
   border: none;
   border-radius: 28px;
@@ -775,7 +775,7 @@
 
           // Add disabled state styles
     const disabledStyles = `
-    background-color: #f7941d !important;
+    background-color: rgb(16, 74, 163) !important;
     cursor: not-allowed;
     opacity: 0.7;
     transform: none;
@@ -829,8 +829,8 @@
         botBubble.className = "chat-bubble bot animated";
         botBubble.innerHTML = `
           <div class="bot-message">
-            <span class="bot-label">מאוחדת עוזר רפואי</span></br>
-            <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
+            <span class="bot-label">מכבי עוזר רפואי</span></br>
+            <img class="main-logo" src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2FMaccabiHealth%2F&psig=AOvVaw3xvTFbxquv9OgHpyUvaJ0c&ust=1754383354876000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCNCNlrvh8I4DFQAAAAAdAAAAABAE" alt="מכבי" height="38">
             <div class="message-content">שגיאה בשליחת ההודעה לשרת</div>
             <div class="message-meta">
               <span class="message-time">${getCurrentTime()}</span>
@@ -902,8 +902,8 @@
 
       initialBot.innerHTML = `
         <div class="bot-message">
-          <span class="bot-label">מאוחדת עוזר רפואי</span><br>
-          <img class="main-logo" src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="38">
+          <span class="bot-label">מכבי עוזר רפואי</span><br>
+          <img class="main-logo" src="https://www.maccabi4u.co.il/media/xtxhwsfh/%D7%9C%D7%95%D7%92%D7%95-%D7%9E%D7%9B%D7%91%D7%99_%D7%90%D7%93%D7%A8-%D7%93%D7%A1%D7%A7%D7%98%D7%95%D7%A4.svg" alt="מכבי" height="30" width="30">
           <div class="message-content">
             ${formattedMessage}
           </div>          
@@ -939,7 +939,7 @@
     if (title && content) {
       htmlOutput += `
         <div style="margin-bottom: 1em;">
-          <div style="font-weight: bold; color: #e65100; font-size: 1.1em;">${title}</div>
+          <div style="font-weight: bold; color: #0d47a1; font-size: 1.1em;">${title}</div>
           <div style="margin-top: 4px;">${content}</div>
         </div>
       `;
@@ -973,7 +973,7 @@
 
 <body>
   <header style="display: flex; align-items: center; gap: 10px;">
-    <img  src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg" alt="מאוחדת" height="50">
+    <img  src="https://www.maccabi4u.co.il/media/xtxhwsfh/%D7%9C%D7%95%D7%92%D7%95-%D7%9E%D7%9B%D7%91%D7%99_%D7%90%D7%93%D7%A8-%D7%93%D7%A1%D7%A7%D7%98%D7%95%D7%A4.svg" alt="מכבי" height="50">
     <div style="text-align: center; width: 100%;">
       <h2 >הכנה לביקור רופא </h2>
     </div>  </header>
@@ -987,7 +987,7 @@
       <div class="tab" onclick="document.getElementById('fileInput').click();">
         צירוף מסמכים
       </div>  
-      <div class="tab" onclick="window.open('https://www.meuhedet.co.il/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F-%D7%90%D7%AA%D7%A8-%D7%95%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%94/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F/', '_blank')">
+      <div class="tab" onclick="window.open('https://www.maccabi4u.co.il/', '_blank')">
         יצירת קשר
       </div>
     <input type="file" id="fileInput" style="display: none;" onchange="handleFileUpload(event)">
@@ -1012,12 +1012,11 @@
   </div>
   <div class="footer">
     <div>
-      מאוחדת תהפוך לארגון שירותי בריאות בוטיק המעניק ללקוחותיו רפואה איכותית, זמינה ונגישה – בשירות אישי, אכפתי ויוצא דופן.
-    </div>
+      מכבי, קבוצת הבריאות הטובה בישראל, תעניק שירות רפואי מצוין, חדשני ומותאם אישית ותהא השותפה הטובה ביותר לבריאותם של חבריה.    </div>
     <div class="appointment-link" style="margin-top: 16px; text-align: center;">
-      <a href="https://www.meuhedet.co.il/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F-%D7%90%D7%AA%D7%A8-%D7%95%D7%90%D7%A4%D7%9C%D7%99%D7%A7%D7%A6%D7%99%D7%94/%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA-%D7%90%D7%95%D7%A0%D7%9C%D7%99%D7%99%D7%9F/"
+      <a href="https://www.maccabi4u.co.il/"
          target="_blank"
-         style="display: inline-block; background-color: orange; color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 16px; transition: background-color 0.3s ease;">
+         style="display: inline-block; background-color: rgb(16, 74, 163); color: white; padding: 12px 24px; border-radius: 30px; text-decoration: none; font-weight: bold; font-size: 16px; transition: background-color 0.3s ease;">
         שינוי תור באונליין 
       </a>
     </div>
@@ -1030,8 +1029,8 @@
       <div class="modal-header">
         <div class="header">
           <img class="logo"
-            src="https://www.pcgraph.co.il/wp-content/uploads/2019/11/%D7%9C%D7%95%D7%92%D7%95-%D7%A7%D7%95%D7%A4%D7%97-%D7%9E%D7%90%D7%95%D7%97%D7%93%D7%AA.jpg"
-            alt="מאוחדת" height="50">
+            src="https://www.maccabi4u.co.il/media/xtxhwsfh/%D7%9C%D7%95%D7%92%D7%95-%D7%9E%D7%9B%D7%91%D7%99_%D7%90%D7%93%D7%A8-%D7%93%D7%A1%D7%A7%D7%98%D7%95%D7%A4.svg"
+            alt="מכבי" height="50">
         </div>
         <button class="modal-close" onclick="closeSummaryModal()">&times;</button>
       </div>

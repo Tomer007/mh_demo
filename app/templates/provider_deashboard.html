@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
   <meta name="patient-name" content="שם המטופל: {{ patient_name }}">
   <title>Provider patient dashboard</title>
   <style>
@@ -36,10 +35,10 @@
       right: 120px;
     }
     .language-selector select {
-      background-color: #374151;
-      color: #fff;
+      background-color: #ffffff;
+      color: #333;
       padding: 8px;
-      border: none;
+      border: 1px solid #ddd;
       border-radius: 5px;
       cursor: pointer;
       font-size: 14px;
@@ -58,7 +57,7 @@
       cursor: pointer;
     }
     .sidebar {
-      background-color: #1f2937;
+      background-color: #ffffff;
       width: 100px;
       height: 100vh;
       position: fixed;
@@ -70,6 +69,7 @@
       align-items: center;
       overflow-y: auto; 
       padding: 10px;
+      border-left: 1px solid #eee;
     }
     .sidebar-item {
       text-align: center;
@@ -105,7 +105,7 @@
     .bg-blue { background-color: #3B82F6; }
     .bg-purple { background-color: #8B5CF6; }
     .bg-pink { background-color: #EC4899; }
-    .bg-orange { background-color: #F97316; }
+    .bg-orange { background-color: rgb(16, 74, 163); }
     .bg-green { background-color: #22C55E; }
     .bg-red { background-color: #EF4444; }
     .bg-yellow { background-color: #F59E0B; }
@@ -180,7 +180,7 @@
       </select>
     </div> -->
     <div class="header-title">
-      <strong  id="patient-name" style="color: #3b82f6; font-size: 20px;"></strong><br />
+      <strong  id="patient-name" style="color: rgb(16, 74, 163); font-size: 20px;"></strong><br />
       <span data-lang-key="dob_label">תאריך לידה: <strong>24/7/1997</strong></span> |
       <span data-lang-key="country_label">מדינה: <strong>ישראל</strong></span> |
       <span data-lang-key="patient_id_label">מזהה מטופל: <code style="background: #334155; padding: 2px 6px; border-radius: 4px;">1465e9bb-9e66-4ad7-ade7-9c874ca3d3f7</code></span>
@@ -275,7 +275,7 @@
   </div>
 
   <div class="main-content">
-    <h2 style="font-size: 26px; font-weight: 600; color: #3B82F6; border-bottom: 1px solid #3B82F6; padding-bottom: 10px; margin-bottom: 20px;" data-lang-key="main_heading">
+    <h2 style="font-size: 26px; font-weight: 600; color: white; border-bottom: 1px solid #3B82F6; padding-bottom: 10px; margin-bottom: 20px;" data-lang-key="main_heading">
       תיעוד מקדים - על בסיס דיווח המטופל
     </h2>
     <div class="tabs">
